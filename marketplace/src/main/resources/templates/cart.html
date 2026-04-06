@@ -1,40 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-<div th:replace="~{layout :: layout(~{::section})}">
-<section class="max-w-4xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6"><i class="fas fa-shopping-cart"></i> Корзина</h1>
-    <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-16 text-gray-400">
-        <i class="fas fa-shopping-bag text-6xl mb-4"></i>
-        <p class="text-xl">Корзина пуста</p>
-        <a href="/catalog" class="mt-4 inline-block text-indigo-600 hover:underline">Перейти в каталог</a>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARKETPLACE — Корзина</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="flex-1 pt-16">
+<section class="max-w-[900px] mx-auto px-6 py-12">
+    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Корзина</h1>
+    <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-24">
+        <p class="text-white/30 text-[15px]">Корзина пуста</p>
+        <a href="/catalog" class="inline-block mt-6 text-white/50 text-[13px] uppercase tracking-[0.15em] hover:text-white transition">Перейти в каталог</a>
     </div>
     <div th:unless="${#lists.isEmpty(cartItems)}">
-        <div class="bg-white rounded-xl shadow-sm divide-y">
-            <div th:each="item : ${cartItems}" class="flex items-center justify-between p-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-image text-gray-300"></i>
-                    </div>
-                    <div>
-                        <a th:href="@{'/product/' + ${item.product.id}}" class="font-semibold text-gray-800 hover:text-indigo-600" th:text="${item.product.title}"></a>
-                        <p class="text-sm text-gray-500" th:text="'Кол-во: ' + ${item.quantity}"></p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <span class="font-bold text-indigo-600" th:text="${item.product.price} + ' ₽'"></span>
-                    <form th:action="@{'/cart/remove/' + ${item.product.id}}" method="post">
-                        <button class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>
-                    </form>
-                </div>
+        <div th:each="item : ${cartItems}" class="flex items-center gap-6 py-5 border-b border-white/10">
+            <div class="w-20 h-24 bg-[#161616] flex-shrink-0 flex items-center justify-center"><i class="fas fa-image text-white/10 text-xl"></i></div>
+            <div class="flex-1 min-w-0">
+                <a th:href="@{'/product/' + ${item.product.id}}" class="text-white/80 text-[14px] hover:text-white transition truncate block" th:text="${item.product.title}"></a>
+                <p class="text-white/40 text-[12px] mt-0.5" th:text="'Кол-во: ' + ${item.quantity}"></p>
             </div>
+            <p class="text-white text-[15px] font-medium flex-shrink-0" th:text="${item.product.price} + ' ₽'"></p>
+            <form th:action="@{'/cart/remove/' + ${item.product.id}}" method="post"><button class="text-white/20 hover:text-red-400 transition"><i class="fas fa-times"></i></button></form>
         </div>
-        <div class="mt-6 flex items-center justify-between">
-            <span class="text-2xl font-bold text-gray-800">Итого: <span class="text-indigo-600" th:text="${total} + ' ₽'"></span></span>
-            <a href="/orders/checkout" class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-lg">Оформить заказ</a>
+        <div class="flex items-center justify-between mt-8 pt-6 border-t border-white/10">
+            <span class="text-white text-[20px] font-light">Итого: <span th:text="${total} + ' ₽'"></span></span>
+            <a href="/orders/checkout" class="px-10 py-3.5 bg-white text-black text-[13px] uppercase tracking-[0.15em] hover:bg-white/90 transition">Оформить заказ</a>
         </div>
     </div>
 </section>
-</div>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

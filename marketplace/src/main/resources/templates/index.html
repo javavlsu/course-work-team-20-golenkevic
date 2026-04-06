@@ -1,44 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-<div th:replace="~{layout :: layout(~{::section})}">
-<section class="max-w-7xl mx-auto px-4 py-8">
-    <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-gray-800 mb-3"><i class="fas fa-rocket text-indigo-500"></i> Маркетплейс товаров</h1>
-        <p class="text-gray-500 text-lg">Покупайте и продавайте уникальные товары</p>
-        <a href="/catalog" class="mt-4 inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Перейти в каталог</a>
-    </div>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARKETPLACE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="flex-1 pt-16">
 
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4"><i class="fas fa-sparkles"></i> Новинки</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-        <div th:each="p : ${newest}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
-            <div th:class="'h-32 bg-gradient-to-br ' + ${p.themeColor} + ' flex items-center justify-center'">
-                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" class="h-full w-full object-cover"/>
-                <i th:unless="${p.hasImage}" class="fas fa-image text-white text-3xl"></i>
-            </div>
-            <div class="p-4">
-                <h3 class="font-semibold text-gray-800 truncate" th:text="${p.title}"></h3>
-                <p class="text-indigo-600 font-bold" th:text="${p.price} + ' ₽'"></p>
-                <a th:href="@{'/product/' + ${p.id}}" class="text-sm text-indigo-500 hover:underline">Подробнее →</a>
-            </div>
-        </div>
-    </div>
+<!-- Hero -->
+<section class="h-[70vh] flex flex-col items-center justify-center text-center px-6">
+    <p class="text-white/40 text-[12px] uppercase tracking-[0.4em] mb-4">resale concept store</p>
+    <h1 class="text-white text-[48px] md:text-[72px] font-light tracking-[0.15em] uppercase leading-none">MARKETPLACE</h1>
+    <p class="text-white/50 text-[15px] mt-6 max-w-md">Покупайте и продавайте уникальные товары</p>
+    <a href="/catalog" class="mt-10 px-10 py-3.5 border border-white/30 text-white text-[13px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all duration-300">
+        Смотреть каталог
+    </a>
+</section>
 
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4"><i class="fas fa-fire"></i> Популярные</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <div th:each="p : ${popular}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
-            <div th:class="'h-32 bg-gradient-to-br ' + ${p.themeColor} + ' flex items-center justify-center'">
-                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" class="h-full w-full object-cover"/>
-                <i th:unless="${p.hasImage}" class="fas fa-image text-white text-3xl"></i>
+<!-- Новинки -->
+<section class="max-w-[1400px] mx-auto px-6 pb-20">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Новинки</h2>
+        <a href="/catalog?sort=createdAt" class="text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white transition">Все →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a th:each="p : ${newest}" th:href="@{'/product/' + ${p.id}}" class="group block">
+            <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
+                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-image text-white/10 text-4xl"></i>
+                </div>
             </div>
-            <div class="p-4">
-                <h3 class="font-semibold text-gray-800 truncate" th:text="${p.title}"></h3>
-                <p class="text-indigo-600 font-bold" th:text="${p.price} + ' ₽'"></p>
-                <a th:href="@{'/product/' + ${p.id}}" class="text-sm text-indigo-500 hover:underline">Подробнее →</a>
+            <div class="mt-3">
+                <p class="text-white/80 text-[13px] truncate" th:text="${p.title}"></p>
+                <p class="text-white text-[14px] font-medium mt-1" th:text="${p.price} + ' ₽'"></p>
             </div>
-        </div>
+        </a>
     </div>
 </section>
-</div>
+
+<!-- Популярные -->
+<section class="max-w-[1400px] mx-auto px-6 pb-24">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Популярные</h2>
+        <a href="/catalog" class="text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white transition">Все →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a th:each="p : ${popular}" th:href="@{'/product/' + ${p.id}}" class="group block">
+            <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
+                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-image text-white/10 text-4xl"></i>
+                </div>
+            </div>
+            <div class="mt-3">
+                <p class="text-white/80 text-[13px] truncate" th:text="${p.title}"></p>
+                <p class="text-white text-[14px] font-medium mt-1" th:text="${p.price} + ' ₽'"></p>
+            </div>
+        </a>
+    </div>
+</section>
+
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
