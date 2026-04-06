@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:replace="~{layout :: layout(~{::section})}">
+<section class="max-w-5xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Мои товары</h1>
+        <a href="/seller/products/new" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"><i class="fas fa-plus"></i> Добавить товар</a>
+    </div>
+    <div th:unless="${#lists.isEmpty(pending)}">
+        <h2 class="text-lg font-semibold text-yellow-600 mb-3"><i class="fas fa-clock"></i> На модерации</h2>
+        <div th:each="p : ${pending}" class="bg-yellow-50 p-4 rounded-lg mb-2 flex justify-between items-center">
+            <span th:text="${p.title}"></span><span class="text-yellow-600 text-sm">Ожидает проверки</span>
+        </div>
+    </div>
+    <div th:unless="${#lists.isEmpty(approved)}" class="mt-6">
+        <h2 class="text-lg font-semibold text-emerald-600 mb-3"><i class="fas fa-check-circle"></i> Опубликованные</h2>
+        <div th:each="p : ${approved}" class="bg-white p-4 rounded-lg shadow-sm mb-2 flex justify-between items-center">
+            <div>
+                <a th:href="@{'/product/' + ${p.id}}" class="font-semibold text-gray-800 hover:text-indigo-600" th:text="${p.title}"></a>
+                <span class="text-gray-500 ml-2" th:text="${p.price} + ' ₽'"></span>
+            </div>
+            <div class="flex gap-2">
+                <a th:href="@{'/seller/products/' + ${p.id} + '/edit'}" class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded hover:bg-indigo-100">Редакт.</a>
+                <form th:action="@{'/seller/products/' + ${p.id} + '/delete'}" method="post">
+                    <button class="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${#lists.isEmpty(rejected)}" class="mt-6">
+        <h2 class="text-lg font-semibold text-red-600 mb-3"><i class="fas fa-times-circle"></i> Отклонённые</h2>
+        <div th:each="p : ${rejected}" class="bg-red-50 p-4 rounded-lg mb-2">
+            <span th:text="${p.title}"></span>
+        </div>
+    </div>
+</section>
+</div>
+</body>
+</html>

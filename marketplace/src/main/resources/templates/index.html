@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:replace="~{layout :: layout(~{::section})}">
+<section class="max-w-7xl mx-auto px-4 py-8">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 mb-3"><i class="fas fa-rocket text-indigo-500"></i> Маркетплейс товаров</h1>
+        <p class="text-gray-500 text-lg">Покупайте и продавайте уникальные товары</p>
+        <a href="/catalog" class="mt-4 inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Перейти в каталог</a>
+    </div>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4"><i class="fas fa-sparkles"></i> Новинки</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        <div th:each="p : ${newest}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
+            <div th:class="'h-32 bg-gradient-to-br ' + ${p.themeColor} + ' flex items-center justify-center'">
+                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" class="h-full w-full object-cover"/>
+                <i th:unless="${p.hasImage}" class="fas fa-image text-white text-3xl"></i>
+            </div>
+            <div class="p-4">
+                <h3 class="font-semibold text-gray-800 truncate" th:text="${p.title}"></h3>
+                <p class="text-indigo-600 font-bold" th:text="${p.price} + ' ₽'"></p>
+                <a th:href="@{'/product/' + ${p.id}}" class="text-sm text-indigo-500 hover:underline">Подробнее →</a>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4"><i class="fas fa-fire"></i> Популярные</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div th:each="p : ${popular}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
+            <div th:class="'h-32 bg-gradient-to-br ' + ${p.themeColor} + ' flex items-center justify-center'">
+                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" class="h-full w-full object-cover"/>
+                <i th:unless="${p.hasImage}" class="fas fa-image text-white text-3xl"></i>
+            </div>
+            <div class="p-4">
+                <h3 class="font-semibold text-gray-800 truncate" th:text="${p.title}"></h3>
+                <p class="text-indigo-600 font-bold" th:text="${p.price} + ' ₽'"></p>
+                <a th:href="@{'/product/' + ${p.id}}" class="text-sm text-indigo-500 hover:underline">Подробнее →</a>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:replace="~{layout :: layout(~{::section})}">
+<section class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6"><i class="fas fa-shopping-cart"></i> Корзина</h1>
+    <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-16 text-gray-400">
+        <i class="fas fa-shopping-bag text-6xl mb-4"></i>
+        <p class="text-xl">Корзина пуста</p>
+        <a href="/catalog" class="mt-4 inline-block text-indigo-600 hover:underline">Перейти в каталог</a>
+    </div>
+    <div th:unless="${#lists.isEmpty(cartItems)}">
+        <div class="bg-white rounded-xl shadow-sm divide-y">
+            <div th:each="item : ${cartItems}" class="flex items-center justify-between p-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-image text-gray-300"></i>
+                    </div>
+                    <div>
+                        <a th:href="@{'/product/' + ${item.product.id}}" class="font-semibold text-gray-800 hover:text-indigo-600" th:text="${item.product.title}"></a>
+                        <p class="text-sm text-gray-500" th:text="'Кол-во: ' + ${item.quantity}"></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="font-bold text-indigo-600" th:text="${item.product.price} + ' ₽'"></span>
+                    <form th:action="@{'/cart/remove/' + ${item.product.id}}" method="post">
+                        <button class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between">
+            <span class="text-2xl font-bold text-gray-800">Итого: <span class="text-indigo-600" th:text="${total} + ' ₽'"></span></span>
+            <a href="/orders/checkout" class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-lg">Оформить заказ</a>
+        </div>
+    </div>
+</section>
+</div>
+</body>
+</html>
