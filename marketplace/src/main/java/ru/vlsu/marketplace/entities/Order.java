@@ -23,7 +23,7 @@ public class Order {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "fk_buyer", optional = false)
+    @JoinColumn(name = "fk_buyer", nullable = false)
     private User buyer;
 
     @Enumerated(EnumType.STRING)

@@ -19,11 +19,11 @@ public class OrderItem {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "fk_order", optional = false)
+    @JoinColumn(name = "fk_order", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "fk_product", optional = false)
+    @JoinColumn(name = "fk_product", nullable = false)
     private Product product;
 
     @Column(nullable = false, precision = 10, scale = 2)

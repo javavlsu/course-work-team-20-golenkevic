@@ -19,11 +19,11 @@ public class Review {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "fk_product", optional = false)
+    @JoinColumn(name = "fk_product", nullable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "fk_user", optional = false)
+    @JoinColumn(name = "fk_user", nullable = false)
     private User author;
 
     @Column(nullable = false, columnDefinition = "TINYINT UNSIGNED")

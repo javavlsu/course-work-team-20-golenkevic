@@ -1,46 +1,50 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Маркетплейс товаров</title>
+    <title>MARKETPLACE — Профиль</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700\&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
-<main class="flex-1">
-<section class="max-w-5xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-xl shadow-sm p-8 mb-8">
-        <div class="flex items-center gap-6">
-            <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center">
-                <img th:if="${user.profilePic != null}" th:src="@{'/profile/' + ${user.id} + '/avatar'}" class="w-24 h-24 rounded-full object-cover"/>
-                <i th:unless="${user.profilePic != null}" class="fas fa-user text-indigo-400 text-3xl"></i>
-            </div>
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800" th:text="${user.username}"></h1>
-                <p class="text-gray-500" th:text="${user.email}"></p>
-                <span class="px-3 py-1 bg-indigo-100 text-indigo-600 text-sm rounded-full" th:text="${user.role}"></span>
-            </div>
+<main class="flex-1 pt-16">
+<section class="max-w-[900px] mx-auto px-6 py-12">
+    <div class="flex items-center gap-6 pb-8 border-b border-white/10 mb-10">
+        <div class="w-20 h-20 bg-[#161616] rounded-full flex items-center justify-center overflow-hidden">
+            <img th:if="${user.profilePic != null}" th:src="@{'/profile/' + ${user.id} + '/avatar'}" class="w-20 h-20 rounded-full object-cover"/>
+            <i th:unless="${user.profilePic != null}" class="fas fa-user text-white/20 text-2xl"></i>
         </div>
-        <p class="mt-4 text-gray-600" th:if="${user.bio}" th:text="${user.bio}"></p>
-    </div>
-
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Избранное</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div th:each="fav : ${favorites}" class="bg-white p-4 rounded-xl shadow-sm">
-            <a th:href="@{'/product/' + ${fav.product.id}}" class="font-semibold text-indigo-600 hover:underline" th:text="${fav.product.title}"></a>
-            <p class="text-sm text-gray-500" th:text="${fav.product.price} + ' ₽'"></p>
+        <div>
+            <h1 class="text-white text-[22px] font-light" th:text="${user.username}"></h1>
+            <p class="text-white/40 text-[13px]" th:text="${user.email}"></p>
+            <span class="text-[11px] uppercase tracking-[0.2em] px-2 py-0.5 bg-white/10 text-white/60 mt-1 inline-block" th:text="${user.role}"></span>
         </div>
     </div>
 
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Мои отзывы</h2>
-    <div th:each="r : ${reviews}" class="bg-white p-4 rounded-xl shadow-sm mb-3">
-        <a th:href="@{'/product/' + ${r.product.id}}" class="font-semibold text-indigo-600 hover:underline" th:text="${r.product.title}"></a>
-        <span class="text-yellow-500 ml-2"><i class="fas fa-star"></i> <span th:text="${r.rating}"></span></span>
-        <p class="text-gray-600 mt-1" th:text="${r.text}"></p>
+    <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-6">Избранное</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+        <a th:each="fav : ${favorites}" th:href="@{'/product/' + ${fav.product.id}}" class="group block">
+            <div class="aspect-[3/4] bg-[#161616] overflow-hidden">
+                <div class="w-full h-full flex items-center justify-center"><i class="fas fa-image text-white/10 text-3xl"></i></div>
+            </div>
+            <div class="mt-2">
+                <p class="text-white/80 text-[13px] truncate" th:text="${fav.product.title}"></p>
+                <p class="text-white text-[14px] font-medium" th:text="${fav.product.price} + ' ₽'"></p>
+            </div>
+        </a>
+    </div>
+
+    <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-6">Мои отзывы</h2>
+    <div th:each="r : ${reviews}" class="border-b border-white/5 py-4">
+        <div class="flex items-center gap-3 mb-1">
+            <a th:href="@{'/product/' + ${r.product.id}}" class="text-white/70 text-[13px] hover:text-white transition" th:text="${r.product.title}"></a>
+            <span class="text-yellow-500/70 text-[12px]"><i class="fas fa-star text-[10px]"></i> <span th:text="${r.rating}"></span></span>
+        </div>
+        <p class="text-white/40 text-[13px]" th:text="${r.text}"></p>
     </div>
 </section>
 </main>

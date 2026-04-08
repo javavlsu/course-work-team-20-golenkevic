@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Маркетплейс товаров</title>
+    <title>MARKETPLACE — Мои товары</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700\&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
-<main class="flex-1">
-<section class="max-w-5xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Мои товары</h1>
-        <a href="/seller/products/new" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"><i class="fas fa-plus"></i> Добавить товар</a>
+<main class="flex-1 pt-16">
+<section class="max-w-[900px] mx-auto px-6 py-12">
+    <div class="flex justify-between items-center mb-10">
+        <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Мои товары</h1>
+        <a href="/seller/products/new" class="px-6 py-2.5 bg-white text-black text-[12px] uppercase tracking-[0.15em] hover:bg-white/90 transition">Добавить товар</a>
     </div>
-    <div th:unless="${#lists.isEmpty(pending)}">
-        <h2 class="text-lg font-semibold text-yellow-600 mb-3"><i class="fas fa-clock"></i> На модерации</h2>
-        <div th:each="p : ${pending}" class="bg-yellow-50 p-4 rounded-lg mb-2 flex justify-between items-center">
-            <span th:text="${p.title}"></span><span class="text-yellow-600 text-sm">Ожидает проверки</span>
+    <div th:unless="${#lists.isEmpty(pending)}" class="mb-8">
+        <p class="text-yellow-400/70 text-[11px] uppercase tracking-[0.2em] mb-4">На модерации</p>
+        <div th:each="p : ${pending}" class="border border-yellow-500/10 bg-yellow-500/[0.03] p-4 mb-2 flex justify-between items-center">
+            <span class="text-white/70 text-[13px]" th:text="${p.title}"></span>
+            <span class="text-yellow-400/50 text-[11px] uppercase tracking-wider">Ожидает</span>
         </div>
     </div>
-    <div th:unless="${#lists.isEmpty(approved)}" class="mt-6">
-        <h2 class="text-lg font-semibold text-emerald-600 mb-3"><i class="fas fa-check-circle"></i> Опубликованные</h2>
-        <div th:each="p : ${approved}" class="bg-white p-4 rounded-lg shadow-sm mb-2 flex justify-between items-center">
-            <div>
-                <a th:href="@{'/product/' + ${p.id}}" class="font-semibold text-gray-800 hover:text-indigo-600" th:text="${p.title}"></a>
-                <span class="text-gray-500 ml-2" th:text="${p.price} + ' ₽'"></span>
+    <div th:unless="${#lists.isEmpty(approved)}" class="mb-8">
+        <p class="text-emerald-400/70 text-[11px] uppercase tracking-[0.2em] mb-4">Опубликованные</p>
+        <div th:each="p : ${approved}" class="border border-white/10 p-4 mb-2 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <a th:href="@{'/product/' + ${p.id}}" class="text-white/80 text-[13px] hover:text-white transition" th:text="${p.title}"></a>
+                <span class="text-white/40 text-[13px]" th:text="${p.price} + ' ₽'"></span>
             </div>
             <div class="flex gap-2">
-                <a th:href="@{'/seller/products/' + ${p.id} + '/edit'}" class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded hover:bg-indigo-100">Редакт.</a>
+                <a th:href="@{'/seller/products/' + ${p.id} + '/edit'}" class="px-3 py-1 text-[11px] border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition">Ред.</a>
                 <form th:action="@{'/seller/products/' + ${p.id} + '/delete'}" method="post">
-                    <button class="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100">Удалить</button>
+                    <button class="px-3 py-1 text-[11px] border border-white/10 text-white/40 hover:text-red-400 hover:border-red-400/30 transition">Удалить</button>
                 </form>
             </div>
         </div>
     </div>
-    <div th:unless="${#lists.isEmpty(rejected)}" class="mt-6">
-        <h2 class="text-lg font-semibold text-red-600 mb-3"><i class="fas fa-times-circle"></i> Отклонённые</h2>
-        <div th:each="p : ${rejected}" class="bg-red-50 p-4 rounded-lg mb-2">
-            <span th:text="${p.title}"></span>
+    <div th:unless="${#lists.isEmpty(rejected)}">
+        <p class="text-red-400/70 text-[11px] uppercase tracking-[0.2em] mb-4">Отклонённые</p>
+        <div th:each="p : ${rejected}" class="border border-red-500/10 bg-red-500/[0.03] p-4 mb-2">
+            <span class="text-white/50 text-[13px]" th:text="${p.title}"></span>
         </div>
     </div>
 </section>

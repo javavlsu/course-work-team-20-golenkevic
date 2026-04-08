@@ -1,43 +1,45 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Маркетплейс товаров</title>
+    <title>MARKETPLACE — Админ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700\&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
-<main class="flex-1">
-<section class="max-w-5xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6"><i class="fas fa-chart-bar"></i> Панель администратора</h1>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-            <i class="fas fa-users text-3xl text-indigo-500 mb-2"></i>
-            <p class="text-3xl font-bold text-gray-800" th:text="${totalUsers}"></p>
-            <p class="text-gray-500">Пользователей</p>
+<main class="flex-1 pt-16">
+<section class="max-w-[1100px] mx-auto px-6 py-12">
+    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Панель администратора</h1>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        <div class="border border-white/10 p-6 text-center">
+            <i class="fas fa-users text-white/20 text-2xl mb-3"></i>
+            <p class="text-white text-[28px] font-light" th:text="${totalUsers}"></p>
+            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">Пользователей</p>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-            <i class="fas fa-box text-3xl text-emerald-500 mb-2"></i>
-            <p class="text-3xl font-bold text-gray-800" th:text="${totalProducts}"></p>
-            <p class="text-gray-500">Товаров</p>
+        <div class="border border-white/10 p-6 text-center">
+            <i class="fas fa-box text-white/20 text-2xl mb-3"></i>
+            <p class="text-white text-[28px] font-light" th:text="${totalProducts}"></p>
+            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">Товаров</p>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-            <i class="fas fa-shopping-bag text-3xl text-amber-500 mb-2"></i>
-            <p class="text-3xl font-bold text-gray-800" th:text="${totalOrders}"></p>
-            <p class="text-gray-500">Заказов</p>
+        <div class="border border-white/10 p-6 text-center">
+            <i class="fas fa-shopping-bag text-white/20 text-2xl mb-3"></i>
+            <p class="text-white text-[28px] font-light" th:text="${totalOrders}"></p>
+            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">Заказов</p>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-            <i class="fas fa-clock text-3xl text-red-500 mb-2"></i>
-            <p class="text-3xl font-bold text-gray-800" th:text="${pendingProducts}"></p>
-            <p class="text-gray-500">На модерации</p>
+        <div class="border border-white/10 p-6 text-center">
+            <i class="fas fa-clock text-white/20 text-2xl mb-3"></i>
+            <p class="text-white text-[28px] font-light" th:text="${pendingProducts}"></p>
+            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">На модерации</p>
         </div>
     </div>
-    <a href="/admin/users" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Управление пользователями</a>
-    <a href="/moderation" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 ml-3">Модерация</a>
+    <div class="flex gap-3">
+        <a href="/admin/users" class="px-6 py-3 bg-white text-black text-[12px] uppercase tracking-[0.15em] hover:bg-white/90 transition">Пользователи</a>
+        <a href="/moderation" class="px-6 py-3 border border-white/20 text-white/70 text-[12px] uppercase tracking-[0.15em] hover:text-white hover:border-white/40 transition">Модерация</a>
+    </div>
 </section>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>

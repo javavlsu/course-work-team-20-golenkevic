@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Маркетплейс товаров</title>
+    <title>MARKETPLACE — Модерация</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700\&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
-<main class="flex-1">
-<section class="max-w-5xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6"><i class="fas fa-shield-alt"></i> Модерация товаров</h1>
-    <div th:if="${#lists.isEmpty(pendingProducts)}" class="text-center py-16 text-gray-400">
-        <p class="text-xl">Нет товаров на модерации</p>
+<main class="flex-1 pt-16">
+<section class="max-w-[900px] mx-auto px-6 py-12">
+    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Модерация товаров</h1>
+    <div th:if="${#lists.isEmpty(pendingProducts)}" class="text-center py-24">
+        <p class="text-white/30 text-[15px]">Нет товаров на модерации</p>
     </div>
-    <div th:each="p : ${pendingProducts}" class="bg-white rounded-xl shadow-sm p-6 mb-4 flex items-center justify-between">
+    <div th:each="p : ${pendingProducts}" class="border border-white/10 p-6 mb-4 flex items-center justify-between">
         <div>
-            <h3 class="font-semibold text-gray-800" th:text="${p.title}"></h3>
-            <p class="text-sm text-gray-500">Продавец: <span th:text="${p.seller.username}"></span></p>
-            <p class="text-sm text-gray-500" th:text="${p.price} + ' ₽'"></p>
-            <p class="text-sm text-gray-400 mt-1" th:text="${#strings.abbreviate(p.description, 100)}"></p>
+            <h3 class="text-white/80 text-[14px] font-medium" th:text="${p.title}"></h3>
+            <p class="text-white/40 text-[12px] mt-1">Продавец: <span th:text="${p.seller.username}"></span></p>
+            <p class="text-white/50 text-[13px] mt-1" th:text="${p.price} + ' ₽'"></p>
+            <p class="text-white/30 text-[12px] mt-1" th:text="${#strings.abbreviate(p.description, 80)}"></p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-shrink-0 ml-6">
             <form th:action="@{'/moderation/approve/' + ${p.id}}" method="post">
-                <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"><i class="fas fa-check"></i> Одобрить</button>
+                <button class="px-5 py-2.5 bg-white text-black text-[12px] uppercase tracking-[0.1em] hover:bg-white/90 transition">Одобрить</button>
             </form>
             <form th:action="@{'/moderation/reject/' + ${p.id}}" method="post">
-                <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"><i class="fas fa-times"></i> Отклонить</button>
+                <button class="px-5 py-2.5 border border-white/20 text-white/60 text-[12px] uppercase tracking-[0.1em] hover:text-red-400 hover:border-red-400/30 transition">Отклонить</button>
             </form>
         </div>
     </div>

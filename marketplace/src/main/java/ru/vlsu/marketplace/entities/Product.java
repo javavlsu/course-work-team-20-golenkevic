@@ -52,7 +52,7 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "fk_seller", optional = false)
+    @JoinColumn(name = "fk_seller", nullable = false)
     private User seller;
 
     @Column(name = "created_at")
