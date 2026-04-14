@@ -30,16 +30,22 @@
     </form>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <a th:each="p : ${products}" th:href="@{'/product/' + ${p.id}}" class="group block">
-            <div class="aspect-[3/4] bg-[#161616] overflow-hidden">
+            <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
                 <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                 <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center"><i class="fas fa-image text-white/10 text-4xl"></i></div>
-            </div>
-            <div class="mt-3 mb-6">
-                <p class="text-white/60 text-[11px] uppercase tracking-wider" th:text="${p.categoryName}"></p>
-                <p class="text-white/80 text-[13px] truncate mt-0.5" th:text="${p.title}"></p>
-                <div class="flex items-center gap-2 mt-1">
-                    <p class="text-white text-[14px] font-medium" th:text="${p.price} + ' ₽'"></p>
-                    <span class="text-yellow-500/70 text-[12px]" th:if="${p.averageRating != null}"><i class="fas fa-star text-[10px]"></i> <span th:text="${#numbers.formatDecimal(p.averageRating, 1, 1)}"></span></span>
+                <!-- Градиентный оверлей -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+                <!-- Информация поверх фото -->
+                <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+                    <p class="text-white/55 text-[10px] uppercase tracking-[0.2em] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300" th:text="${p.categoryName}"></p>
+                    <p class="text-white text-[13px] leading-snug line-clamp-2 mb-2" th:text="${p.title}"></p>
+                    <div class="flex items-center justify-between">
+                        <p class="text-white text-[15px] font-semibold" th:text="${p.price} + ' ₽'"></p>
+                        <span class="text-yellow-400/80 text-[11px] flex items-center gap-1" th:if="${p.averageRating != null}">
+                            <i class="fas fa-star text-[9px]"></i>
+                            <span th:text="${#numbers.formatDecimal(p.averageRating, 1, 1)}"></span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </a>
