@@ -40,7 +40,11 @@ public class CatalogController {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("totalItems", products.getTotalElements());
         model.addAttribute("selectedCategory", categoryId);
+        model.addAttribute("selectedCondition", condition);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("search", search);
         model.addAttribute("conditions", Product.Condition.values());
         return "catalog";

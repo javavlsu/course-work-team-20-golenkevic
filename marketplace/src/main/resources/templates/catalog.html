@@ -7,37 +7,122 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
+        .filter-chips::-webkit-scrollbar { display: none; }
+        .filter-chips { scrollbar-width: none; }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[1400px] mx-auto px-6 py-12">
-    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Каталог</h1>
-    <form method="get" action="/catalog" class="flex flex-wrap gap-4 mb-10 pb-8 border-b border-white/10">
-        <input type="text" name="search" th:value="${search}" placeholder="Поиск..." class="bg-transparent border border-white/15 text-white text-[13px] px-4 py-2.5 w-56 focus:border-white/40 outline-none transition placeholder:text-white/30">
-        <select name="categoryId" class="bg-[#0a0a0a] border border-white/15 text-white/70 text-[13px] px-4 py-2.5">
-            <option value="">Все категории</option>
-            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${cat.id == selectedCategory}"></option>
-        </select>
-        <select name="condition" class="bg-[#0a0a0a] border border-white/15 text-white/70 text-[13px] px-4 py-2.5">
-            <option value="">Любое состояние</option>
-            <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}"></option>
-        </select>
-        <input type="number" name="minPrice" step="0.01" placeholder="Цена от" class="bg-transparent border border-white/15 text-white text-[13px] px-4 py-2.5 w-32 focus:border-white/40 outline-none transition placeholder:text-white/30">
-        <input type="number" name="maxPrice" step="0.01" placeholder="Цена до" class="bg-transparent border border-white/15 text-white text-[13px] px-4 py-2.5 w-32 focus:border-white/40 outline-none transition placeholder:text-white/30">
-        <button type="submit" class="px-6 py-2.5 bg-white text-black text-[12px] uppercase tracking-[0.15em] hover:bg-white/90 transition">Найти</button>
+
+<!-- ═══ ФИЛЬТР-БАР (sticky) ═══ -->
+<div class="sticky top-16 z-30 bg-[#0a0a0a]/96 backdrop-blur-sm border-b border-white/10">
+    <form method="get" action="/catalog" id="filterForm">
+
+        <!-- Строка 1: поиск + цена + кнопка -->
+        <div class="max-w-[1400px] mx-auto px-6 pt-3 pb-2 flex flex-wrap items-center gap-2">
+            <!-- Поиск -->
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-white/25 text-[11px]"></i>
+                <input type="text" name="search" th:value="${search}"
+                       placeholder="Поиск..."
+                       class="bg-white/5 border border-white/10 text-white text-[13px] pl-8 pr-4 py-2 w-52 focus:border-white/30 outline-none transition placeholder:text-white/25">
+            </div>
+            <!-- Цена от — до -->
+            <div class="flex items-center gap-1">
+                <input type="number" name="minPrice" th:value="${minPrice}" step="0.01" placeholder="от ₽"
+                       class="bg-white/5 border border-white/10 text-white text-[13px] px-3 py-2 w-24 focus:border-white/30 outline-none transition placeholder:text-white/25">
+                <span class="text-white/20 text-[12px]">—</span>
+                <input type="number" name="maxPrice" th:value="${maxPrice}" step="0.01" placeholder="до ₽"
+                       class="bg-white/5 border border-white/10 text-white text-[13px] px-3 py-2 w-24 focus:border-white/30 outline-none transition placeholder:text-white/25">
+            </div>
+            <!-- Применить -->
+            <button type="submit"
+                    class="px-5 py-2 bg-white text-black text-[11px] uppercase tracking-[0.15em] hover:bg-white/90 transition">
+                Найти
+            </button>
+            <!-- Сбросить -->
+            <a href="/catalog"
+               th:if="${search != null or selectedCategory != null or selectedCondition != null or minPrice != null or maxPrice != null}"
+               class="flex items-center gap-1.5 text-white/35 text-[11px] uppercase tracking-[0.1em] hover:text-white/70 transition">
+                <i class="fas fa-times text-[10px]"></i> Сбросить
+            </a>
+        </div>
+
+        <!-- Строка 2: категории + состояние (горизонтальный скролл) -->
+        <div class="filter-chips overflow-x-auto">
+            <div class="max-w-[1400px] mx-auto px-6 pb-3 flex items-center gap-1.5 whitespace-nowrap">
+
+                <!-- Категории -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Категория</span>
+                <button type="submit" name="categoryId" value=""
+                        th:class="${selectedCategory == null}
+                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white text-black'
+                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
+                    Все
+                </button>
+                <button th:each="cat : ${categories}"
+                        type="submit" th:name="categoryId" th:value="${cat.id}" th:text="${cat.name}"
+                        th:class="${cat.id == selectedCategory}
+                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white text-black'
+                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
+                </button>
+
+                <span class="w-px h-4 bg-white/15 mx-2"></span>
+
+                <!-- Состояние -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Состояние</span>
+                <button type="submit" name="condition" value=""
+                        th:class="${selectedCondition == null}
+                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
+                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
+                    Любое
+                </button>
+                <button th:each="c : ${conditions}"
+                        type="submit" th:name="condition" th:value="${c}" th:text="${c}"
+                        th:class="${c == selectedCondition}
+                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
+                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
+                </button>
+
+            </div>
+        </div>
     </form>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+</div>
+
+<!-- ═══ КАТАЛОГ ═══ -->
+<section class="max-w-[1400px] mx-auto px-6 py-10">
+
+    <!-- Заголовок + счётчик -->
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Каталог</h1>
+        <p class="text-white/30 text-[12px]" th:text="${totalItems} + ' товаров'"></p>
+    </div>
+
+    <!-- Пустой результат -->
+    <div th:if="${#lists.isEmpty(products.content)}" class="py-24 text-center">
+        <i class="fas fa-search text-white/10 text-5xl mb-6"></i>
+        <p class="text-white/30 text-[13px] uppercase tracking-[0.2em]">Ничего не найдено</p>
+        <a href="/catalog" class="mt-6 inline-block text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white/70 transition">Сбросить фильтры</a>
+    </div>
+
+    <!-- Адаптивная сетка -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         <a th:each="p : ${products}" th:href="@{'/product/' + ${p.id}}" class="group block">
             <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
-                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
-                <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center"><i class="fas fa-image text-white/10 text-4xl"></i></div>
+                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt=""
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-image text-white/10 text-4xl"></i>
+                </div>
                 <!-- Градиентный оверлей -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
                 <!-- Информация поверх фото -->
                 <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                    <p class="text-white/55 text-[10px] uppercase tracking-[0.2em] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300" th:text="${p.categoryName}"></p>
+                    <p class="text-white/55 text-[10px] uppercase tracking-[0.2em] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                       th:text="${p.categoryName}"></p>
                     <p class="text-white text-[13px] leading-snug line-clamp-2 mb-2" th:text="${p.title}"></p>
                     <div class="flex items-center justify-between">
                         <p class="text-white text-[15px] font-semibold" th:text="${p.price} + ' ₽'"></p>
@@ -50,9 +135,18 @@
             </div>
         </a>
     </div>
+
+    <!-- Пагинация -->
     <div class="mt-12 flex justify-center gap-1" th:if="${totalPages > 1}">
-        <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:href="@{/catalog(page=${i}, search=${search}, categoryId=${selectedCategory})}" th:text="${i + 1}" th:class="${i == currentPage} ? 'w-10 h-10 flex items-center justify-center bg-white text-black text-[13px]' : 'w-10 h-10 flex items-center justify-center border border-white/15 text-white/50 text-[13px] hover:border-white/40 transition'"></a>
+        <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+           th:href="@{/catalog(page=${i}, search=${search}, categoryId=${selectedCategory}, condition=${selectedCondition}, minPrice=${minPrice}, maxPrice=${maxPrice})}"
+           th:text="${i + 1}"
+           th:class="${i == currentPage}
+               ? 'w-10 h-10 flex items-center justify-center bg-white text-black text-[13px]'
+               : 'w-10 h-10 flex items-center justify-center border border-white/15 text-white/50 text-[13px] hover:border-white/40 transition'">
+        </a>
     </div>
+
 </section>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
