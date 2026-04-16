@@ -15,6 +15,7 @@ public class CatalogProductDto {
     private String description;
     private BigDecimal price;
     private Product.Condition condition;
+    private Integer categoryId;
     private String categoryName;
     private String sellerUsername;
     private Double averageRating;

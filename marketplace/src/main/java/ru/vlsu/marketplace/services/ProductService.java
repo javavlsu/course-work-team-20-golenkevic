@@ -66,6 +66,7 @@ public class ProductService {
                 .description(p.getDescription())
                 .price(p.getPrice())
                 .condition(p.getCondition())
+                .categoryId(p.getCategory() != null ? p.getCategory().getId() : null)
                 .categoryName(p.getCategory() != null ? p.getCategory().getName() : "")
                 .sellerUsername(p.getSeller().getUsername())
                 .averageRating(avgRating)
