@@ -27,15 +27,15 @@ public class AuthController {
     public String register(@Valid @ModelAttribute UserRegistrationDto dto, RedirectAttributes ra) {
         if (!dto.isPasswordConfirmed()) {
             ra.addFlashAttribute("error", "Пароли не совпадают");
-            return "redirect:/auth?error";
+            return "redirect:/auth?register&error";
         }
         if (userService.isUsernameTaken(dto.getUsername())) {
             ra.addFlashAttribute("error", "Имя пользователя занято");
-            return "redirect:/auth?error";
+            return "redirect:/auth?register&error";
         }
         if (userService.isEmailTaken(dto.getEmail())) {
             ra.addFlashAttribute("error", "Email уже используется");
-            return "redirect:/auth?error";
+            return "redirect:/auth?register&error";
         }
         userService.registerNewUser(dto);
         ra.addFlashAttribute("success", "Регистрация успешна! Войдите в систему.");

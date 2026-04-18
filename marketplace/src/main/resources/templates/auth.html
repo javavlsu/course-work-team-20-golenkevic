@@ -7,62 +7,197 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
+        .form-panel { transition: opacity 0.2s ease, transform 0.2s ease; }
+        .form-panel.hidden { opacity: 0; pointer-events: none; transform: translateY(6px); display: none; }
+        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 100px #111 inset !important; -webkit-text-fill-color: #e5e5e5 !important; }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
-<main class="flex-1 pt-16">
+<main class="flex-1 pt-16 flex items-center justify-center px-6 py-16">
 
-<section class="min-h-[80vh] flex items-center justify-center px-6">
-    <div class="w-full max-w-md">
-        <h1 class="text-white text-[28px] font-light tracking-[0.15em] uppercase text-center mb-12">Аккаунт</h1>
-        <div class="flex border-b border-white/10 mb-10">
-            <button onclick="showTab('login')" id="tab-login" class="flex-1 pb-3 text-[13px] uppercase tracking-[0.2em] text-white border-b-2 border-white transition">Вход</button>
-            <button onclick="showTab('register')" id="tab-register" class="flex-1 pb-3 text-[13px] uppercase tracking-[0.2em] text-white/40 border-b-2 border-transparent hover:text-white/60 transition">Регистрация</button>
+    <div class="w-full max-w-[420px]">
+
+        <!-- Логотип -->
+        <div class="text-center mb-10">
+            <a href="/" class="text-white text-[18px] uppercase tracking-[0.35em] font-light">MARKETPLACE</a>
         </div>
-        <div th:if="${param.error}" class="bg-red-500/10 border border-red-500/20 text-red-400 text-[13px] px-4 py-3 mb-6">Неверные данные для входа</div>
-        <div th:if="${param.success}" class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[13px] px-4 py-3 mb-6">Регистрация успешна</div>
-        <div th:if="${error}" class="bg-red-500/10 border border-red-500/20 text-red-400 text-[13px] px-4 py-3 mb-6" th:text="${error}"></div>
-        <form id="form-login" th:action="@{/auth/login}" method="post" class="space-y-6">
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Email или имя</label>
-                <input type="text" name="username" required class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
+
+        <!-- Карточка формы -->
+        <div class="bg-[#111] border border-white/8 p-8">
+
+            <!-- Табы -->
+            <div class="flex mb-8 border-b border-white/10 -mx-8 px-8">
+                <button id="tab-login" onclick="showTab('login')"
+                        class="flex-1 pb-4 text-[11px] uppercase tracking-[0.25em] transition-all border-b-2 border-white text-white">
+                    Вход
+                </button>
+                <button id="tab-register" onclick="showTab('register')"
+                        class="flex-1 pb-4 text-[11px] uppercase tracking-[0.25em] transition-all border-b-2 border-transparent text-white/35 hover:text-white/60">
+                    Регистрация
+                </button>
             </div>
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Пароль</label>
-                <input type="password" name="password" required class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
+
+            <!-- Уведомления -->
+            <div th:if="${param.error and !param.register}"
+                 class="flex items-center gap-3 bg-red-500/8 border border-red-500/20 text-red-400 text-[13px] px-4 py-3 mb-6">
+                <i class="fas fa-exclamation-circle text-[14px]"></i>
+                <span>Неверное имя пользователя или пароль</span>
             </div>
-            <div class="flex items-center gap-2">
-                <input type="checkbox" name="remember-me" id="remember" class="accent-white">
-                <label for="remember" class="text-white/40 text-[12px]">Запомнить</label>
+            <div th:if="${error}"
+                 class="flex items-center gap-3 bg-red-500/8 border border-red-500/20 text-red-400 text-[13px] px-4 py-3 mb-6">
+                <i class="fas fa-exclamation-circle text-[14px]"></i>
+                <span th:text="${error}"></span>
             </div>
-            <button type="submit" class="w-full py-3.5 bg-white text-black text-[13px] uppercase tracking-[0.2em] font-medium hover:bg-white/90 transition">Войти</button>
-        </form>
-        <form id="form-register" th:action="@{/auth/register}" method="post" class="space-y-6 hidden">
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Имя пользователя</label>
-                <input type="text" name="username" required maxlength="50" class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
+            <div th:if="${success}"
+                 class="flex items-center gap-3 bg-emerald-500/8 border border-emerald-500/20 text-emerald-400 text-[13px] px-4 py-3 mb-6">
+                <i class="fas fa-check-circle text-[14px]"></i>
+                <span th:text="${success}"></span>
             </div>
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Email</label>
-                <input type="email" name="email" required class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
-            </div>
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Пароль</label>
-                <input type="password" name="password" required minlength="6" class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
-            </div>
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Подтвердите пароль</label>
-                <input type="password" name="confirmPassword" required class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
-            </div>
-            <button type="submit" class="w-full py-3.5 bg-white text-black text-[13px] uppercase tracking-[0.2em] font-medium hover:bg-white/90 transition">Зарегистрироваться</button>
-        </form>
+
+            <!-- ═══ ФОРМА ВХОДА ═══ -->
+            <form id="form-login" th:action="@{/auth/login}" method="post" class="form-panel space-y-5">
+                <!-- Логин -->
+                <div>
+                    <label for="login-username" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Имя пользователя</label>
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[12px]"></i>
+                        <input id="login-username" type="text" name="username" required autocomplete="username"
+                               class="w-full bg-white/4 border border-white/10 text-white text-[14px] pl-10 pr-4 py-3 focus:border-white/35 focus:bg-white/6 outline-none transition placeholder:text-white/20"
+                               placeholder="username">
+                    </div>
+                </div>
+                <!-- Пароль -->
+                <div>
+                    <label for="login-password" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Пароль</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[12px]"></i>
+                        <input id="login-password" type="password" name="password" required autocomplete="current-password"
+                               class="w-full bg-white/4 border border-white/10 text-white text-[14px] pl-10 pr-10 py-3 focus:border-white/35 focus:bg-white/6 outline-none transition placeholder:text-white/20"
+                               placeholder="••••••••">
+                        <button type="button" onclick="togglePwd('login-password', 'eye-login')"
+                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition">
+                            <i id="eye-login" class="far fa-eye text-[13px]"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Запомнить -->
+                <div class="flex items-center gap-2.5">
+                    <input type="checkbox" name="remember-me" id="remember"
+                           class="w-4 h-4 accent-white bg-white/5 border border-white/15">
+                    <label for="remember" class="text-white/35 text-[12px] cursor-pointer select-none">Запомнить меня</label>
+                </div>
+                <!-- Кнопка -->
+                <button type="submit"
+                        class="w-full py-3.5 bg-white text-black text-[12px] uppercase tracking-[0.25em] font-medium hover:bg-white/90 active:bg-white/80 transition mt-2">
+                    Войти
+                </button>
+                <!-- Ссылка на регистрацию -->
+                <p class="text-center text-white/30 text-[12px] pt-2">
+                    Нет аккаунта?
+                    <button type="button" onclick="showTab('register')"
+                            class="text-white/60 hover:text-white underline underline-offset-2 transition">
+                        Зарегистрироваться
+                    </button>
+                </p>
+            </form>
+
+            <!-- ═══ ФОРМА РЕГИСТРАЦИИ ═══ -->
+            <form id="form-register" th:action="@{/auth/register}" method="post" class="form-panel space-y-5 hidden">
+                <!-- Имя -->
+                <div>
+                    <label for="reg-username" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Имя пользователя</label>
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[12px]"></i>
+                        <input id="reg-username" type="text" name="username" required maxlength="50" autocomplete="username"
+                               class="w-full bg-white/4 border border-white/10 text-white text-[14px] pl-10 pr-4 py-3 focus:border-white/35 focus:bg-white/6 outline-none transition placeholder:text-white/20"
+                               placeholder="username">
+                    </div>
+                </div>
+                <!-- Email -->
+                <div>
+                    <label for="reg-email" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Email</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[12px]"></i>
+                        <input id="reg-email" type="email" name="email" required autocomplete="email"
+                               class="w-full bg-white/4 border border-white/10 text-white text-[14px] pl-10 pr-4 py-3 focus:border-white/35 focus:bg-white/6 outline-none transition placeholder:text-white/20"
+                               placeholder="you@example.com">
+                    </div>
+                </div>
+                <!-- Пароль -->
+                <div>
+                    <label for="reg-password" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Пароль <span class="text-white/20">(мин. 6 символов)</span></label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[12px]"></i>
+                        <input id="reg-password" type="password" name="password" required minlength="6" autocomplete="new-password"
+                               class="w-full bg-white/4 border border-white/10 text-white text-[14px] pl-10 pr-10 py-3 focus:border-white/35 focus:bg-white/6 outline-none transition placeholder:text-white/20"
+                               placeholder="••••••••">
+                        <button type="button" onclick="togglePwd('reg-password', 'eye-reg')"
+                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition">
+                            <i id="eye-reg" class="far fa-eye text-[13px]"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Подтверждение пароля -->
+                <div>
+                    <label for="reg-confirm" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Подтвердите пароль</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[12px]"></i>
+                        <input id="reg-confirm" type="password" name="confirmPassword" required autocomplete="new-password"
+                               class="w-full bg-white/4 border border-white/10 text-white text-[14px] pl-10 pr-10 py-3 focus:border-white/35 focus:bg-white/6 outline-none transition placeholder:text-white/20"
+                               placeholder="••••••••">
+                        <button type="button" onclick="togglePwd('reg-confirm', 'eye-confirm')"
+                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition">
+                            <i id="eye-confirm" class="far fa-eye text-[13px]"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Кнопка -->
+                <button type="submit"
+                        class="w-full py-3.5 bg-white text-black text-[12px] uppercase tracking-[0.25em] font-medium hover:bg-white/90 active:bg-white/80 transition mt-2">
+                    Создать аккаунт
+                </button>
+                <!-- Ссылка на вход -->
+                <p class="text-center text-white/30 text-[12px] pt-2">
+                    Уже есть аккаунт?
+                    <button type="button" onclick="showTab('login')"
+                            class="text-white/60 hover:text-white underline underline-offset-2 transition">
+                        Войти
+                    </button>
+                </p>
+            </form>
+        </div>
     </div>
-</section>
-<script>
-function showTab(t){document.getElementById('form-login').classList.toggle('hidden',t!=='login');document.getElementById('form-register').classList.toggle('hidden',t!=='register');document.getElementById('tab-login').className='flex-1 pb-3 text-[13px] uppercase tracking-[0.2em] transition '+(t==='login'?'text-white border-b-2 border-white':'text-white/40 border-b-2 border-transparent');document.getElementById('tab-register').className='flex-1 pb-3 text-[13px] uppercase tracking-[0.2em] transition '+(t==='register'?'text-white border-b-2 border-white':'text-white/40 border-b-2 border-transparent');}
-</script>
 </main>
+
+<script th:inline="javascript">
+    const openRegister = /*[[${param.register}]]*/ false;
+
+    function showTab(t) {
+        const isLogin = t === 'login';
+        const isRegister = t === 'register';
+        document.getElementById('form-login').classList.toggle('hidden', isRegister);
+        document.getElementById('form-register').classList.toggle('hidden', isLogin);
+
+        const activeClass = 'border-b-2 border-white text-white';
+        const inactiveClass = 'border-b-2 border-transparent text-white/35 hover:text-white/60';
+        document.getElementById('tab-login').className = `flex-1 pb-4 text-[11px] uppercase tracking-[0.25em] transition-all ${isLogin ? activeClass : inactiveClass}`;
+        document.getElementById('tab-register').className = `flex-1 pb-4 text-[11px] uppercase tracking-[0.25em] transition-all ${!isLogin ? activeClass : inactiveClass}`;
+    }
+
+    function togglePwd(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        icon.className = isHidden ? 'far fa-eye-slash text-[13px]' : 'far fa-eye text-[13px]';
+    }
+
+    if (openRegister) showTab('register');
+</script>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
