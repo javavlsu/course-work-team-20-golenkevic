@@ -3,51 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARKETPLACE — Профиль</title>
+    <title th:text="${user.username} + ' — MARKETPLACE'">Профиль</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[900px] mx-auto px-6 py-12">
-    <div class="flex items-center gap-6 pb-8 border-b border-white/10 mb-10">
-        <div class="w-20 h-20 bg-[#161616] rounded-full flex items-center justify-center overflow-hidden">
-            <img th:if="${user.profilePic != null}" th:src="@{'/profile/' + ${user.id} + '/avatar'}" class="w-20 h-20 rounded-full object-cover"/>
-            <i th:unless="${user.profilePic != null}" class="fas fa-user text-white/20 text-2xl"></i>
+<div class="max-w-[1000px] mx-auto px-6 py-12">
+
+    <!-- ═══ ШАПКА ПРОФИЛЯ ═══ -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-10 border-b border-white/10 mb-0">
+
+        <!-- Аватар -->
+        <div class="relative group flex-shrink-0">
+            <div class="w-20 h-20 bg-[#161616] rounded-full overflow-hidden flex items-center justify-center">
+                <img th:if="${user.profilePic != null}"
+                     th:src="@{'/profile/' + ${user.id} + '/avatar'}"
+                     th:alt="${user.username}"
+                     class="w-20 h-20 object-cover rounded-full"/>
+                <i th:unless="${user.profilePic != null}"
+                   class="fas fa-user text-white/20 text-3xl"></i>
+            </div>
+            <!-- Кнопка смены аватара -->
+            <button onclick="document.getElementById('avatarInput').click()"
+                    class="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <i class="fas fa-camera text-white text-sm"></i>
+            </button>
+            <input id="avatarInput" type="file" accept="image/*" class="hidden" onchange="uploadAvatar(this)">
         </div>
-        <div>
-            <h1 class="text-white text-[22px] font-light" th:text="${user.username}"></h1>
-            <p class="text-white/40 text-[13px]" th:text="${user.email}"></p>
-            <span class="text-[11px] uppercase tracking-[0.2em] px-2 py-0.5 bg-white/10 text-white/60 mt-1 inline-block" th:text="${user.role}"></span>
+
+        <!-- Инфо -->
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3 flex-wrap">
+                <h1 id="display-username" class="text-white text-[22px] font-light" th:text="${user.username}">Username</h1>
+                <span class="text-[10px] uppercase tracking-[0.2em] px-2.5 py-1 border border-white/15 text-white/40"
+                      th:text="${user.role}"></span>
+            </div>
+            <p class="text-white/35 text-[13px] mt-1" th:text="${user.email}"></p>
+            <p class="text-white/50 text-[13px] mt-2 max-w-md"
+               th:text="${user.bio}" th:if="${user.bio != null and !#strings.isEmpty(user.bio)}"></p>
+            <p class="text-white/20 text-[12px] mt-2 italic" th:if="${user.bio == null or #strings.isEmpty(user.bio)}">
+                Расскажите о себе...
+            </p>
+        </div>
+
+        <!-- Кнопка редактирования -->
+        <button onclick="toggleEdit()"
+                class="flex-shrink-0 flex items-center gap-2 px-4 py-2 border border-white/15 text-white/50 text-[11px] uppercase tracking-[0.15em] hover:border-white/35 hover:text-white/80 transition">
+            <i class="fas fa-pen text-[10px]"></i> Редактировать
+        </button>
+    </div>
+
+    <!-- ═══ ФОРМА РЕДАКТИРОВАНИЯ (скрыта) ═══ -->
+    <div id="edit-panel" class="hidden border border-white/8 bg-[#111] p-6 mb-0">
+        <p class="text-white/35 text-[11px] uppercase tracking-[0.2em] mb-5">Редактировать профиль</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="edit-username" class="block text-white/30 text-[10px] uppercase tracking-[0.2em] mb-2">Имя пользователя</label>
+                <input id="edit-username" type="text" th:value="${user.username}"
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-3 py-2.5 focus:border-white/30 outline-none transition">
+            </div>
+            <div>
+                <label for="edit-bio" class="block text-white/30 text-[10px] uppercase tracking-[0.2em] mb-2">О себе</label>
+                <input id="edit-bio" type="text" th:value="${user.bio}"
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-3 py-2.5 focus:border-white/30 outline-none transition"
+                       placeholder="Напишите что-нибудь о себе">
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="saveProfile()"
+                    class="px-6 py-2.5 bg-white text-black text-[11px] uppercase tracking-[0.15em] hover:bg-white/90 transition">
+                Сохранить
+            </button>
+            <button onclick="toggleEdit()"
+                    class="px-6 py-2.5 border border-white/15 text-white/50 text-[11px] uppercase tracking-[0.15em] hover:border-white/35 transition">
+                Отмена
+            </button>
         </div>
     </div>
 
-    <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-6">Избранное</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-        <a th:each="fav : ${favorites}" th:href="@{'/product/' + ${fav.product.id}}" class="group block">
-            <div class="aspect-[3/4] bg-[#161616] overflow-hidden">
-                <div class="w-full h-full flex items-center justify-center"><i class="fas fa-image text-white/10 text-3xl"></i></div>
-            </div>
-            <div class="mt-2">
-                <p class="text-white/80 text-[13px] truncate" th:text="${fav.product.title}"></p>
-                <p class="text-white text-[14px] font-medium" th:text="${fav.product.price} + ' ₽'"></p>
-            </div>
-        </a>
+    <!-- ═══ ТАБЫ ═══ -->
+    <div class="border-b border-white/10 flex mt-10 mb-8">
+        <button id="tab-btn-favorites" onclick="switchTab('favorites')"
+                class="px-1 pb-4 mr-8 text-[11px] uppercase tracking-[0.25em] border-b-2 border-white text-white transition">
+            Избранное
+            <span class="ml-2 text-white/30 text-[10px]" th:text="${#lists.size(favorites)}"></span>
+        </button>
+        <button id="tab-btn-reviews" onclick="switchTab('reviews')"
+                class="px-1 pb-4 mr-8 text-[11px] uppercase tracking-[0.25em] border-b-2 border-transparent text-white/35 hover:text-white/60 transition">
+            Отзывы
+            <span class="ml-2 text-white/30 text-[10px]" th:text="${#lists.size(reviews)}"></span>
+        </button>
     </div>
 
-    <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-6">Мои отзывы</h2>
-    <div th:each="r : ${reviews}" class="border-b border-white/5 py-4">
-        <div class="flex items-center gap-3 mb-1">
-            <a th:href="@{'/product/' + ${r.product.id}}" class="text-white/70 text-[13px] hover:text-white transition" th:text="${r.product.title}"></a>
-            <span class="text-yellow-500/70 text-[12px]"><i class="fas fa-star text-[10px]"></i> <span th:text="${r.rating}"></span></span>
+    <!-- ═══ ТАБ: ИЗБРАННОЕ ═══ -->
+    <div id="tab-favorites" class="tab-panel active">
+        <div th:if="${#lists.isEmpty(favorites)}" class="py-20 text-center">
+            <i class="far fa-heart text-white/8 text-5xl mb-6"></i>
+            <p class="text-white/25 text-[12px] uppercase tracking-[0.2em]">Нет избранных товаров</p>
+            <a href="/catalog" class="mt-5 inline-block text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white/70 transition">
+                Перейти в каталог
+            </a>
         </div>
-        <p class="text-white/40 text-[13px]" th:text="${r.text}"></p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            <a th:each="fav : ${favorites}" th:href="@{'/product/' + ${fav.product.id}}" class="group block">
+                <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
+                    <img th:if="${fav.product.imageData != null}"
+                         th:src="@{'/product/' + ${fav.product.id} + '/image'}"
+                         alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                    <div th:unless="${fav.product.imageData != null}"
+                         class="w-full h-full flex items-center justify-center">
+                        <i class="fas fa-image text-white/10 text-3xl"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+                        <p class="text-white text-[12px] leading-snug line-clamp-2 mb-1.5" th:text="${fav.product.title}"></p>
+                        <p class="text-white text-[14px] font-semibold" th:text="${fav.product.price} + ' ₽'"></p>
+                    </div>
+                    <!-- Удалить из избранного -->
+                    <form th:action="@{'/favorites/remove/' + ${fav.product.id}}" method="post"
+                          class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
+                        <button class="w-7 h-7 bg-black/60 text-red-400 text-[11px] flex items-center justify-center hover:bg-black/80 transition">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </form>
+                </div>
+            </a>
+        </div>
     </div>
-</section>
+
+    <!-- ═══ ТАБ: ОТЗЫВЫ ═══ -->
+    <div id="tab-reviews" class="tab-panel">
+        <div th:if="${#lists.isEmpty(reviews)}" class="py-20 text-center">
+            <i class="far fa-comment text-white/8 text-5xl mb-6"></i>
+            <p class="text-white/25 text-[12px] uppercase tracking-[0.2em]">Нет отзывов</p>
+        </div>
+        <div class="space-y-0 max-w-2xl">
+            <div th:each="r : ${reviews}" class="py-6 border-b border-white/8">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                    <a th:href="@{'/product/' + ${r.product.id}}"
+                       class="text-white/70 text-[14px] hover:text-white transition line-clamp-1 flex-1"
+                       th:text="${r.product.title}"></a>
+                    <div class="flex gap-0.5 flex-shrink-0">
+                        <i th:each="i : ${#numbers.sequence(1,5)}"
+                           th:class="${i <= r.rating} ? 'fas fa-star text-yellow-400 text-[11px]' : 'far fa-star text-white/15 text-[11px]'"></i>
+                    </div>
+                </div>
+                <p class="text-white/45 text-[13px] leading-relaxed" th:text="${r.text}"></p>
+            </div>
+        </div>
+    </div>
+
+</div>
 </main>
+
+<script th:inline="javascript">
+    const userId = /*[[${user.id}]]*/ 0;
+
+    function switchTab(name) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+
+        const activeClass = 'border-b-2 border-white text-white';
+        const inactiveClass = 'border-b-2 border-transparent text-white/35 hover:text-white/60';
+        ['favorites', 'reviews'].forEach(t => {
+            const btn = document.getElementById('tab-btn-' + t);
+            btn.className = `px-1 pb-4 mr-8 text-[11px] uppercase tracking-[0.25em] transition ${t === name ? activeClass : inactiveClass}`;
+        });
+    }
+
+    function toggleEdit() {
+        document.getElementById('edit-panel').classList.toggle('hidden');
+    }
+
+    function saveProfile() {
+        const username = document.getElementById('edit-username').value;
+        const bio = document.getElementById('edit-bio').value;
+        const fd = new FormData();
+        fd.append('username', username);
+        fd.append('bio', bio);
+        fetch(`/profile/${userId}/edit`, { method: 'POST', body: fd })
+            .then(r => r.text())
+            .then(() => {
+                document.getElementById('display-username').textContent = username;
+                toggleEdit();
+            });
+    }
+
+    function uploadAvatar(input) {
+        if (!input.files[0]) return;
+        const fd = new FormData();
+        fd.append('avatar', input.files[0]);
+        fetch(`/profile/${userId}/edit`, { method: 'POST', body: fd })
+            .then(() => location.reload());
+    }
+</script>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
