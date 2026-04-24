@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARKETPLACE — Редактировать</title>
+    <title>MARKETPLACE — Редактировать товар</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,44 +12,153 @@
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[600px] mx-auto px-6 py-12">
+<div class="max-w-[1000px] mx-auto px-6 py-12">
+
+    <!-- Хлебные крошки -->
+    <nav class="flex items-center gap-2 text-[11px] uppercase tracking-[0.15em] text-white/25 mb-10">
+        <a href="/seller/products" class="hover:text-white/50 transition">Мои товары</a>
+        <span>/</span>
+        <span class="text-white/50">Редактировать</span>
+    </nav>
+
     <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Редактировать товар</h1>
-    <form th:action="@{'/seller/products/' + ${productId} + '/edit'}" method="post" enctype="multipart/form-data" class="space-y-6">
-        <div>
-            <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Название</label>
-            <input type="text" name="title" th:value="${productDto.title}" required class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
-        </div>
-        <div>
-            <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Описание</label>
-            <textarea name="description" rows="4" class="w-full bg-transparent border border-white/15 text-white text-[14px] px-4 py-3 focus:border-white/30 outline-none transition resize-none" th:text="${productDto.description}"></textarea>
-        </div>
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Цена (₽)</label>
-                <input type="number" name="price" step="0.01" th:value="${productDto.price}" required class="w-full bg-transparent border-b border-white/20 text-white text-[15px] py-2.5 focus:border-white outline-none transition">
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10 items-start">
+
+        <!-- Форма -->
+        <form th:action="@{'/seller/products/' + ${productId} + '/edit'}" method="post" enctype="multipart/form-data" class="space-y-6">
+
+            <div class="bg-[#111] border border-white/8 p-7 space-y-6">
+                <p class="text-white/30 text-[10px] uppercase tracking-[0.25em]">Основная информация</p>
+
+                <div>
+                    <label for="title" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Название *</label>
+                    <input id="title" type="text" name="title" th:value="${productDto.title}" required maxlength="200"
+                           oninput="updatePreview(this.value)"
+                           class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[14px] px-4 py-3 focus:border-white/35 outline-none transition">
+                </div>
+
+                <div>
+                    <label for="description" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Описание</label>
+                    <textarea id="description" name="description" rows="4"
+                              th:text="${productDto.description}"
+                              class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-4 py-3 focus:border-white/35 outline-none transition resize-none"></textarea>
+                </div>
             </div>
-            <div>
-                <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Состояние</label>
-                <select name="condition" class="w-full bg-[#0a0a0a] border border-white/15 text-white/70 text-[13px] px-4 py-2.5">
-                    <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}" th:selected="${c == productDto.condition}"></option>
-                </select>
+
+            <div class="bg-[#111] border border-white/8 p-7 space-y-6">
+                <p class="text-white/30 text-[10px] uppercase tracking-[0.25em]">Детали</p>
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label for="price" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Цена (₽) *</label>
+                        <input id="price" type="number" name="price" step="0.01" required
+                               th:value="${productDto.price}"
+                               oninput="updatePrice(this.value)"
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[14px] px-4 py-3 focus:border-white/35 outline-none transition">
+                    </div>
+                    <div>
+                        <label for="condition" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Состояние *</label>
+                        <select id="condition" name="condition" required
+                                class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                            <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}" th:selected="${c == productDto.condition}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="categoryId" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Категория</label>
+                    <select id="categoryId" name="categoryId"
+                            class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                        <option value="">Без категории</option>
+                        <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"
+                                th:selected="${cat.id == productDto.categoryId}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-[#111] border border-white/8 p-7">
+                <p class="text-white/30 text-[10px] uppercase tracking-[0.25em] mb-5">Фотография</p>
+
+                <!-- Текущее фото -->
+                <div th:if="${hasImage}" class="mb-4">
+                    <p class="text-white/25 text-[11px] uppercase tracking-[0.15em] mb-2">Текущее фото</p>
+                    <img th:src="@{'/product/' + ${productId} + '/image'}" alt=""
+                         class="w-24 h-32 object-cover border border-white/10"/>
+                </div>
+
+                <label class="block cursor-pointer">
+                    <div class="border-2 border-dashed border-white/10 p-8 text-center hover:border-white/25 transition">
+                        <i class="fas fa-cloud-upload-alt text-white/20 text-2xl mb-2"></i>
+                        <p class="text-white/30 text-[12px] uppercase tracking-[0.15em] mb-1">
+                            <span th:text="${hasImage} ? 'Заменить фото' : 'Загрузить фото'">Загрузить фото</span>
+                        </p>
+                        <p class="text-white/20 text-[11px]">JPG, PNG, WEBP — до 5 МБ</p>
+                    </div>
+                    <input type="file" name="image" accept="image/*" class="hidden" onchange="previewImage(this)">
+                </label>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit"
+                        class="flex-1 py-4 bg-white text-black text-[12px] uppercase tracking-[0.25em] font-medium hover:bg-white/90 transition">
+                    Сохранить изменения
+                </button>
+                <a href="/seller/products"
+                   class="px-6 py-4 border border-white/15 text-white/50 text-[12px] uppercase tracking-[0.15em] hover:border-white/35 hover:text-white/70 transition flex items-center">
+                    Отмена
+                </a>
+            </div>
+        </form>
+
+        <!-- Превью -->
+        <div class="lg:sticky lg:top-24">
+            <p class="text-white/25 text-[10px] uppercase tracking-[0.2em] mb-4">Предпросмотр</p>
+            <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
+                <img id="preview-new-img" src="" alt="" class="w-full h-full object-cover hidden"/>
+                <img th:if="${hasImage}" id="preview-current-img"
+                     th:src="@{'/product/' + ${productId} + '/image'}"
+                     alt="" class="w-full h-full object-cover"/>
+                <div th:unless="${hasImage}" id="preview-placeholder"
+                     class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-image text-white/8 text-5xl"></i>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <p id="preview-title" class="text-white text-[13px] mb-2 line-clamp-2"
+                       th:text="${productDto.title}">Название</p>
+                    <p id="preview-price" class="text-white text-[15px] font-semibold"
+                       th:text="${productDto.price} + ' ₽'">— ₽</p>
+                </div>
             </div>
         </div>
-        <div>
-            <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Категория</label>
-            <select name="categoryId" class="w-full bg-[#0a0a0a] border border-white/15 text-white/70 text-[13px] px-4 py-2.5">
-                <option value="">Без категории</option>
-                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${cat.id == productDto.categoryId}"></option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-white/40 text-[11px] uppercase tracking-[0.2em] mb-2">Новая фотография</label>
-            <input type="file" name="image" accept="image/*" class="w-full text-white/50 text-[13px] file:mr-4 file:py-2 file:px-4 file:border file:border-white/20 file:text-white/70 file:bg-transparent file:text-[12px] file:uppercase file:tracking-wider hover:file:border-white/40 file:transition file:cursor-pointer">
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-white text-black text-[13px] uppercase tracking-[0.2em] font-medium hover:bg-white/90 transition">Сохранить</button>
-    </form>
-</section>
+    </div>
+</div>
 </main>
+
+<script>
+    function updatePreview(val) {
+        document.getElementById('preview-title').textContent = val || 'Название товара';
+    }
+    function updatePrice(val) {
+        document.getElementById('preview-price').textContent = val ? val + ' ₽' : '— ₽';
+    }
+    function previewImage(input) {
+        if (!input.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.getElementById('preview-new-img');
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+            const cur = document.getElementById('preview-current-img');
+            if (cur) cur.classList.add('hidden');
+            const ph = document.getElementById('preview-placeholder');
+            if (ph) ph.classList.add('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

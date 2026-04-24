@@ -79,6 +79,7 @@ public class SellerController {
         dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
         model.addAttribute("productDto", dto);
         model.addAttribute("productId", id);
+        model.addAttribute("hasImage", product.getImageData() != null && product.getImageData().length > 0);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("conditions", Product.Condition.values());
         return "seller/edit_product";

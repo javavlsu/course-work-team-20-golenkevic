@@ -3,50 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARKETPLACE — Мои товары</title>
+    <title>MARKETPLACE — Панель продавца</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[900px] mx-auto px-6 py-12">
-    <div class="flex justify-between items-center mb-10">
-        <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Мои товары</h1>
-        <a href="/seller/products/new" class="px-6 py-2.5 bg-white text-black text-[12px] uppercase tracking-[0.15em] hover:bg-white/90 transition">Добавить товар</a>
+<div class="max-w-[1100px] mx-auto px-6 py-12">
+
+    <!-- Заголовок -->
+    <div class="flex items-center justify-between mb-10">
+        <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Панель продавца</h1>
+        <a href="/seller/products/new"
+           class="flex items-center gap-2 px-5 py-2.5 bg-white text-black text-[11px] uppercase tracking-[0.2em] hover:bg-white/90 transition">
+            <i class="fas fa-plus text-[10px]"></i> Добавить товар
+        </a>
     </div>
-    <div th:unless="${#lists.isEmpty(pending)}" class="mb-8">
-        <p class="text-yellow-400/70 text-[11px] uppercase tracking-[0.2em] mb-4">На модерации</p>
-        <div th:each="p : ${pending}" class="border border-yellow-500/10 bg-yellow-500/[0.03] p-4 mb-2 flex justify-between items-center">
-            <span class="text-white/70 text-[13px]" th:text="${p.title}"></span>
-            <span class="text-yellow-400/50 text-[11px] uppercase tracking-wider">Ожидает</span>
+
+    <!-- Статистика -->
+    <div class="grid grid-cols-3 gap-4 mb-10">
+        <div class="bg-[#111] border border-white/8 p-5">
+            <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] mb-2">Опубликовано</p>
+            <p class="text-white text-[28px] font-light" th:text="${#lists.size(approved)}">0</p>
+        </div>
+        <div class="bg-[#111] border border-yellow-500/10 p-5">
+            <p class="text-yellow-400/50 text-[10px] uppercase tracking-[0.2em] mb-2">На модерации</p>
+            <p class="text-yellow-400/80 text-[28px] font-light" th:text="${#lists.size(pending)}">0</p>
+        </div>
+        <div class="bg-[#111] border border-red-500/10 p-5">
+            <p class="text-red-400/50 text-[10px] uppercase tracking-[0.2em] mb-2">Отклонено</p>
+            <p class="text-red-400/70 text-[28px] font-light" th:text="${#lists.size(rejected)}">0</p>
         </div>
     </div>
-    <div th:unless="${#lists.isEmpty(approved)}" class="mb-8">
-        <p class="text-emerald-400/70 text-[11px] uppercase tracking-[0.2em] mb-4">Опубликованные</p>
-        <div th:each="p : ${approved}" class="border border-white/10 p-4 mb-2 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <a th:href="@{'/product/' + ${p.id}}" class="text-white/80 text-[13px] hover:text-white transition" th:text="${p.title}"></a>
-                <span class="text-white/40 text-[13px]" th:text="${p.price} + ' ₽'"></span>
+
+    <!-- Табы -->
+    <div class="border-b border-white/10 flex mb-8">
+        <button id="tab-btn-approved" onclick="switchTab('approved')"
+                class="px-1 pb-4 mr-8 text-[11px] uppercase tracking-[0.25em] border-b-2 border-white text-white transition">
+            Опубликованные
+        </button>
+        <button id="tab-btn-pending" onclick="switchTab('pending')"
+                class="px-1 pb-4 mr-8 text-[11px] uppercase tracking-[0.25em] border-b-2 border-transparent text-white/35 hover:text-white/60 transition">
+            На модерации
+        </button>
+        <button id="tab-btn-rejected" onclick="switchTab('rejected')"
+                class="px-1 pb-4 text-[11px] uppercase tracking-[0.25em] border-b-2 border-transparent text-white/35 hover:text-white/60 transition">
+            Отклонённые
+        </button>
+    </div>
+
+    <!-- ═══ ТАБ: ОПУБЛИКОВАННЫЕ ═══ -->
+    <div id="tab-approved" class="tab-panel active">
+        <div th:if="${#lists.isEmpty(approved)}" class="py-16 text-center">
+            <i class="fas fa-box-open text-white/8 text-5xl mb-6"></i>
+            <p class="text-white/25 text-[12px] uppercase tracking-[0.2em]">Нет опубликованных товаров</p>
+        </div>
+        <div class="space-y-2">
+            <div th:each="p : ${approved}"
+                 class="group flex items-center gap-5 p-4 border border-white/8 hover:border-white/20 transition bg-[#111]/50">
+                <!-- Фото -->
+                <div class="w-16 h-20 bg-[#1a1a1a] flex-shrink-0 overflow-hidden">
+                    <img th:if="${p.imageData != null}" th:src="@{'/product/' + ${p.id} + '/image'}"
+                         alt="" class="w-full h-full object-cover"/>
+                    <div th:unless="${p.imageData != null}" class="w-full h-full flex items-center justify-center">
+                        <i class="fas fa-image text-white/10 text-lg"></i>
+                    </div>
+                </div>
+                <!-- Инфо -->
+                <div class="flex-1 min-w-0">
+                    <a th:href="@{'/product/' + ${p.id}}"
+                       class="text-white/80 text-[14px] hover:text-white transition truncate block" th:text="${p.title}"></a>
+                    <div class="flex items-center gap-3 mt-1">
+                        <span class="text-white/50 text-[13px]" th:text="${p.price} + ' ₽'"></span>
+                        <span class="text-white/25 text-[11px]" th:text="${p.category != null ? p.category.name : ''}"></span>
+                    </div>
+                </div>
+                <!-- Статус + действия -->
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <span class="text-emerald-400/60 text-[10px] uppercase tracking-wider px-2.5 py-1 border border-emerald-400/15">
+                        Активен
+                    </span>
+                    <a th:href="@{'/seller/products/' + ${p.id} + '/edit'}"
+                       class="w-8 h-8 flex items-center justify-center border border-white/10 text-white/35 hover:text-white hover:border-white/30 transition">
+                        <i class="fas fa-pen text-[10px]"></i>
+                    </a>
+                    <form th:action="@{'/seller/products/' + ${p.id} + '/delete'}" method="post">
+                        <button class="w-8 h-8 flex items-center justify-center border border-white/10 text-white/35 hover:text-red-400 hover:border-red-400/30 transition">
+                            <i class="fas fa-trash-alt text-[10px]"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
-            <div class="flex gap-2">
-                <a th:href="@{'/seller/products/' + ${p.id} + '/edit'}" class="px-3 py-1 text-[11px] border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition">Ред.</a>
-                <form th:action="@{'/seller/products/' + ${p.id} + '/delete'}" method="post">
-                    <button class="px-3 py-1 text-[11px] border border-white/10 text-white/40 hover:text-red-400 hover:border-red-400/30 transition">Удалить</button>
-                </form>
+        </div>
+    </div>
+
+    <!-- ═══ ТАБ: НА МОДЕРАЦИИ ═══ -->
+    <div id="tab-pending" class="tab-panel">
+        <div th:if="${#lists.isEmpty(pending)}" class="py-16 text-center">
+            <i class="fas fa-clock text-white/8 text-5xl mb-6"></i>
+            <p class="text-white/25 text-[12px] uppercase tracking-[0.2em]">Нет товаров на модерации</p>
+        </div>
+        <div class="space-y-2">
+            <div th:each="p : ${pending}"
+                 class="flex items-center gap-5 p-4 border border-yellow-500/10 bg-yellow-500/[0.02]">
+                <div class="w-16 h-20 bg-[#1a1a1a] flex-shrink-0 overflow-hidden">
+                    <img th:if="${p.imageData != null}" th:src="@{'/product/' + ${p.id} + '/image'}"
+                         alt="" class="w-full h-full object-cover"/>
+                    <div th:unless="${p.imageData != null}" class="w-full h-full flex items-center justify-center">
+                        <i class="fas fa-image text-white/10 text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white/70 text-[14px] truncate" th:text="${p.title}"></p>
+                    <span class="text-white/40 text-[13px]" th:text="${p.price} + ' ₽'"></span>
+                </div>
+                <span class="text-yellow-400/60 text-[10px] uppercase tracking-wider px-2.5 py-1 border border-yellow-400/15 flex-shrink-0">
+                    Ожидает
+                </span>
             </div>
         </div>
     </div>
-    <div th:unless="${#lists.isEmpty(rejected)}">
-        <p class="text-red-400/70 text-[11px] uppercase tracking-[0.2em] mb-4">Отклонённые</p>
-        <div th:each="p : ${rejected}" class="border border-red-500/10 bg-red-500/[0.03] p-4 mb-2">
-            <span class="text-white/50 text-[13px]" th:text="${p.title}"></span>
+
+    <!-- ═══ ТАБ: ОТКЛОНЁННЫЕ ═══ -->
+    <div id="tab-rejected" class="tab-panel">
+        <div th:if="${#lists.isEmpty(rejected)}" class="py-16 text-center">
+            <i class="fas fa-check-circle text-white/8 text-5xl mb-6"></i>
+            <p class="text-white/25 text-[12px] uppercase tracking-[0.2em]">Отклонённых товаров нет</p>
+        </div>
+        <div class="space-y-2">
+            <div th:each="p : ${rejected}"
+                 class="flex items-center gap-5 p-4 border border-red-500/10 bg-red-500/[0.02]">
+                <div class="w-16 h-20 bg-[#1a1a1a] flex-shrink-0 overflow-hidden">
+                    <img th:if="${p.imageData != null}" th:src="@{'/product/' + ${p.id} + '/image'}"
+                         alt="" class="w-full h-full object-cover"/>
+                    <div th:unless="${p.imageData != null}" class="w-full h-full flex items-center justify-center">
+                        <i class="fas fa-image text-white/10 text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white/50 text-[14px] truncate" th:text="${p.title}"></p>
+                    <span class="text-white/30 text-[13px]" th:text="${p.price} + ' ₽'"></span>
+                </div>
+                <span class="text-red-400/60 text-[10px] uppercase tracking-wider px-2.5 py-1 border border-red-400/15 flex-shrink-0">
+                    Отклонён
+                </span>
+            </div>
         </div>
     </div>
-</section>
+
+</div>
 </main>
+
+<script>
+    function switchTab(name) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        const active = 'border-b-2 border-white text-white';
+        const inactive = 'border-b-2 border-transparent text-white/35 hover:text-white/60';
+        ['approved','pending','rejected'].forEach(t => {
+            const btn = document.getElementById('tab-btn-' + t);
+            btn.className = `px-1 pb-4 mr-8 text-[11px] uppercase tracking-[0.25em] transition ${t === name ? active : inactive}`;
+        });
+    }
+</script>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
