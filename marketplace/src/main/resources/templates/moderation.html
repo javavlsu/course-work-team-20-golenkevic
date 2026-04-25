@@ -12,28 +12,109 @@
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[900px] mx-auto px-6 py-12">
-    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Модерация товаров</h1>
-    <div th:if="${#lists.isEmpty(pendingProducts)}" class="text-center py-24">
-        <p class="text-white/30 text-[15px]">Нет товаров на модерации</p>
-    </div>
-    <div th:each="p : ${pendingProducts}" class="border border-white/10 p-6 mb-4 flex items-center justify-between">
+<div class="max-w-[1100px] mx-auto px-6 py-12">
+
+    <!-- Заголовок -->
+    <div class="flex items-end justify-between mb-10 pb-6 border-b border-white/10">
         <div>
-            <h3 class="text-white/80 text-[14px] font-medium" th:text="${p.title}"></h3>
-            <p class="text-white/40 text-[12px] mt-1">Продавец: <span th:text="${p.seller.username}"></span></p>
-            <p class="text-white/50 text-[13px] mt-1" th:text="${p.price} + ' ₽'"></p>
-            <p class="text-white/30 text-[12px] mt-1" th:text="${#strings.abbreviate(p.description, 80)}"></p>
+            <p class="text-white/30 text-[10px] uppercase tracking-[0.3em] mb-2">Панель модератора</p>
+            <h1 class="text-white text-[24px] font-light tracking-wide">Модерация товаров</h1>
         </div>
-        <div class="flex gap-2 flex-shrink-0 ml-6">
-            <form th:action="@{'/moderation/approve/' + ${p.id}}" method="post">
-                <button class="px-5 py-2.5 bg-white text-black text-[12px] uppercase tracking-[0.1em] hover:bg-white/90 transition">Одобрить</button>
-            </form>
-            <form th:action="@{'/moderation/reject/' + ${p.id}}" method="post">
-                <button class="px-5 py-2.5 border border-white/20 text-white/60 text-[12px] uppercase tracking-[0.1em] hover:text-red-400 hover:border-red-400/30 transition">Отклонить</button>
-            </form>
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-yellow-400/80 animate-pulse"></div>
+            <span class="text-white/50 text-[13px]">
+                Ожидает: <span class="text-yellow-400/90 font-medium" th:text="${#lists.size(pendingProducts)}">0</span>
+            </span>
         </div>
     </div>
-</section>
+
+    <!-- Пусто -->
+    <div th:if="${#lists.isEmpty(pendingProducts)}" class="py-24 text-center">
+        <i class="fas fa-check-circle text-emerald-400/20 text-6xl mb-6"></i>
+        <p class="text-white/40 text-[14px] uppercase tracking-[0.2em] mb-2">Очередь пуста</p>
+        <p class="text-white/25 text-[13px]">Все товары проверены</p>
+    </div>
+
+    <!-- Список товаров -->
+    <div class="space-y-4">
+        <div th:each="p : ${pendingProducts}"
+             class="bg-[#111] border border-white/8 hover:border-white/15 transition-colors">
+
+            <div class="flex flex-col md:flex-row gap-0">
+
+                <!-- Фото -->
+                <div class="flex-shrink-0 w-full md:w-[200px] h-[260px] md:h-auto bg-[#1a1a1a] relative overflow-hidden">
+                    <img th:if="${p.imageData != null}"
+                         th:src="@{'/product/' + ${p.id} + '/image'}"
+                         alt="" class="w-full h-full object-cover"/>
+                    <div th:unless="${p.imageData != null}"
+                         class="w-full h-full flex flex-col items-center justify-center gap-2">
+                        <i class="fas fa-image text-white/10 text-3xl"></i>
+                        <p class="text-white/20 text-[10px] uppercase tracking-[0.15em]">Нет фото</p>
+                    </div>
+                    <!-- Бейдж состояния -->
+                    <span class="absolute top-3 left-3 text-[10px] uppercase tracking-[0.15em] px-2 py-0.5 bg-black/60 backdrop-blur-sm"
+                          th:classappend="${p.condition == T(ru.vlsu.marketplace.entities.Product.Condition).NEW} ? 'text-emerald-400/80' : (${p.condition == T(ru.vlsu.marketplace.entities.Product.Condition).VINTAGE} ? 'text-amber-400/80' : 'text-white/60')"
+                          th:text="${p.condition}"></span>
+                </div>
+
+                <!-- Контент -->
+                <div class="flex-1 p-6 flex flex-col gap-4 min-w-0">
+
+                    <!-- Заголовок + цена -->
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-white text-[18px] font-light leading-tight" th:text="${p.title}"></h3>
+                            <p class="text-white/30 text-[11px] uppercase tracking-[0.2em] mt-1.5"
+                               th:text="${p.category != null ? p.category.name : 'без категории'}"></p>
+                        </div>
+                        <p class="text-white text-[20px] font-light flex-shrink-0" th:text="${p.price} + ' ₽'"></p>
+                    </div>
+
+                    <!-- Описание -->
+                    <p class="text-white/45 text-[13px] leading-relaxed line-clamp-3 flex-1"
+                       th:text="${p.description}"
+                       th:if="${p.description != null and !#strings.isEmpty(p.description)}"></p>
+                    <p class="text-white/20 text-[12px] italic" th:if="${p.description == null or #strings.isEmpty(p.description)}">
+                        Описание отсутствует
+                    </p>
+
+                    <!-- Метаданные + действия -->
+                    <div class="flex items-center justify-between gap-4 pt-4 border-t border-white/5">
+                        <!-- Продавец -->
+                        <div class="flex items-center gap-2 min-w-0">
+                            <i class="fas fa-user-circle text-white/20 text-[14px]"></i>
+                            <div class="min-w-0">
+                                <p class="text-white/30 text-[10px] uppercase tracking-[0.15em]">Продавец</p>
+                                <p class="text-white/65 text-[13px] truncate" th:text="${p.seller.username}"></p>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки -->
+                        <div class="flex gap-2 flex-shrink-0">
+                            <a th:href="@{'/product/' + ${p.id}}" target="_blank"
+                               class="w-10 h-10 flex items-center justify-center border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition"
+                               title="Открыть">
+                                <i class="fas fa-external-link-alt text-[11px]"></i>
+                            </a>
+                            <form th:action="@{'/moderation/reject/' + ${p.id}}" method="post">
+                                <button class="px-5 py-2.5 border border-red-400/20 text-red-400/80 text-[11px] uppercase tracking-[0.15em] hover:bg-red-400/8 hover:border-red-400/40 transition flex items-center gap-2">
+                                    <i class="fas fa-times text-[10px]"></i> Отклонить
+                                </button>
+                            </form>
+                            <form th:action="@{'/moderation/approve/' + ${p.id}}" method="post">
+                                <button class="px-5 py-2.5 bg-emerald-400/15 border border-emerald-400/30 text-emerald-400 text-[11px] uppercase tracking-[0.15em] hover:bg-emerald-400/25 transition flex items-center gap-2">
+                                    <i class="fas fa-check text-[10px]"></i> Одобрить
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
