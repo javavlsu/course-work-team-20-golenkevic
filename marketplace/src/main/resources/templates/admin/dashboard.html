@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARKETPLACE — Админ</title>
+    <title>MARKETPLACE — Админ-панель</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,35 +12,166 @@
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[1100px] mx-auto px-6 py-12">
-    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Панель администратора</h1>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-        <div class="border border-white/10 p-6 text-center">
-            <i class="fas fa-users text-white/20 text-2xl mb-3"></i>
-            <p class="text-white text-[28px] font-light" th:text="${totalUsers}"></p>
-            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">Пользователей</p>
+<div class="max-w-[1200px] mx-auto px-6 py-12">
+
+    <!-- Заголовок -->
+    <div class="flex items-end justify-between mb-10 pb-6 border-b border-white/10">
+        <div>
+            <p class="text-white/30 text-[10px] uppercase tracking-[0.3em] mb-2">Админ-панель</p>
+            <h1 class="text-white text-[26px] font-light tracking-wide">Дашборд</h1>
         </div>
-        <div class="border border-white/10 p-6 text-center">
-            <i class="fas fa-box text-white/20 text-2xl mb-3"></i>
-            <p class="text-white text-[28px] font-light" th:text="${totalProducts}"></p>
-            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">Товаров</p>
-        </div>
-        <div class="border border-white/10 p-6 text-center">
-            <i class="fas fa-shopping-bag text-white/20 text-2xl mb-3"></i>
-            <p class="text-white text-[28px] font-light" th:text="${totalOrders}"></p>
-            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">Заказов</p>
-        </div>
-        <div class="border border-white/10 p-6 text-center">
-            <i class="fas fa-clock text-white/20 text-2xl mb-3"></i>
-            <p class="text-white text-[28px] font-light" th:text="${pendingProducts}"></p>
-            <p class="text-white/40 text-[12px] uppercase tracking-wider mt-1">На модерации</p>
+        <div class="hidden sm:flex items-center gap-2 text-white/30 text-[12px]">
+            <i class="fas fa-shield-alt text-[11px]"></i>
+            <span>Полный доступ</span>
         </div>
     </div>
-    <div class="flex gap-3">
-        <a href="/admin/users" class="px-6 py-3 bg-white text-black text-[12px] uppercase tracking-[0.15em] hover:bg-white/90 transition">Пользователи</a>
-        <a href="/moderation" class="px-6 py-3 border border-white/20 text-white/70 text-[12px] uppercase tracking-[0.15em] hover:text-white hover:border-white/40 transition">Модерация</a>
+
+    <!-- ═══ СТАТИСТИКА ═══ -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+
+        <!-- Пользователи -->
+        <div class="bg-[#111] border border-white/8 p-6 hover:border-white/20 transition relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-400/5 rounded-full blur-2xl"></div>
+            <div class="relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 bg-blue-400/10 flex items-center justify-center">
+                        <i class="fas fa-users text-blue-400/80 text-[14px]"></i>
+                    </div>
+                    <i class="fas fa-arrow-up text-emerald-400/40 text-[10px]"></i>
+                </div>
+                <p class="text-white text-[32px] font-light leading-none" th:text="${totalUsers}">0</p>
+                <p class="text-white/35 text-[11px] uppercase tracking-[0.15em] mt-2">Пользователей</p>
+            </div>
+        </div>
+
+        <!-- Товары -->
+        <div class="bg-[#111] border border-white/8 p-6 hover:border-white/20 transition relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-400/5 rounded-full blur-2xl"></div>
+            <div class="relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 bg-emerald-400/10 flex items-center justify-center">
+                        <i class="fas fa-box text-emerald-400/80 text-[14px]"></i>
+                    </div>
+                </div>
+                <p class="text-white text-[32px] font-light leading-none" th:text="${totalProducts}">0</p>
+                <p class="text-white/35 text-[11px] uppercase tracking-[0.15em] mt-2">Опубликовано</p>
+            </div>
+        </div>
+
+        <!-- Заказы -->
+        <div class="bg-[#111] border border-white/8 p-6 hover:border-white/20 transition relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-purple-400/5 rounded-full blur-2xl"></div>
+            <div class="relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 bg-purple-400/10 flex items-center justify-center">
+                        <i class="fas fa-shopping-bag text-purple-400/80 text-[14px]"></i>
+                    </div>
+                </div>
+                <p class="text-white text-[32px] font-light leading-none" th:text="${totalOrders}">0</p>
+                <p class="text-white/35 text-[11px] uppercase tracking-[0.15em] mt-2">Заказов</p>
+            </div>
+        </div>
+
+        <!-- На модерации -->
+        <div class="bg-[#111] border border-yellow-400/15 p-6 hover:border-yellow-400/30 transition relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-400/8 rounded-full blur-2xl"></div>
+            <div class="relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 bg-yellow-400/10 flex items-center justify-center">
+                        <i class="fas fa-clock text-yellow-400/80 text-[14px]"></i>
+                    </div>
+                    <span class="w-2 h-2 rounded-full bg-yellow-400/80 animate-pulse" th:if="${pendingProducts > 0}"></span>
+                </div>
+                <p class="text-white text-[32px] font-light leading-none" th:text="${pendingProducts}">0</p>
+                <p class="text-white/35 text-[11px] uppercase tracking-[0.15em] mt-2">На модерации</p>
+            </div>
+        </div>
     </div>
-</section>
+
+    <!-- ═══ БЫСТРЫЕ ДЕЙСТВИЯ ═══ -->
+    <div class="mb-10">
+        <p class="text-white/30 text-[10px] uppercase tracking-[0.25em] mb-4">Быстрые действия</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+
+            <a href="/admin/users"
+               class="group bg-[#111] border border-white/8 p-5 hover:border-white/25 hover:bg-[#141414] transition flex items-center gap-4">
+                <div class="w-12 h-12 bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition">
+                    <i class="fas fa-users text-white/60 text-[16px]"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white/85 text-[13px] uppercase tracking-[0.15em] mb-0.5">Пользователи</p>
+                    <p class="text-white/35 text-[12px]">Управление аккаунтами</p>
+                </div>
+                <i class="fas fa-arrow-right text-white/15 group-hover:text-white/40 text-[12px] transition"></i>
+            </a>
+
+            <a href="/moderation"
+               class="group bg-[#111] border border-white/8 p-5 hover:border-yellow-400/25 hover:bg-[#141414] transition flex items-center gap-4">
+                <div class="w-12 h-12 bg-yellow-400/8 flex items-center justify-center group-hover:bg-yellow-400/15 transition">
+                    <i class="fas fa-gavel text-yellow-400/70 text-[16px]"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white/85 text-[13px] uppercase tracking-[0.15em] mb-0.5">Модерация</p>
+                    <p class="text-white/35 text-[12px]">
+                        <span th:if="${pendingProducts > 0}" class="text-yellow-400/70" th:text="${pendingProducts} + ' ожидает'"></span>
+                        <span th:unless="${pendingProducts > 0}">Очередь пуста</span>
+                    </p>
+                </div>
+                <i class="fas fa-arrow-right text-white/15 group-hover:text-yellow-400/50 text-[12px] transition"></i>
+            </a>
+
+            <a href="/catalog"
+               class="group bg-[#111] border border-white/8 p-5 hover:border-white/25 hover:bg-[#141414] transition flex items-center gap-4">
+                <div class="w-12 h-12 bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition">
+                    <i class="fas fa-shopping-bag text-white/60 text-[16px]"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white/85 text-[13px] uppercase tracking-[0.15em] mb-0.5">Каталог</p>
+                    <p class="text-white/35 text-[12px]">Просмотр товаров</p>
+                </div>
+                <i class="fas fa-arrow-right text-white/15 group-hover:text-white/40 text-[12px] transition"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- ═══ СОСТОЯНИЕ СИСТЕМЫ ═══ -->
+    <div>
+        <p class="text-white/30 text-[10px] uppercase tracking-[0.25em] mb-4">Состояние системы</p>
+        <div class="bg-[#111] border border-white/8 p-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-[0.15em]">База данных</p>
+                        <p class="text-white/70 text-[12px]">MySQL</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-[0.15em]">API</p>
+                        <p class="text-white/70 text-[12px]">Активен</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-[0.15em]">Авторизация</p>
+                        <p class="text-white/70 text-[12px]">Работает</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-[0.15em]">Хранилище</p>
+                        <p class="text-white/70 text-[12px]">Доступно</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
