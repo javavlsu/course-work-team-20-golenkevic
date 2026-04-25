@@ -42,4 +42,16 @@ public class OrderController {
         model.addAttribute("orders", orderService.getOrdersByBuyer(user.getId()));
         return "orders";
     }
+
+    @PostMapping("/orders/{id}/cancel")
+    public String cancelOrder(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+        var order = orderService.findById(id).orElseThrow();
+        if (!order.getBuyer().getUsername().equals(userDetails.getUsername())) {
+            return "redirect:/orders";
+        }
+        if (order.getStatus() == ru.vlsu.marketplace.entities.Order.Status.NEW) {
+            orderService.updateStatus(id, ru.vlsu.marketplace.entities.Order.Status.CANCELLED);
+        }
+        return "redirect:/orders";
+    }
 }

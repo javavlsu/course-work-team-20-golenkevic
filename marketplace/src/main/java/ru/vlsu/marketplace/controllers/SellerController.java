@@ -117,4 +117,11 @@ public class SellerController {
         model.addAttribute("orders", orderService.getOrdersBySeller(user.getId()));
         return "seller/seller_orders";
     }
+
+    @PostMapping("/orders/{id}/status")
+    public String updateOrderStatus(@PathVariable Integer id,
+                                    @RequestParam ru.vlsu.marketplace.entities.Order.Status status) {
+        orderService.updateStatus(id, status);
+        return "redirect:/seller/orders";
+    }
 }

@@ -3,38 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARKETPLACE — Заказы</title>
+    <title>MARKETPLACE — Мои заказы</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
+        details summary { list-style: none; cursor: pointer; }
+        details summary::-webkit-details-marker { display: none; }
+        details[open] .accordion-chevron { transform: rotate(180deg); }
+        .accordion-chevron { transition: transform 0.25s ease; }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
 <main class="flex-1 pt-16">
-<section class="max-w-[900px] mx-auto px-6 py-12">
-    <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium mb-10">Мои заказы</h1>
-    <div th:if="${#lists.isEmpty(orders)}" class="text-center py-24">
-        <p class="text-white/30 text-[15px]">Заказов пока нет</p>
-    </div>
-    <div th:each="order : ${orders}" class="border border-white/10 p-6 mb-4">
-        <div class="flex justify-between items-center mb-3">
-            <span class="text-white/80 text-[14px]">Заказ #<span th:text="${order.id}"></span></span>
-            <span class="text-[12px] uppercase tracking-wider px-3 py-1"
-                  th:class="${order.status.name() == 'NEW'} ? 'bg-blue-500/10 text-blue-400' :
-                             ${order.status.name() == 'COMPLETED'} ? 'bg-emerald-500/10 text-emerald-400' :
-                             ${order.status.name() == 'CANCELLED'} ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400'"
-                  th:text="${order.status}"></span>
+<div class="max-w-[1100px] mx-auto px-6 py-12">
+
+    <!-- Заголовок -->
+    <div class="flex items-end justify-between mb-10 pb-6 border-b border-white/10">
+        <div>
+            <p class="text-white/30 text-[10px] uppercase tracking-[0.3em] mb-2">История покупок</p>
+            <h1 class="text-white text-[26px] font-light tracking-wide">Мои заказы</h1>
         </div>
-        <p class="text-white/40 text-[13px]">Сумма: <span class="text-white/70" th:text="${order.totalAmount} + ' ₽'"></span></p>
-        <p class="text-white/40 text-[13px]">Адрес: <span class="text-white/70" th:text="${order.deliveryAddress}"></span></p>
-        <div class="mt-3 pt-3 border-t border-white/5 space-y-1">
-            <div th:each="item : ${order.items}" class="text-white/50 text-[13px]">
-                <span th:text="${item.product.title}"></span> x<span th:text="${item.quantity}"></span> — <span th:text="${item.price} + ' ₽'"></span>
+        <span class="text-white/30 text-[12px]" th:text="'Всего: ' + ${#lists.size(orders)}"></span>
+    </div>
+
+    <!-- Пусто -->
+    <div th:if="${#lists.isEmpty(orders)}" class="py-24 text-center">
+        <i class="fas fa-receipt text-white/8 text-6xl mb-6"></i>
+        <p class="text-white/30 text-[13px] uppercase tracking-[0.2em] mb-2">Заказов пока нет</p>
+        <a href="/catalog"
+           class="mt-6 inline-block px-6 py-3 border border-white/20 text-white/60 text-[12px] uppercase tracking-[0.2em] hover:border-white/40 hover:text-white/80 transition">
+            Перейти в каталог
+        </a>
+    </div>
+
+    <!-- Список заказов -->
+    <div class="space-y-4">
+        <details th:each="order : ${orders}" class="bg-[#111] border border-white/8 hover:border-white/15 transition group">
+
+            <!-- Заголовок (всегда виден) -->
+            <summary class="p-6 flex flex-wrap items-center gap-4 justify-between">
+
+                <!-- Слева: номер + дата -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center">
+                        <i class="fas fa-box text-white/40 text-[14px]"></i>
+                    </div>
+                    <div>
+                        <p class="text-white/85 text-[14px] font-medium">
+                            Заказ <span class="font-mono">#<span th:text="${order.id}"></span></span>
+                        </p>
+                        <p class="text-white/30 text-[11px] mt-0.5"
+                           th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, HH:mm')}"></p>
+                    </div>
+                </div>
+
+                <!-- Центр: товары превью -->
+                <div class="hidden md:flex items-center gap-1.5">
+                    <div th:each="item, stat : ${order.items}" th:if="${stat.index < 4}"
+                         class="w-10 h-12 bg-[#1a1a1a] overflow-hidden border border-white/5">
+                        <img th:if="${item.product.imageData != null}"
+                             th:src="@{'/product/' + ${item.product.id} + '/image'}"
+                             alt="" class="w-full h-full object-cover"/>
+                        <div th:unless="${item.product.imageData != null}"
+                             class="w-full h-full flex items-center justify-center">
+                            <i class="fas fa-image text-white/15 text-[10px]"></i>
+                        </div>
+                    </div>
+                    <span th:if="${#lists.size(order.items) > 4}"
+                          class="text-white/30 text-[11px] ml-1"
+                          th:text="'+' + (${#lists.size(order.items)} - 4)"></span>
+                </div>
+
+                <!-- Справа: статус + сумма + шеврон -->
+                <div class="flex items-center gap-4">
+                    <span class="text-[10px] uppercase tracking-[0.15em] px-3 py-1 border whitespace-nowrap"
+                          th:classappend="${order.status.name() == 'NEW'}        ? 'bg-blue-400/10 text-blue-400 border-blue-400/20' :
+                                          (${order.status.name() == 'CONFIRMED'}  ? 'bg-cyan-400/10 text-cyan-400 border-cyan-400/20' :
+                                          (${order.status.name() == 'IN_DELIVERY'} ? 'bg-amber-400/10 text-amber-400 border-amber-400/20' :
+                                          (${order.status.name() == 'DELIVERED'}   ? 'bg-purple-400/10 text-purple-400 border-purple-400/20' :
+                                          (${order.status.name() == 'COMPLETED'}   ? 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20' :
+                                                                                    'bg-red-400/10 text-red-400 border-red-400/20'))))"
+                          th:text="${order.status}"></span>
+                    <span class="text-white text-[15px] font-medium" th:text="${order.totalAmount} + ' ₽'"></span>
+                    <i class="fas fa-chevron-down accordion-chevron text-white/30 text-[11px]"></i>
+                </div>
+            </summary>
+
+            <!-- Подробности (раскрываются) -->
+            <div class="border-t border-white/8 p-6">
+
+                <!-- Прогресс -->
+                <div th:unless="${order.status.name() == 'CANCELLED'}" class="mb-8">
+                    <div class="flex items-center justify-between text-[10px] uppercase tracking-[0.15em] text-white/30 mb-3">
+                        <span th:classappend="${#lists.contains({'NEW','CONFIRMED','IN_DELIVERY','DELIVERED','COMPLETED'}, order.status.name())} ? 'text-white' : ''">Принят</span>
+                        <span th:classappend="${#lists.contains({'CONFIRMED','IN_DELIVERY','DELIVERED','COMPLETED'}, order.status.name())} ? 'text-white' : ''">Подтверждён</span>
+                        <span th:classappend="${#lists.contains({'IN_DELIVERY','DELIVERED','COMPLETED'}, order.status.name())} ? 'text-white' : ''">В доставке</span>
+                        <span th:classappend="${#lists.contains({'DELIVERED','COMPLETED'}, order.status.name())} ? 'text-white' : ''">Доставлен</span>
+                        <span th:classappend="${order.status.name() == 'COMPLETED'} ? 'text-emerald-400' : ''">Завершён</span>
+                    </div>
+                    <div class="h-1 bg-white/8 relative">
+                        <div class="h-full bg-white transition-all"
+                             th:style="${order.status.name() == 'NEW'}        ? 'width: 10%' :
+                                       (${order.status.name() == 'CONFIRMED'}  ? 'width: 30%' :
+                                       (${order.status.name() == 'IN_DELIVERY'} ? 'width: 60%' :
+                                       (${order.status.name() == 'DELIVERED'}   ? 'width: 90%' :
+                                       (${order.status.name() == 'COMPLETED'}   ? 'width: 100%; background: #34d399' :
+                                                                                  'width: 0%'))))"></div>
+                    </div>
+                </div>
+
+                <div th:if="${order.status.name() == 'CANCELLED'}"
+                     class="mb-6 p-3 bg-red-400/5 border border-red-400/15 text-red-400/80 text-[12px] flex items-center gap-2">
+                    <i class="fas fa-times-circle"></i> Заказ отменён
+                </div>
+
+                <!-- Товары -->
+                <div class="mb-8">
+                    <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] mb-4">Товары</p>
+                    <div class="space-y-3">
+                        <a th:each="item : ${order.items}" th:href="@{'/product/' + ${item.product.id}}"
+                           class="flex gap-4 group/item hover:bg-white/[0.02] -mx-2 px-2 py-2 transition">
+                            <div class="w-14 h-18 bg-[#1a1a1a] overflow-hidden flex-shrink-0">
+                                <img th:if="${item.product.imageData != null}"
+                                     th:src="@{'/product/' + ${item.product.id} + '/image'}"
+                                     alt="" class="w-full h-full object-cover"/>
+                                <div th:unless="${item.product.imageData != null}"
+                                     class="w-full h-full flex items-center justify-center">
+                                    <i class="fas fa-image text-white/15 text-sm"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col justify-center">
+                                <p class="text-white/80 text-[13px] group-hover/item:text-white transition truncate"
+                                   th:text="${item.product.title}"></p>
+                                <p class="text-white/35 text-[12px] mt-0.5"
+                                   th:text="'Кол-во: ' + ${item.quantity}"></p>
+                            </div>
+                            <p class="text-white/70 text-[14px] font-medium self-center flex-shrink-0"
+                               th:text="${item.price} + ' ₽'"></p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Доставка + действия -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/8">
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] mb-3">Доставка</p>
+                        <p class="text-white/70 text-[13px] mb-1" th:text="${order.contactName}"></p>
+                        <p class="text-white/50 text-[12px] mb-1" th:text="${order.contactPhone}"></p>
+                        <p class="text-white/45 text-[12px] leading-relaxed" th:text="${order.deliveryAddress}"></p>
+                    </div>
+                    <div class="flex flex-col items-start md:items-end justify-between">
+                        <div class="md:text-right">
+                            <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] mb-1">Сумма заказа</p>
+                            <p class="text-white text-[20px] font-light" th:text="${order.totalAmount} + ' ₽'"></p>
+                        </div>
+                        <form th:if="${order.status.name() == 'NEW'}"
+                              th:action="@{'/orders/' + ${order.id} + '/cancel'}" method="post"
+                              class="mt-4">
+                            <button class="px-5 py-2.5 border border-red-400/20 text-red-400/80 text-[11px] uppercase tracking-[0.15em] hover:bg-red-400/8 hover:border-red-400/40 transition flex items-center gap-2">
+                                <i class="fas fa-times text-[10px]"></i> Отменить заказ
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
+        </details>
     </div>
-</section>
+
+</div>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
