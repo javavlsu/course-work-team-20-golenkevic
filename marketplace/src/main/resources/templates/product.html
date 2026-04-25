@@ -12,6 +12,10 @@
         @media (min-width: 1024px) {
             .product-info-sticky { position: sticky; top: 5rem; }
         }
+        details summary { list-style: none; cursor: pointer; }
+        details summary::-webkit-details-marker { display: none; }
+        details[open] .accordion-chevron { transform: rotate(180deg); }
+        .accordion-chevron { transition: transform 0.25s ease; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
@@ -48,23 +52,33 @@
             </div>
         </div>
 
-        <!-- ═══ ПРАВАЯ КОЛОНКА: ОПИСАНИЕ ═══ -->
+        <!-- ═══ ПРАВАЯ КОЛОНКА ═══ -->
         <div class="product-info-sticky">
 
-            <!-- Категория + состояние -->
-            <div class="flex items-center gap-3 mb-4">
-                <a th:href="@{/catalog(categoryId=${product.categoryId})}"
-                   class="text-white/35 text-[11px] uppercase tracking-[0.2em] hover:text-white/60 transition"
-                   th:text="${product.categoryName}"></a>
-                <span class="w-px h-3 bg-white/15"></span>
-                <span class="text-[11px] uppercase tracking-[0.15em] px-2 py-0.5"
-                      th:classappend="${product.condition == 'NEW'} ? 'text-emerald-400/70 border border-emerald-400/20' : (${product.condition == 'VINTAGE'} ? 'text-amber-400/70 border border-amber-400/20' : 'text-white/40 border border-white/15')"
-                      th:text="${product.condition}"></span>
-            </div>
+            <!-- Категория -->
+            <a th:href="@{/catalog(categoryId=${product.categoryId})}"
+               class="text-white/35 text-[11px] uppercase tracking-[0.2em] hover:text-white/60 transition mb-3 inline-block"
+               th:text="${product.categoryName}"></a>
 
-            <!-- Название -->
-            <h1 class="text-white text-[28px] md:text-[34px] font-light tracking-wide leading-tight mb-4"
-                th:text="${product.title}">Товар</h1>
+            <!-- Заголовок + сердце -->
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <h1 class="text-white text-[28px] md:text-[34px] font-light tracking-wide leading-tight flex-1"
+                    th:text="${product.title}">Товар</h1>
+
+                <!-- Сердце -->
+                <div sec:authorize="isAuthenticated()" class="flex-shrink-0">
+                    <form th:if="${!isFavorite}" th:action="@{'/favorites/add/' + ${product.id}}" method="post">
+                        <button class="w-11 h-11 flex items-center justify-center text-white/40 hover:text-red-400 transition">
+                            <i class="far fa-heart text-[20px]"></i>
+                        </button>
+                    </form>
+                    <form th:if="${isFavorite}" th:action="@{'/favorites/remove/' + ${product.id}}" method="post">
+                        <button class="w-11 h-11 flex items-center justify-center text-red-400 hover:text-red-300 transition">
+                            <i class="fas fa-heart text-[20px]"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
 
             <!-- Рейтинг -->
             <div class="flex items-center gap-2 mb-6" th:if="${product.averageRating != null}">
@@ -82,28 +96,20 @@
             </div>
 
             <!-- Цена -->
-            <p class="text-white text-[40px] font-light tracking-tight mb-8"
+            <p class="text-white text-[36px] md:text-[42px] font-light tracking-tight mb-8"
                th:text="${product.price} + ' ₽'"></p>
 
             <!-- Кнопки -->
-            <div sec:authorize="isAuthenticated()">
-                <div class="flex gap-3 mb-8">
-                    <form th:action="@{'/cart/add/' + ${product.id}}" method="post" class="flex-1">
-                        <button class="w-full py-4 bg-white text-black text-[12px] uppercase tracking-[0.2em] hover:bg-white/90 active:bg-white/80 transition">
-                            <i class="fas fa-shopping-bag mr-2 text-[11px]"></i>В корзину
-                        </button>
-                    </form>
-                    <form th:if="${!isFavorite}" th:action="@{'/favorites/add/' + ${product.id}}" method="post">
-                        <button class="w-14 h-14 border border-white/20 text-white/40 hover:text-red-400 hover:border-red-400/30 transition flex items-center justify-center">
-                            <i class="far fa-heart text-[16px]"></i>
-                        </button>
-                    </form>
-                    <form th:if="${isFavorite}" th:action="@{'/favorites/remove/' + ${product.id}}" method="post">
-                        <button class="w-14 h-14 border border-red-400/30 text-red-400 hover:border-red-400/60 transition flex items-center justify-center">
-                            <i class="fas fa-heart text-[16px]"></i>
-                        </button>
-                    </form>
-                </div>
+            <div sec:authorize="isAuthenticated()" class="space-y-3 mb-8">
+                <form th:action="@{'/cart/add/' + ${product.id}}" method="post">
+                    <button class="w-full py-4 bg-white text-black text-[12px] uppercase tracking-[0.25em] font-medium hover:bg-white/90 active:bg-white/80 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-shopping-bag text-[11px]"></i>В корзину
+                    </button>
+                </form>
+                <a th:href="'mailto:' + ${product.sellerUsername} + '@marketplace.ru'"
+                   class="w-full py-3.5 border border-white/15 text-white/70 text-[12px] uppercase tracking-[0.2em] hover:border-white/35 hover:text-white transition flex items-center justify-center gap-2">
+                    <i class="far fa-paper-plane text-[11px]"></i>Задать вопрос
+                </a>
             </div>
             <div sec:authorize="!isAuthenticated()" class="mb-8">
                 <a href="/auth"
@@ -112,31 +118,99 @@
                 </a>
             </div>
 
-            <!-- Разделитель -->
-            <div class="border-t border-white/8 pt-8 space-y-4">
+            <!-- ═══ АККОРДЕОНЫ ═══ -->
+            <div class="border-t border-white/10">
 
                 <!-- Описание -->
-                <div>
-                    <p class="text-white/30 text-[11px] uppercase tracking-[0.2em] mb-3">Описание</p>
-                    <p class="text-white/60 text-[14px] leading-relaxed"
-                       th:text="${productEntity.description}">Описание не указано.</p>
-                </div>
+                <details open class="border-b border-white/10 group">
+                    <summary class="flex items-center justify-between py-5">
+                        <span class="text-white text-[14px] font-medium">Описание</span>
+                        <i class="fas fa-chevron-down accordion-chevron text-white/30 text-[12px]"></i>
+                    </summary>
+                    <div class="pb-6 text-white/55 text-[14px] leading-relaxed"
+                         th:text="${productEntity.description}"
+                         th:if="${productEntity.description != null and !#strings.isEmpty(productEntity.description)}"></div>
+                    <div class="pb-6 text-white/25 text-[13px] italic"
+                         th:if="${productEntity.description == null or #strings.isEmpty(productEntity.description)}">
+                        Описание не указано.
+                    </div>
+                </details>
 
-                <!-- Детали -->
-                <div class="border-t border-white/8 pt-6 grid grid-cols-2 gap-y-3">
-                    <div>
-                        <p class="text-white/25 text-[10px] uppercase tracking-[0.2em] mb-1">Продавец</p>
-                        <p class="text-white/65 text-[13px]" th:text="${product.sellerUsername}"></p>
+                <!-- О товаре -->
+                <details open class="border-b border-white/10 group">
+                    <summary class="flex items-center justify-between py-5">
+                        <span class="text-white text-[14px] font-medium">О товаре</span>
+                        <i class="fas fa-chevron-down accordion-chevron text-white/30 text-[12px]"></i>
+                    </summary>
+                    <div class="pb-6 space-y-0">
+                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
+                            <span class="text-white/40 text-[13px]">Категория:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.categoryName}"></span>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                            <span class="text-white/40 text-[13px]">Состояние:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.condition}"></span>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
+                            <span class="text-white/40 text-[13px]">Продавец:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.sellerUsername}"></span>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                            <span class="text-white/40 text-[13px]">Артикул:</span>
+                            <span class="text-white/80 text-[13px] font-mono"
+                                  th:text="${'MP-' + #strings.replace(#strings.repeat('0', 8 - #strings.length(#strings.toString(product.id))), ' ', '0') + product.id}"></span>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
+                            <span class="text-white/40 text-[13px]">Рейтинг:</span>
+                            <span class="text-white/80 text-[13px]"
+                                  th:text="${product.averageRating != null ? #numbers.formatDecimal(product.averageRating, 1, 1) + ' / 5.0' : 'Не оценён'}"></span>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-white/25 text-[10px] uppercase tracking-[0.2em] mb-1">Состояние</p>
-                        <p class="text-white/65 text-[13px]" th:text="${product.condition}"></p>
+                </details>
+
+                <!-- Доставка и оплата -->
+                <details class="border-b border-white/10 group">
+                    <summary class="flex items-center justify-between py-5">
+                        <span class="text-white text-[14px] font-medium">Доставка и оплата</span>
+                        <i class="fas fa-chevron-down accordion-chevron text-white/30 text-[12px]"></i>
+                    </summary>
+                    <div class="pb-6 space-y-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-truck text-white/30 text-[14px] mt-0.5"></i>
+                            <div>
+                                <p class="text-white/75 text-[13px] mb-1">Курьерская доставка по России</p>
+                                <p class="text-white/40 text-[12px] leading-relaxed">Заказы, оформленные до 12:00, передаются в доставку в тот же день. При покупке от 5000 ₽ доставка бесплатная.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-store text-white/30 text-[14px] mt-0.5"></i>
+                            <div>
+                                <p class="text-white/75 text-[13px] mb-1">Самовывоз</p>
+                                <p class="text-white/40 text-[12px] leading-relaxed">Получите заказ в пункте выдачи в день оформления.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-credit-card text-white/30 text-[14px] mt-0.5"></i>
+                            <div>
+                                <p class="text-white/75 text-[13px] mb-1">Способы оплаты</p>
+                                <p class="text-white/40 text-[12px] leading-relaxed">Банковская карта, СБП, наличные при получении.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-white/25 text-[10px] uppercase tracking-[0.2em] mb-1">Категория</p>
-                        <p class="text-white/65 text-[13px]" th:text="${product.categoryName}"></p>
+                </details>
+
+                <!-- Возврат -->
+                <details class="border-b border-white/10 group">
+                    <summary class="flex items-center justify-between py-5">
+                        <span class="text-white text-[14px] font-medium">Возврат и гарантия</span>
+                        <i class="fas fa-chevron-down accordion-chevron text-white/30 text-[12px]"></i>
+                    </summary>
+                    <div class="pb-6 space-y-3 text-white/55 text-[13px] leading-relaxed">
+                        <p>Вы можете вернуть товар надлежащего качества в течение 14 дней с момента получения.</p>
+                        <p class="text-white/40">Товары, бывшие в употреблении, проходят проверку модератором перед публикацией.</p>
                     </div>
-                </div>
+                </details>
+
             </div>
         </div>
     </div>
@@ -173,7 +247,6 @@
             </form>
         </div>
 
-        <!-- Список отзывов -->
         <div th:if="${#lists.isEmpty(reviews)}" class="text-white/25 text-[13px] py-8">
             Отзывов пока нет. Будьте первым!
         </div>
