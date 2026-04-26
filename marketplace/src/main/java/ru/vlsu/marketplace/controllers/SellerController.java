@@ -9,11 +9,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.vlsu.marketplace.dto.ProductDto;
 import ru.vlsu.marketplace.entities.Product;
+import ru.vlsu.marketplace.entities.ProductImage;
 import ru.vlsu.marketplace.entities.User;
 import ru.vlsu.marketplace.repositories.CategoryRepository;
+import ru.vlsu.marketplace.repositories.ProductImageRepository;
 import ru.vlsu.marketplace.services.OrderService;
 import ru.vlsu.marketplace.services.ProductService;
 import ru.vlsu.marketplace.services.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -27,6 +32,7 @@ public class SellerController {
     private final CategoryRepository categoryRepository;
     private final UserService userService;
     private final OrderService orderService;
+    private final ProductImageRepository productImageRepository;
 
     @GetMapping("/products")
     public String myProducts(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -47,7 +53,7 @@ public class SellerController {
 
     @PostMapping("/products/new")
     public String addProduct(@ModelAttribute ProductDto dto,
-                             @RequestParam(required = false) MultipartFile image,
+                             @RequestParam(required = false) MultipartFile[] images,
                              @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         User seller = userService.findByUsername(userDetails.getUsername()).orElseThrow();
         Product product = new Product();
@@ -61,10 +67,8 @@ public class SellerController {
         if (dto.getCategoryId() != null) {
             product.setCategory(categoryRepository.findById(dto.getCategoryId()).orElse(null));
         }
-        if (image != null && !image.isEmpty()) {
-            product.setImageData(image.getBytes());
-        }
-        productService.save(product);
+        Product saved = productService.save(product);
+        saveImages(saved, images, 0);
         return "redirect:/seller/products";
     }
 
@@ -80,6 +84,7 @@ public class SellerController {
         model.addAttribute("productDto", dto);
         model.addAttribute("productId", id);
         model.addAttribute("hasImage", product.getImageData() != null && product.getImageData().length > 0);
+        model.addAttribute("extraImages", productImageRepository.findByProductIdOrderBySortOrderAsc(id));
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("conditions", Product.Condition.values());
         return "seller/edit_product";
@@ -87,7 +92,7 @@ public class SellerController {
 
     @PostMapping("/products/{id}/edit")
     public String editProduct(@PathVariable Integer id, @ModelAttribute ProductDto dto,
-                              @RequestParam(required = false) MultipartFile image) throws IOException {
+                              @RequestParam(required = false) MultipartFile[] images) throws IOException {
         Product product = productService.findById(id).orElseThrow();
         product.setTitle(dto.getTitle());
         product.setDescription(dto.getDescription());
@@ -96,11 +101,44 @@ public class SellerController {
         if (dto.getCategoryId() != null) {
             product.setCategory(categoryRepository.findById(dto.getCategoryId()).orElse(null));
         }
-        if (image != null && !image.isEmpty()) {
-            product.setImageData(image.getBytes());
-        }
-        productService.save(product);
+        Product saved = productService.save(product);
+        int existingCount = productImageRepository.findByProductIdOrderBySortOrderAsc(id).size()
+                          + (saved.getImageData() != null ? 1 : 0);
+        saveImages(saved, images, existingCount);
         return "redirect:/seller/products";
+    }
+
+    @PostMapping("/products/{productId}/images/{imageId}/delete")
+    public String deleteImage(@PathVariable Integer productId, @PathVariable Integer imageId) {
+        productImageRepository.findById(imageId).ifPresent(img -> {
+            if (img.getProduct().getId().equals(productId)) {
+                productImageRepository.delete(img);
+            }
+        });
+        return "redirect:/seller/products/" + productId + "/edit";
+    }
+
+    private void saveImages(Product product, MultipartFile[] images, int startSortOrder) throws IOException {
+        if (images == null) return;
+        List<ProductImage> toSave = new ArrayList<>();
+        int order = startSortOrder;
+        for (MultipartFile file : images) {
+            if (file == null || file.isEmpty()) continue;
+            // Первое фото — в imageData (для совместимости с каталогом)
+            if (product.getImageData() == null) {
+                product.setImageData(file.getBytes());
+                productService.save(product);
+            } else {
+                ProductImage img = new ProductImage();
+                img.setProduct(product);
+                img.setImageData(file.getBytes());
+                img.setSortOrder(order++);
+                toSave.add(img);
+            }
+        }
+        if (!toSave.isEmpty()) {
+            productImageRepository.saveAll(toSave);
+        }
     }
 
     @PostMapping("/products/{id}/delete")

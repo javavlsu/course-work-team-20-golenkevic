@@ -38,10 +38,11 @@
     <!-- Две колонки -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-start">
 
-        <!-- ═══ ЛЕВАЯ КОЛОНКА: ФОТО ═══ -->
+        <!-- ═══ ЛЕВАЯ КОЛОНКА: ФОТО + ГАЛЕРЕЯ ═══ -->
         <div>
+            <!-- Главное фото -->
             <div class="aspect-[3/4] bg-[#161616] overflow-hidden">
-                <img th:if="${product.hasImage}"
+                <img th:if="${product.hasImage}" id="main-image"
                      th:src="@{'/product/' + ${product.id} + '/image'}"
                      th:alt="${product.title}"
                      class="w-full h-full object-cover"/>
@@ -51,7 +52,35 @@
                     <p class="text-white/20 text-[11px] uppercase tracking-[0.2em]">Нет фото</p>
                 </div>
             </div>
+
+            <!-- Миниатюры (если есть дополнительные фото) -->
+            <div th:if="${productEntity.images != null and !#lists.isEmpty(productEntity.images)}"
+                 class="mt-3 grid grid-cols-5 sm:grid-cols-6 gap-2">
+                <button type="button" onclick="setMain(this)"
+                        th:data-src="@{'/product/' + ${product.id} + '/image'}"
+                        class="aspect-square bg-[#161616] overflow-hidden border-2 border-white/40">
+                    <img th:src="@{'/product/' + ${product.id} + '/image'}" alt="" class="w-full h-full object-cover"/>
+                </button>
+                <button th:each="img : ${productEntity.images}" type="button" onclick="setMain(this)"
+                        th:data-src="@{'/product/' + ${product.id} + '/image/' + ${img.id}}"
+                        class="aspect-square bg-[#161616] overflow-hidden border-2 border-transparent hover:border-white/30 transition">
+                    <img th:src="@{'/product/' + ${product.id} + '/image/' + ${img.id}}" alt="" class="w-full h-full object-cover"/>
+                </button>
+            </div>
         </div>
+
+        <script>
+            function setMain(btn) {
+                const main = document.getElementById('main-image');
+                if (main) main.src = btn.dataset.src;
+                document.querySelectorAll('button[data-src]').forEach(b => {
+                    b.classList.remove('border-white/40');
+                    b.classList.add('border-transparent');
+                });
+                btn.classList.add('border-white/40');
+                btn.classList.remove('border-transparent');
+            }
+        </script>
 
         <!-- ═══ ПРАВАЯ КОЛОНКА ═══ -->
         <div class="product-info-sticky">

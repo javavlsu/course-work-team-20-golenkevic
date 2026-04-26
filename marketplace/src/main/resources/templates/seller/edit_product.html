@@ -79,25 +79,44 @@
             </div>
 
             <div class="bg-[#111] border border-white/8 p-7">
-                <p class="text-white/30 text-[10px] uppercase tracking-[0.25em] mb-5">Фотография</p>
+                <p class="text-white/30 text-[10px] uppercase tracking-[0.25em] mb-5">Фотографии</p>
 
-                <!-- Текущее фото -->
-                <div th:if="${hasImage}" class="mb-4">
-                    <p class="text-white/25 text-[11px] uppercase tracking-[0.15em] mb-2">Текущее фото</p>
-                    <img th:src="@{'/product/' + ${productId} + '/image'}" alt=""
-                         class="w-24 h-32 object-cover border border-white/10"/>
+                <!-- Существующие фото -->
+                <div th:if="${hasImage or !#lists.isEmpty(extraImages)}"
+                     class="mb-5 grid grid-cols-4 sm:grid-cols-6 gap-2">
+                    <!-- Главное фото (imageData) -->
+                    <div th:if="${hasImage}" class="relative aspect-square bg-[#1a1a1a] overflow-hidden group">
+                        <img th:src="@{'/product/' + ${productId} + '/image'}" alt=""
+                             class="w-full h-full object-cover"/>
+                        <span class="absolute top-1 left-1 text-[9px] uppercase tracking-wider px-1.5 py-0.5 bg-white/20 backdrop-blur-sm text-white">Главное</span>
+                    </div>
+                    <!-- Дополнительные фото -->
+                    <div th:each="img : ${extraImages}"
+                         class="relative aspect-square bg-[#1a1a1a] overflow-hidden group">
+                        <img th:src="@{'/product/' + ${productId} + '/image/' + ${img.id}}" alt=""
+                             class="w-full h-full object-cover"/>
+                        <form th:action="@{'/seller/products/' + ${productId} + '/images/' + ${img.id} + '/delete'}" method="post"
+                              class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <button type="submit" aria-label="Удалить"
+                                    class="w-9 h-9 bg-red-500/90 text-white flex items-center justify-center hover:bg-red-500 transition">
+                                <i class="fas fa-trash-alt text-[12px]"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 <label class="block cursor-pointer">
                     <div class="border-2 border-dashed border-white/10 p-8 text-center hover:border-white/25 transition">
                         <i class="fas fa-cloud-upload-alt text-white/20 text-2xl mb-2"></i>
                         <p class="text-white/30 text-[12px] uppercase tracking-[0.15em] mb-1">
-                            <span th:text="${hasImage} ? 'Заменить фото' : 'Загрузить фото'">Загрузить фото</span>
+                            <span th:text="${hasImage} ? 'Добавить ещё фото' : 'Загрузить фото'">Загрузить фото</span>
                         </p>
-                        <p class="text-white/20 text-[11px]">JPG, PNG, WEBP — до 5 МБ</p>
+                        <p class="text-white/20 text-[11px]">JPG, PNG, WEBP — до 5 МБ. Можно несколько.</p>
                     </div>
-                    <input type="file" name="image" accept="image/*" class="hidden" onchange="previewImage(this)">
+                    <input type="file" name="images" accept="image/*" multiple class="hidden" onchange="previewImage(this)">
                 </label>
+                <!-- Превью загружаемых -->
+                <div id="upload-thumbs" class="mt-3 grid grid-cols-4 sm:grid-cols-6 gap-2 hidden"></div>
             </div>
 
             <div class="flex gap-3">
@@ -145,7 +164,9 @@
         document.getElementById('preview-price').textContent = val ? val + ' ₽' : '— ₽';
     }
     function previewImage(input) {
-        if (!input.files[0]) return;
+        const files = Array.from(input.files);
+        if (files.length === 0) return;
+        // Главное превью — первый файл (если у товара ещё нет основного фото)
         const reader = new FileReader();
         reader.onload = e => {
             const img = document.getElementById('preview-new-img');
@@ -156,7 +177,21 @@
             const ph = document.getElementById('preview-placeholder');
             if (ph) ph.classList.add('hidden');
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(files[0]);
+        // Миниатюры всех новых файлов
+        const thumbs = document.getElementById('upload-thumbs');
+        thumbs.innerHTML = '';
+        files.forEach(file => {
+            const r = new FileReader();
+            r.onload = e => {
+                const div = document.createElement('div');
+                div.className = 'aspect-square bg-[#1a1a1a] overflow-hidden border border-emerald-400/30';
+                div.innerHTML = `<img src="${e.target.result}" alt="" class="w-full h-full object-cover">`;
+                thumbs.appendChild(div);
+            };
+            r.readAsDataURL(file);
+        });
+        thumbs.classList.remove('hidden');
     }
 </script>
 

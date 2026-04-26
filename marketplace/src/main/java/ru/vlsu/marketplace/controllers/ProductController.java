@@ -15,6 +15,7 @@ import ru.vlsu.marketplace.entities.Product;
 import ru.vlsu.marketplace.entities.Review;
 import ru.vlsu.marketplace.entities.User;
 import ru.vlsu.marketplace.repositories.CategoryRepository;
+import ru.vlsu.marketplace.repositories.ProductImageRepository;
 import ru.vlsu.marketplace.services.*;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class ProductController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final FavoriteService favoriteService;
+    private final ProductImageRepository productImageRepository;
 
     @GetMapping("/product/{id}")
     public String productPage(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -53,6 +55,16 @@ public class ProductController {
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(product.getImageData());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/product/{productId}/image/{imageId}")
+    @ResponseBody
+    public ResponseEntity<byte[]> productImageById(@PathVariable Integer productId, @PathVariable Integer imageId) {
+        var image = productImageRepository.findById(imageId).orElseThrow();
+        if (!image.getProduct().getId().equals(productId)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image.getImageData());
     }
 
     @PostMapping("/product/{id}/review")
