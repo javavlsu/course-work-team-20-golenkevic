@@ -27,7 +27,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 items-start">
 
         <!-- ═══ ФОРМА ═══ -->
-        <form th:action="@{/orders/checkout}" method="post" class="space-y-8">
+        <form id="checkoutForm" th:action="@{/orders/checkout}" method="post" class="space-y-8">
 
             <!-- Получатель -->
             <div class="bg-[#111] border border-white/8 p-8">
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Кнопка (десктоп) -->
-                <button form="checkoutForm" type="submit" onclick="document.querySelector('form').submit()"
+                <button form="checkoutForm" type="submit"
                         class="w-full py-4 bg-white text-black text-[12px] uppercase tracking-[0.25em] font-medium hover:bg-white/90 active:bg-white/80 transition">
                     Подтвердить заказ
                 </button>
