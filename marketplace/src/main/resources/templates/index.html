@@ -101,20 +101,74 @@
     </div>
 </section>
 
-<!-- ═══ КАТЕГОРИИ-ССЫЛКИ ═══ -->
-<section class="border-y border-white/10 bg-[#0a0a0a]">
-    <div class="max-w-[1400px] mx-auto px-6 py-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.25em]">
+<!-- ═══ КАТЕГОРИИ С МЕГА-МЕНЮ ═══ -->
+<section class="border-y border-white/10 bg-[#0a0a0a] relative z-20">
+    <div class="max-w-[1400px] mx-auto hidden lg:flex items-center justify-center gap-10 text-[11px] uppercase tracking-[0.25em]">
+
+        <!-- Новинки — без меню -->
+        <a href="/catalog?sort=createdAt" class="py-5 text-white/85 hover:text-white border-b-2 border-transparent hover:border-white transition">Новинки</a>
+
+        <!-- Категории с мега-меню -->
+        <div th:each="cat,stat : ${categories}" class="group relative">
+            <a th:href="@{/catalog(categoryId=${cat.id})}"
+               class="py-5 inline-block text-white/65 hover:text-white border-b-2 border-transparent group-hover:border-white transition"
+               th:text="${cat.name}"></a>
+
+            <!-- Выпадающее мега-меню -->
+            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-0 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
+                <div class="w-[760px] bg-[#0f0f0f] border border-white/10 shadow-2xl shadow-black/50 grid grid-cols-[1fr_360px] gap-0">
+
+                    <!-- Левая колонка: подборки -->
+                    <div class="p-8">
+                        <p class="text-white/85 text-[12px] uppercase tracking-[0.2em] font-medium mb-5" th:text="${cat.name}"></p>
+                        <div class="space-y-3 text-[13px] normal-case tracking-normal">
+                            <a th:href="@{/catalog(categoryId=${cat.id}, sort=createdAt)}"
+                               class="block text-white/65 hover:text-white transition">Новинки</a>
+                            <a th:href="@{/catalog(categoryId=${cat.id}, condition='NEW')}"
+                               class="block text-white/65 hover:text-white transition">Новые товары</a>
+                            <a th:href="@{/catalog(categoryId=${cat.id}, condition='USED')}"
+                               class="block text-white/65 hover:text-white transition">Б/у в отличном состоянии</a>
+                            <a th:href="@{/catalog(categoryId=${cat.id}, condition='VINTAGE')}"
+                               class="block text-white/65 hover:text-white transition">Винтаж</a>
+                        </div>
+                        <a th:href="@{/catalog(categoryId=${cat.id})}"
+                           class="mt-8 inline-flex items-center gap-2 px-5 py-2.5 border border-white/30 text-white/85 text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition">
+                            Смотреть все
+                        </a>
+                    </div>
+
+                    <!-- Правая колонка: фото -->
+                    <a th:href="@{/catalog(categoryId=${cat.id})}"
+                       class="block relative overflow-hidden bg-[#1a1a1a] group/photo">
+                        <img th:src="${'/photoformain/photo_' + ((stat.index % 9) + 1) + '_2026-04-26_17-20-42.jpg'}"
+                             alt="" class="w-full h-full object-cover group-hover/photo:scale-105 transition-transform duration-500"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <p class="text-white/60 text-[9px] uppercase tracking-[0.25em] mb-1">Категория</p>
+                            <p class="text-white text-[14px] uppercase tracking-[0.15em]" th:text="${cat.name}"></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Продать -->
+        <a href="/seller/products/new" sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')"
+           class="py-5 text-red-400/85 hover:text-red-400 border-b-2 border-transparent hover:border-red-400 transition">
+            Продать
+        </a>
+    </div>
+
+    <!-- Мобильный вариант (без мега-меню) -->
+    <div class="max-w-[1400px] mx-auto px-6 py-4 lg:hidden flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.25em]">
         <a href="/catalog?sort=createdAt" class="text-white/85 hover:text-white transition">Новинки</a>
-        <span class="text-white/15">·</span>
-        <a href="/catalog" class="text-white/60 hover:text-white transition">Одежда</a>
-        <span class="text-white/15">·</span>
-        <a href="/catalog" class="text-white/60 hover:text-white transition">Обувь</a>
-        <span class="text-white/15">·</span>
-        <a href="/catalog" class="text-white/60 hover:text-white transition">Аксессуары</a>
-        <span class="text-white/15">·</span>
-        <a href="/catalog" class="text-white/60 hover:text-white transition">Электроника</a>
-        <span class="text-white/15">·</span>
-        <a href="/seller/products/new" class="text-red-400/85 hover:text-red-400 transition" sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">Продать</a>
+        <span th:each="cat : ${categories}" class="contents">
+            <span class="text-white/15">·</span>
+            <a th:href="@{/catalog(categoryId=${cat.id})}" class="text-white/60 hover:text-white transition" th:text="${cat.name}"></a>
+        </span>
+        <span class="text-white/15" sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">·</span>
+        <a href="/seller/products/new" sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')"
+           class="text-red-400/85 hover:text-red-400 transition">Продать</a>
     </div>
 </section>
 
