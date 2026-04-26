@@ -27,6 +27,26 @@ public class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        // Админ — создаём/обновляем независимо от наличия товаров
+        userRepository.findByUsername("admin").ifPresentOrElse(
+            existing -> {
+                existing.setPasswordHash(passwordEncoder.encode("admin123"));
+                existing.setRole(User.Role.admin);
+                existing.setActive(true);
+                userRepository.save(existing);
+            },
+            () -> {
+                User admin = new User();
+                admin.setUsername("admin");
+                admin.setEmail("admin@marketplace.ru");
+                admin.setPasswordHash(passwordEncoder.encode("admin123"));
+                admin.setRole(User.Role.admin);
+                admin.setActive(true);
+                admin.setRegisteredAt(Instant.now());
+                userRepository.save(admin);
+            }
+        );
+
         if (productRepository.count() > 0) return;
 
         // Категории

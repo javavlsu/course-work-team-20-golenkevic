@@ -1,71 +1,207 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<header th:fragment="header" class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a] border-b border-white/10">
-    <nav class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
-        <!-- Left: burger + links -->
-        <div class="flex items-center gap-8">
-            <button id="burger-btn" class="lg:hidden text-white text-xl">
-                <i class="fas fa-bars"></i>
+<header th:fragment="header" class="fixed top-0 left-0 right-0 z-50">
+
+    <!-- Top bar -->
+    <div class="bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
+        <nav aria-label="Основная навигация" class="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+
+            <!-- Левая часть: бургер + ссылки -->
+            <div class="flex items-center gap-6 flex-1">
+                <button id="burger-btn" aria-label="Меню"
+                        class="lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] -ml-1.5">
+                    <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
+                    <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
+                    <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
+                </button>
+                <div class="hidden lg:flex items-center gap-6">
+                    <a href="/catalog" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Каталог</a>
+                    <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
+                        <a href="/seller/products" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Мои товары</a>
+                    </span>
+                    <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
+                        <a href="/seller/orders" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Заказы</a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Логотип -->
+            <a href="/" class="absolute left-1/2 -translate-x-1/2 text-white text-[14px] sm:text-[16px] lg:text-[18px] font-semibold tracking-[0.25em] sm:tracking-[0.3em] uppercase whitespace-nowrap">
+                MARKETPLACE
+            </a>
+
+            <!-- Правая часть -->
+            <div class="flex items-center gap-3 sm:gap-5 flex-1 justify-end">
+                <div sec:authorize="isAuthenticated()" class="flex items-center gap-3 sm:gap-5">
+                    <a href="/cart" class="text-white/70 hover:text-white transition" aria-label="Корзина">
+                        <i class="fas fa-shopping-bag text-[16px] sm:text-[17px]"></i>
+                    </a>
+                    <a href="/profile" class="hidden sm:inline text-white/70 hover:text-white transition" aria-label="Профиль">
+                        <i class="fas fa-user text-[17px]"></i>
+                    </a>
+                    <a href="/orders" class="hidden md:inline text-white/70 hover:text-white transition" aria-label="Заказы">
+                        <i class="fas fa-receipt text-[16px]"></i>
+                    </a>
+                    <span sec:authorize="hasAnyAuthority('ROLE_moderator','ROLE_admin')">
+                        <a href="/moderation" class="hidden sm:inline text-white/70 hover:text-white transition" aria-label="Модерация">
+                            <i class="fas fa-shield-alt text-[16px]"></i>
+                        </a>
+                    </span>
+                    <span sec:authorize="hasAuthority('ROLE_admin')">
+                        <a href="/admin/dashboard" class="hidden sm:inline text-white/70 hover:text-white transition" aria-label="Админ">
+                            <i class="fas fa-sliders-h text-[16px]"></i>
+                        </a>
+                    </span>
+                    <form th:action="@{/profile/logout}" method="post" class="hidden sm:inline">
+                        <button type="submit" class="text-white/30 hover:text-red-400 transition" aria-label="Выйти">
+                            <i class="fas fa-sign-out-alt text-[14px]"></i>
+                        </button>
+                    </form>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <a href="/auth" class="text-[12px] text-white/70 hover:text-white uppercase tracking-[0.2em] transition">Войти</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ═══ МОБИЛЬНОЕ МЕНЮ ═══ -->
+    <div id="mobile-overlay"
+         class="fixed inset-0 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden z-40"></div>
+
+    <aside id="mobile-menu"
+           class="fixed top-0 left-0 bottom-0 w-[85%] max-w-sm bg-[#0a0a0a] border-r border-white/10 -translate-x-full transition-transform duration-300 ease-out lg:hidden z-50 overflow-y-auto">
+
+        <!-- Шапка меню -->
+        <div class="flex items-center justify-between p-5 border-b border-white/10">
+            <span class="text-white text-[14px] font-semibold tracking-[0.25em] uppercase">Marketplace</span>
+            <button id="close-menu" aria-label="Закрыть"
+                    class="w-8 h-8 flex items-center justify-center text-white/60 hover:text-white transition">
+                <i class="fas fa-times text-[16px]"></i>
             </button>
-            <div class="hidden lg:flex items-center gap-6">
-                <a href="/catalog" class="text-[13px] text-white/70 hover:text-white uppercase tracking-[0.15em] transition">Каталог</a>
-                <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
-                    <a href="/seller/products" class="text-[13px] text-white/70 hover:text-white uppercase tracking-[0.15em] transition">Мои товары</a>
-                </span>
+        </div>
+
+        <!-- Профиль (если авторизован) -->
+        <div sec:authorize="isAuthenticated()" class="p-5 border-b border-white/10 flex items-center gap-3">
+            <div class="w-10 h-10 bg-[#161616] rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-white/30 text-[14px]"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-white/80 text-[13px] truncate" sec:authentication="name">user</p>
+                <a href="/profile" class="text-white/35 text-[11px] uppercase tracking-[0.15em] hover:text-white/60 transition">
+                    Профиль <i class="fas fa-arrow-right text-[9px] ml-1"></i>
+                </a>
             </div>
         </div>
 
-        <!-- Center: logo -->
-        <a href="/" class="absolute left-1/2 -translate-x-1/2 text-white text-[18px] font-semibold tracking-[0.3em] uppercase">
-            MARKETPLACE
-        </a>
+        <!-- Навигация -->
+        <nav aria-label="Мобильное меню" class="py-4">
+            <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2">Магазин</p>
+            <a href="/" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                <i class="fas fa-home text-white/30 w-5 text-[14px]"></i> Главная
+            </a>
+            <a href="/catalog" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                <i class="fas fa-th text-white/30 w-5 text-[14px]"></i> Каталог
+            </a>
 
-        <!-- Right: icons -->
-        <div class="flex items-center gap-5">
-            <div sec:authorize="isAuthenticated()" class="flex items-center gap-5">
-                <a href="/cart" class="text-white/70 hover:text-white transition" title="Корзина">
-                    <i class="fas fa-shopping-bag text-[17px]"></i>
+            <!-- Покупатель -->
+            <div sec:authorize="isAuthenticated()">
+                <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Личный кабинет</p>
+                <a href="/cart" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-shopping-bag text-white/30 w-5 text-[14px]"></i> Корзина
                 </a>
-                <a href="/profile" class="text-white/70 hover:text-white transition" title="Профиль">
-                    <i class="fas fa-user text-[17px]"></i>
+                <a href="/orders" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-receipt text-white/30 w-5 text-[14px]"></i> Мои заказы
                 </a>
-                <span sec:authorize="hasAnyAuthority('ROLE_moderator','ROLE_admin')">
-                    <a href="/moderation" class="text-white/70 hover:text-white transition" title="Модерация">
-                        <i class="fas fa-shield-alt text-[17px]"></i>
-                    </a>
-                </span>
-                <span sec:authorize="hasAuthority('ROLE_admin')">
-                    <a href="/admin/dashboard" class="text-white/70 hover:text-white transition" title="Админ">
-                        <i class="fas fa-sliders-h text-[17px]"></i>
-                    </a>
-                </span>
-                <form th:action="@{/profile/logout}" method="post" class="inline">
-                    <button type="submit" class="text-white/30 hover:text-red-400 transition" title="Выйти">
-                        <i class="fas fa-sign-out-alt text-[15px]"></i>
+                <a href="/profile" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-user text-white/30 w-5 text-[14px]"></i> Профиль
+                </a>
+            </div>
+
+            <!-- Продавец -->
+            <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
+                <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Продавец</p>
+                <a href="/seller/products" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-box text-white/30 w-5 text-[14px]"></i> Мои товары
+                </a>
+                <a href="/seller/orders" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-clipboard-list text-white/30 w-5 text-[14px]"></i> Заказы покупателей
+                </a>
+                <a href="/seller/products/new" class="flex items-center gap-3 px-5 py-3 text-emerald-400/85 text-[13px] hover:bg-emerald-400/5 transition">
+                    <i class="fas fa-plus text-emerald-400/50 w-5 text-[14px]"></i> Добавить товар
+                </a>
+            </span>
+
+            <!-- Модератор -->
+            <span sec:authorize="hasAnyAuthority('ROLE_moderator','ROLE_admin')">
+                <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Модерация</p>
+                <a href="/moderation" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-shield-alt text-white/30 w-5 text-[14px]"></i> Очередь модерации
+                </a>
+            </span>
+
+            <!-- Админ -->
+            <span sec:authorize="hasAuthority('ROLE_admin')">
+                <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Администрирование</p>
+                <a href="/admin/dashboard" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-sliders-h text-white/30 w-5 text-[14px]"></i> Дашборд
+                </a>
+                <a href="/admin/users" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                    <i class="fas fa-users text-white/30 w-5 text-[14px]"></i> Пользователи
+                </a>
+            </span>
+
+            <!-- Выход / Вход -->
+            <div sec:authorize="isAuthenticated()" class="mt-4 px-5 pt-4 border-t border-white/8">
+                <form th:action="@{/profile/logout}" method="post">
+                    <button type="submit"
+                            class="w-full flex items-center gap-3 py-3 text-red-400/80 text-[13px] hover:text-red-400 transition">
+                        <i class="fas fa-sign-out-alt w-5 text-[14px]"></i> Выйти
                     </button>
                 </form>
             </div>
-            <div sec:authorize="isAnonymous()">
-                <a href="/auth" class="text-[13px] text-white/70 hover:text-white uppercase tracking-[0.15em] transition">Войти</a>
+            <div sec:authorize="isAnonymous()" class="mt-4 px-5 pt-4 border-t border-white/8">
+                <a href="/auth"
+                   class="block w-full py-3 bg-white text-black text-center text-[12px] uppercase tracking-[0.2em] hover:bg-white/90 transition">
+                    Войти / Регистрация
+                </a>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </aside>
 
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-[#0a0a0a] border-t border-white/10 px-6 py-4 space-y-3">
-        <a href="/catalog" class="block text-[13px] text-white/70 hover:text-white uppercase tracking-[0.15em]">Каталог</a>
-        <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
-            <a href="/seller/products" class="block text-[13px] text-white/70 hover:text-white uppercase tracking-[0.15em]">Мои товары</a>
-        </span>
-        <span sec:authorize="hasAnyAuthority('ROLE_moderator','ROLE_admin')">
-            <a href="/moderation" class="block text-[13px] text-white/70 hover:text-white uppercase tracking-[0.15em]">Модерация</a>
-        </span>
-    </div>
+    <style>
+        body.menu-open { overflow: hidden; }
+        #mobile-menu.open { transform: translateX(0); }
+        #mobile-overlay.open { opacity: 1; pointer-events: auto; }
+        #burger-btn.open .burger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        #burger-btn.open .burger-line:nth-child(2) { opacity: 0; }
+        #burger-btn.open .burger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    </style>
 
     <script>
-        document.getElementById('burger-btn')?.addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
+        (function() {
+            const burger = document.getElementById('burger-btn');
+            const close = document.getElementById('close-menu');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-overlay');
+
+            function open() {
+                burger.classList.add('open');
+                menu.classList.add('open');
+                overlay.classList.add('open');
+                document.body.classList.add('menu-open');
+            }
+            function shut() {
+                burger.classList.remove('open');
+                menu.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.classList.remove('menu-open');
+            }
+            burger?.addEventListener('click', () => menu.classList.contains('open') ? shut() : open());
+            close?.addEventListener('click', shut);
+            overlay?.addEventListener('click', shut);
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') shut(); });
+        })();
     </script>
 </header>
 </html>
