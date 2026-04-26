@@ -40,6 +40,12 @@ public class CatalogController {
                           @RequestParam(defaultValue = "createdAt") String sort,
                           Model model) {
 
+        // Пустые строки превращаем в null, чтобы фильтры пропускали значения
+        color = blankToNull(color);
+        material = blankToNull(material);
+        size = blankToNull(size);
+        search = blankToNull(search);
+
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sort).descending());
         Page<Product> products = productService.getApprovedProducts(pageable, categoryId, brandId, minPrice, maxPrice,
                 condition, gender, season, color, material, size, search);
@@ -68,5 +74,9 @@ public class CatalogController {
         model.addAttribute("availableMaterials", productService.getDistinctMaterials());
         model.addAttribute("availableSizes", productService.getDistinctSizes());
         return "catalog";
+    }
+
+    private static String blankToNull(String s) {
+        return (s == null || s.isBlank()) ? null : s;
     }
 }
