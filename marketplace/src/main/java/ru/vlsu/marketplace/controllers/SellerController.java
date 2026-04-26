@@ -129,13 +129,14 @@ public class SellerController {
     }
 
     @PostMapping("/products/{productId}/images/{imageId}/delete")
-    public String deleteImage(@PathVariable Integer productId, @PathVariable Integer imageId) {
+    @org.springframework.web.bind.annotation.ResponseBody
+    public org.springframework.http.ResponseEntity<String> deleteImage(@PathVariable Integer productId, @PathVariable Integer imageId) {
         productImageRepository.findById(imageId).ifPresent(img -> {
             if (img.getProduct().getId().equals(productId)) {
                 productImageRepository.delete(img);
             }
         });
-        return "redirect:/seller/products/" + productId + "/edit";
+        return org.springframework.http.ResponseEntity.ok("OK");
     }
 
     private void saveImages(Product product, MultipartFile[] images, int startSortOrder) throws IOException {

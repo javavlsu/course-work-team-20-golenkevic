@@ -145,13 +145,13 @@
                          class="relative aspect-square bg-[#1a1a1a] overflow-hidden group">
                         <img th:src="@{'/product/' + ${productId} + '/image/' + ${img.id}}" alt=""
                              class="w-full h-full object-cover"/>
-                        <form th:action="@{'/seller/products/' + ${productId} + '/images/' + ${img.id} + '/delete'}" method="post"
-                              class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <button type="submit" aria-label="Удалить"
+                        <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <button type="button" aria-label="Удалить"
+                                    th:onclick="'deleteImage(' + ${productId} + ', ' + ${img.id} + ', this)'"
                                     class="w-9 h-9 bg-red-500/90 text-white flex items-center justify-center hover:bg-red-500 transition">
                                 <i class="fas fa-trash-alt text-[12px]"></i>
                             </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
@@ -213,6 +213,15 @@
     function updatePrice(val) {
         document.getElementById('preview-price').textContent = val ? val + ' ₽' : '— ₽';
     }
+    function deleteImage(productId, imageId, btn) {
+        if (!confirm('Удалить это фото?')) return;
+        fetch(`/seller/products/${productId}/images/${imageId}/delete`, { method: 'POST' })
+            .then(() => {
+                const tile = btn.closest('.relative.aspect-square');
+                if (tile) tile.remove();
+            });
+    }
+
     function previewImage(input) {
         const files = Array.from(input.files);
         if (files.length === 0) return;
