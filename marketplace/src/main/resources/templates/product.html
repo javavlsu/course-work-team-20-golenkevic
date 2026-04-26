@@ -177,9 +177,38 @@
                             <span class="text-white/40 text-[13px]">Категория:</span>
                             <span class="text-white/80 text-[13px]" th:text="${product.categoryName}"></span>
                         </div>
-                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                        <div th:if="${product.brandName != null and !#strings.isEmpty(product.brandName)}"
+                             class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                            <span class="text-white/40 text-[13px]">Бренд:</span>
+                            <a th:href="@{/catalog(brandId=${product.brandId})}"
+                               class="text-white/80 text-[13px] hover:text-white transition" th:text="${product.brandName}"></a>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
                             <span class="text-white/40 text-[13px]">Состояние:</span>
                             <span class="text-white/80 text-[13px]" th:text="${product.condition}"></span>
+                        </div>
+                        <div th:if="${product.gender != null}" class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                            <span class="text-white/40 text-[13px]">Пол:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.gender}"></span>
+                        </div>
+                        <div th:if="${product.color != null and !#strings.isEmpty(product.color)}"
+                             class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
+                            <span class="text-white/40 text-[13px]">Цвет:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.color}"></span>
+                        </div>
+                        <div th:if="${product.material != null and !#strings.isEmpty(product.material)}"
+                             class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                            <span class="text-white/40 text-[13px]">Материал:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.material}"></span>
+                        </div>
+                        <div th:if="${product.size != null and !#strings.isEmpty(product.size)}"
+                             class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
+                            <span class="text-white/40 text-[13px]">Размер:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.size}"></span>
+                        </div>
+                        <div th:if="${product.season != null}" class="grid grid-cols-[140px_1fr] py-2.5 px-3">
+                            <span class="text-white/40 text-[13px]">Сезон:</span>
+                            <span class="text-white/80 text-[13px]" th:text="${product.season}"></span>
                         </div>
                         <div class="grid grid-cols-[140px_1fr] py-2.5 px-3 bg-white/[0.02]">
                             <span class="text-white/40 text-[13px]">Продавец:</span>

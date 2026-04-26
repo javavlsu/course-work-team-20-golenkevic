@@ -17,6 +17,13 @@ public class CatalogProductDto {
     private Product.Condition condition;
     private Integer categoryId;
     private String categoryName;
+    private Integer brandId;
+    private String brandName;
+    private Product.Gender gender;
+    private Product.Season season;
+    private String color;
+    private String material;
+    private String size;
     private String sellerUsername;
     private Double averageRating;
     private Integer reviewsCount;

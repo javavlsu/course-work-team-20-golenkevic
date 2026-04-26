@@ -67,14 +67,64 @@
                     </div>
                 </div>
 
-                <div>
-                    <label for="categoryId" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Категория</label>
-                    <select id="categoryId" name="categoryId"
-                            class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
-                        <option value="">Без категории</option>
-                        <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"
-                                th:selected="${cat.id == productDto.categoryId}"></option>
-                    </select>
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label for="categoryId" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Категория</label>
+                        <select id="categoryId" name="categoryId"
+                                class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                            <option value="">Без категории</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"
+                                    th:selected="${cat.id == productDto.categoryId}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="brandId" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Бренд</label>
+                        <select id="brandId" name="brandId"
+                                class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                            <option value="">Без бренда</option>
+                            <option th:each="br : ${brands}" th:value="${br.id}" th:text="${br.name}"
+                                    th:selected="${br.id == productDto.brandId}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label for="gender" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Пол</label>
+                        <select id="gender" name="gender"
+                                class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                            <option value="">Не указан</option>
+                            <option th:each="g : ${genders}" th:value="${g}" th:text="${g}"
+                                    th:selected="${g == productDto.gender}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="season" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Сезон</label>
+                        <select id="season" name="season"
+                                class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                            <option value="">Не указан</option>
+                            <option th:each="s : ${seasons}" th:value="${s}" th:text="${s}"
+                                    th:selected="${s == productDto.season}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-5">
+                    <div>
+                        <label for="color" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Цвет</label>
+                        <input id="color" type="text" name="color" maxlength="50" th:value="${productDto.color}"
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                    </div>
+                    <div>
+                        <label for="material" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Материал</label>
+                        <input id="material" type="text" name="material" maxlength="100" th:value="${productDto.material}"
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                    </div>
+                    <div>
+                        <label for="size" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Размер</label>
+                        <input id="size" type="text" name="size" maxlength="30" th:value="${productDto.size}"
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
+                    </div>
                 </div>
             </div>
 

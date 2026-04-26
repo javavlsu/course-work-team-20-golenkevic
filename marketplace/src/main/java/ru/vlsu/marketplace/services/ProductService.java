@@ -34,11 +34,17 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public Page<Product> getApprovedProducts(Pageable pageable, Integer categoryId,
+    public Page<Product> getApprovedProducts(Pageable pageable, Integer categoryId, Integer brandId,
                                               BigDecimal minPrice, BigDecimal maxPrice,
-                                              Product.Condition condition, String search) {
-        return productRepository.findWithFilters(categoryId, minPrice, maxPrice, condition, search, pageable);
+                                              Product.Condition condition, Product.Gender gender, Product.Season season,
+                                              String color, String material, String size, String search) {
+        return productRepository.findWithFilters(categoryId, brandId, minPrice, maxPrice, condition,
+                gender, season, color, material, size, search, pageable);
     }
+
+    public List<String> getDistinctColors() { return productRepository.findDistinctColors(); }
+    public List<String> getDistinctMaterials() { return productRepository.findDistinctMaterials(); }
+    public List<String> getDistinctSizes() { return productRepository.findDistinctSizes(); }
 
     public List<Product> getNewest(int count) {
         return productRepository.findNewest(PageRequest.of(0, count));
@@ -73,6 +79,13 @@ public class ProductService {
                 .condition(p.getCondition())
                 .categoryId(p.getCategory() != null ? p.getCategory().getId() : null)
                 .categoryName(p.getCategory() != null ? p.getCategory().getName() : "")
+                .brandId(p.getBrand() != null ? p.getBrand().getId() : null)
+                .brandName(p.getBrand() != null ? p.getBrand().getName() : "")
+                .gender(p.getGender())
+                .season(p.getSeason())
+                .color(p.getColor())
+                .material(p.getMaterial())
+                .size(p.getSize())
                 .sellerUsername(p.getSeller().getUsername())
                 .averageRating(avgRating)
                 .reviewsCount((int) reviewsCount)

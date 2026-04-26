@@ -11,6 +11,7 @@ import ru.vlsu.marketplace.dto.ProductDto;
 import ru.vlsu.marketplace.entities.Product;
 import ru.vlsu.marketplace.entities.ProductImage;
 import ru.vlsu.marketplace.entities.User;
+import ru.vlsu.marketplace.repositories.BrandRepository;
 import ru.vlsu.marketplace.repositories.CategoryRepository;
 import ru.vlsu.marketplace.repositories.ProductImageRepository;
 import ru.vlsu.marketplace.services.OrderService;
@@ -30,6 +31,7 @@ public class SellerController {
 
     private final ProductService productService;
     private final CategoryRepository categoryRepository;
+    private final BrandRepository brandRepository;
     private final UserService userService;
     private final OrderService orderService;
     private final ProductImageRepository productImageRepository;
@@ -46,8 +48,7 @@ public class SellerController {
     @GetMapping("/products/new")
     public String addProductForm(Model model) {
         model.addAttribute("productDto", new ProductDto());
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("conditions", Product.Condition.values());
+        addFormReferenceData(model);
         return "seller/add_product";
     }
 
@@ -64,9 +65,7 @@ public class SellerController {
         product.setStatus(Product.Status.PENDING);
         product.setSeller(seller);
         product.setCreatedAt(Instant.now());
-        if (dto.getCategoryId() != null) {
-            product.setCategory(categoryRepository.findById(dto.getCategoryId()).orElse(null));
-        }
+        applyDtoAttributes(product, dto);
         Product saved = productService.save(product);
         saveImages(saved, images, 0);
         return "redirect:/seller/products";
@@ -81,12 +80,17 @@ public class SellerController {
         dto.setPrice(product.getPrice());
         dto.setCondition(product.getCondition());
         dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
+        dto.setBrandId(product.getBrand() != null ? product.getBrand().getId() : null);
+        dto.setGender(product.getGender());
+        dto.setSeason(product.getSeason());
+        dto.setColor(product.getColor());
+        dto.setMaterial(product.getMaterial());
+        dto.setSize(product.getSize());
         model.addAttribute("productDto", dto);
         model.addAttribute("productId", id);
         model.addAttribute("hasImage", product.getImageData() != null && product.getImageData().length > 0);
         model.addAttribute("extraImages", productImageRepository.findByProductIdOrderBySortOrderAsc(id));
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("conditions", Product.Condition.values());
+        addFormReferenceData(model);
         return "seller/edit_product";
     }
 
@@ -98,14 +102,30 @@ public class SellerController {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setCondition(dto.getCondition());
-        if (dto.getCategoryId() != null) {
-            product.setCategory(categoryRepository.findById(dto.getCategoryId()).orElse(null));
-        }
+        applyDtoAttributes(product, dto);
         Product saved = productService.save(product);
         int existingCount = productImageRepository.findByProductIdOrderBySortOrderAsc(id).size()
                           + (saved.getImageData() != null ? 1 : 0);
         saveImages(saved, images, existingCount);
         return "redirect:/seller/products";
+    }
+
+    private void addFormReferenceData(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("brands", brandRepository.findAll());
+        model.addAttribute("conditions", Product.Condition.values());
+        model.addAttribute("genders", Product.Gender.values());
+        model.addAttribute("seasons", Product.Season.values());
+    }
+
+    private void applyDtoAttributes(Product product, ProductDto dto) {
+        product.setCategory(dto.getCategoryId() != null ? categoryRepository.findById(dto.getCategoryId()).orElse(null) : null);
+        product.setBrand(dto.getBrandId() != null ? brandRepository.findById(dto.getBrandId()).orElse(null) : null);
+        product.setGender(dto.getGender());
+        product.setSeason(dto.getSeason());
+        product.setColor(dto.getColor());
+        product.setMaterial(dto.getMaterial());
+        product.setSize(dto.getSize());
     }
 
     @PostMapping("/products/{productId}/images/{imageId}/delete")

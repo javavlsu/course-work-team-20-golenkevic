@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARKETPLACE — Бренды</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }</style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="flex-1 pt-16">
+<div class="max-w-[1200px] mx-auto px-6 py-12">
+
+    <!-- Хлебные крошки -->
+    <nav class="flex items-center gap-2 text-[11px] uppercase tracking-[0.15em] text-white/25 mb-6">
+        <a href="/" class="hover:text-white/50 transition">Главная</a>
+        <span>/</span>
+        <span class="text-white/50">Бренды</span>
+    </nav>
+
+    <!-- Заголовок -->
+    <div class="flex items-end justify-between mb-10 pb-6 border-b border-white/10">
+        <div>
+            <h1 class="text-white text-[26px] font-light tracking-wide">Бренды</h1>
+            <p class="text-white/30 text-[12px] mt-1" th:text="'Всего: ' + ${#lists.size(brands)}"></p>
+        </div>
+    </div>
+
+    <!-- Сетка брендов -->
+    <div th:if="${#lists.isEmpty(brands)}" class="py-20 text-center">
+        <i class="fas fa-tag text-white/8 text-5xl mb-4"></i>
+        <p class="text-white/25 text-[12px] uppercase tracking-[0.2em]">Брендов пока нет</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <a th:each="br : ${brands}" th:href="@{/catalog(brandId=${br.id})}"
+           class="group bg-[#111] border border-white/8 hover:border-white/25 transition p-6 flex flex-col items-center gap-3 aspect-square justify-center">
+            <div class="w-16 h-16 bg-[#1a1a1a] flex items-center justify-center">
+                <img th:if="${br.logo != null}" th:src="@{'/brand/' + ${br.id} + '/logo'}"
+                     alt="" class="w-full h-full object-contain"/>
+                <i th:unless="${br.logo != null}" class="fas fa-tag text-white/25 text-xl"></i>
+            </div>
+            <p class="text-white/85 text-[14px] uppercase tracking-[0.15em] text-center group-hover:text-white transition" th:text="${br.name}"></p>
+            <p class="text-white/25 text-[11px] text-center line-clamp-2" th:text="${br.description}" th:if="${br.description != null}"></p>
+        </a>
+    </div>
+
+</div>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

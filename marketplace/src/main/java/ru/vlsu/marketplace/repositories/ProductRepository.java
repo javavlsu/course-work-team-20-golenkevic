@@ -21,16 +21,37 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
+           "AND (:brandId IS NULL OR p.brand.id = :brandId) " +
            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
            "AND (:condition IS NULL OR p.condition = :condition) " +
+           "AND (:gender IS NULL OR p.gender = :gender) " +
+           "AND (:season IS NULL OR p.season = :season) " +
+           "AND (:color IS NULL OR LOWER(p.color) = LOWER(:color)) " +
+           "AND (:material IS NULL OR LOWER(p.material) = LOWER(:material)) " +
+           "AND (:size IS NULL OR LOWER(p.size) = LOWER(:size)) " +
            "AND (:search IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%',:search,'%')))")
     Page<Product> findWithFilters(@Param("categoryId") Integer categoryId,
+                                  @Param("brandId") Integer brandId,
                                   @Param("minPrice") BigDecimal minPrice,
                                   @Param("maxPrice") BigDecimal maxPrice,
                                   @Param("condition") Product.Condition condition,
+                                  @Param("gender") Product.Gender gender,
+                                  @Param("season") Product.Season season,
+                                  @Param("color") String color,
+                                  @Param("material") String material,
+                                  @Param("size") String size,
                                   @Param("search") String search,
                                   Pageable pageable);
+
+    @Query("SELECT DISTINCT p.color FROM Product p WHERE p.status = 'APPROVED' AND p.color IS NOT NULL ORDER BY p.color")
+    List<String> findDistinctColors();
+
+    @Query("SELECT DISTINCT p.material FROM Product p WHERE p.status = 'APPROVED' AND p.material IS NOT NULL ORDER BY p.material")
+    List<String> findDistinctMaterials();
+
+    @Query("SELECT DISTINCT p.size FROM Product p WHERE p.status = 'APPROVED' AND p.size IS NOT NULL ORDER BY p.size")
+    List<String> findDistinctSizes();
 
     @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' ORDER BY p.createdAt DESC")
     List<Product> findNewest(Pageable pageable);

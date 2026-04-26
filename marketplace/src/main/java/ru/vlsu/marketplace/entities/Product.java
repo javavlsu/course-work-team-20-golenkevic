@@ -18,6 +18,8 @@ public class Product {
 
     public enum Condition { NEW, USED, VINTAGE }
     public enum Status { PENDING, APPROVED, REJECTED, REMOVED }
+    public enum Gender { MALE, FEMALE, UNISEX }
+    public enum Season { SUMMER, WINTER, DEMI, UNIVERSAL }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,8 +54,27 @@ public class Product {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "fk_brand")
+    private Brand brand;
+
+    @ManyToOne
     @JoinColumn(name = "fk_seller", nullable = false)
     private User seller;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private Season season;
+
+    @Column(length = 50)
+    private String color;
+
+    @Column(length = 100)
+    private String material;
+
+    @Column(length = 30)
+    private String size;
 
     @Column(name = "created_at")
     private Instant createdAt;

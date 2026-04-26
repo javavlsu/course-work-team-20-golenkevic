@@ -13,4 +13,10 @@ public class ProductDto {
     private BigDecimal price;
     private Product.Condition condition;
     private Integer categoryId;
+    private Integer brandId;
+    private Product.Gender gender;
+    private Product.Season season;
+    private String color;
+    private String material;
+    private String size;
 }

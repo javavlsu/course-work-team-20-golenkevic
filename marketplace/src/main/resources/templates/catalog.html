@@ -46,17 +46,17 @@
             </button>
             <!-- Сбросить -->
             <a href="/catalog"
-               th:if="${search != null or selectedCategory != null or selectedCondition != null or minPrice != null or maxPrice != null}"
+               th:if="${search != null or selectedCategory != null or selectedBrand != null or selectedCondition != null or selectedGender != null or selectedSeason != null or selectedColor != null or selectedMaterial != null or selectedSize != null or minPrice != null or maxPrice != null}"
                class="flex items-center gap-1.5 text-white/35 text-[11px] uppercase tracking-[0.1em] hover:text-white/70 transition">
                 <i class="fas fa-times text-[10px]"></i> Сбросить
             </a>
         </div>
 
-        <!-- Строка 2: категории + состояние (горизонтальный скролл) -->
+        <!-- Строка 2: категории + бренд + пол + состояние + сезон (горизонтальный скролл) -->
         <div class="filter-chips overflow-x-auto">
             <div class="max-w-[1400px] mx-auto px-6 pb-3 flex items-center gap-1.5 whitespace-nowrap">
 
-                <!-- Категории -->
+                <!-- Категория -->
                 <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Категория</span>
                 <button type="submit" name="categoryId" value=""
                         th:class="${selectedCategory == null}
@@ -68,6 +68,22 @@
                         type="submit" th:name="categoryId" th:value="${cat.id}" th:text="${cat.name}"
                         th:class="${cat.id == selectedCategory}
                             ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white text-black'
+                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
+                </button>
+
+                <span class="w-px h-4 bg-white/15 mx-2"></span>
+
+                <!-- Пол -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Пол</span>
+                <button type="submit" name="gender" value=""
+                        th:class="${selectedGender == null}
+                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
+                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
+                    Все
+                </button>
+                <button th:each="g : ${genders}" type="submit" th:name="gender" th:value="${g}" th:text="${g}"
+                        th:class="${g == selectedGender}
+                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
                             : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
                 </button>
 
@@ -88,6 +104,59 @@
                             : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
                 </button>
 
+            </div>
+        </div>
+
+        <!-- Строка 3: бренд + сезон + цвет + материал + размер -->
+        <div class="filter-chips overflow-x-auto border-t border-white/5">
+            <div class="max-w-[1400px] mx-auto px-6 py-3 flex items-center gap-1.5 whitespace-nowrap">
+                <!-- Бренд -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Бренд</span>
+                <select name="brandId" onchange="this.form.submit()"
+                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
+                    <option value="">Любой</option>
+                    <option th:each="br : ${brands}" th:value="${br.id}" th:text="${br.name}" th:selected="${br.id == selectedBrand}"></option>
+                </select>
+
+                <span class="w-px h-4 bg-white/15 mx-2"></span>
+
+                <!-- Сезон -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Сезон</span>
+                <select name="season" onchange="this.form.submit()"
+                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
+                    <option value="">Любой</option>
+                    <option th:each="s : ${seasons}" th:value="${s}" th:text="${s}" th:selected="${s == selectedSeason}"></option>
+                </select>
+
+                <span class="w-px h-4 bg-white/15 mx-2"></span>
+
+                <!-- Цвет -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Цвет</span>
+                <select name="color" onchange="this.form.submit()"
+                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
+                    <option value="">Любой</option>
+                    <option th:each="c : ${availableColors}" th:value="${c}" th:text="${c}" th:selected="${c == selectedColor}"></option>
+                </select>
+
+                <span class="w-px h-4 bg-white/15 mx-2"></span>
+
+                <!-- Материал -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Материал</span>
+                <select name="material" onchange="this.form.submit()"
+                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
+                    <option value="">Любой</option>
+                    <option th:each="m : ${availableMaterials}" th:value="${m}" th:text="${m}" th:selected="${m == selectedMaterial}"></option>
+                </select>
+
+                <span class="w-px h-4 bg-white/15 mx-2"></span>
+
+                <!-- Размер -->
+                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Размер</span>
+                <select name="size" onchange="this.form.submit()"
+                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
+                    <option value="">Любой</option>
+                    <option th:each="sz : ${availableSizes}" th:value="${sz}" th:text="${sz}" th:selected="${sz == selectedSize}"></option>
+                </select>
             </div>
         </div>
     </form>
