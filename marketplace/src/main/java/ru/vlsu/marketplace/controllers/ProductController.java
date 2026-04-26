@@ -39,6 +39,13 @@ public class ProductController {
         model.addAttribute("productEntity", product);
         model.addAttribute("reviews", reviewService.getByProduct(id));
 
+        Integer categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
+        model.addAttribute("similar", productService.getSimilar(categoryId, id, 8)
+                .stream().map(productService::convertToDto).toList());
+        model.addAttribute("newest", productService.getNewest(8)
+                .stream().filter(p -> !p.getId().equals(id))
+                .map(productService::convertToDto).toList());
+
         if (userDetails != null) {
             User user = userService.findByUsername(userDetails.getUsername()).orElseThrow();
             model.addAttribute("isFavorite", favoriteService.isFavorite(user.getId(), id));

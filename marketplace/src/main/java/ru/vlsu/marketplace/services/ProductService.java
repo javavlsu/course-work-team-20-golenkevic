@@ -44,6 +44,11 @@ public class ProductService {
         return productRepository.findNewest(PageRequest.of(0, count));
     }
 
+    public List<Product> getSimilar(Integer categoryId, Integer excludeId, int count) {
+        if (categoryId == null) return List.of();
+        return productRepository.findSimilar(categoryId, excludeId, PageRequest.of(0, count));
+    }
+
     public List<Product> getPopular(int count) {
         return productRepository.findPopular(PageRequest.of(0, count));
     }

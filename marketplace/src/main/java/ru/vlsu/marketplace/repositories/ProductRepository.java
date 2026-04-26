@@ -35,6 +35,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' ORDER BY p.createdAt DESC")
     List<Product> findNewest(Pageable pageable);
 
+    @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' AND p.category.id = :categoryId AND p.id <> :excludeId ORDER BY p.createdAt DESC")
+    List<Product> findSimilar(@Param("categoryId") Integer categoryId, @Param("excludeId") Integer excludeId, Pageable pageable);
+
     @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' ORDER BY SIZE(p.orderItems) DESC")
     List<Product> findPopular(Pageable pageable);
 

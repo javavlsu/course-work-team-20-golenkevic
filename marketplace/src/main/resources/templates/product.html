@@ -245,6 +245,92 @@
         </div>
     </div>
 
+    <!-- ═══ ПОХОЖИЕ ТОВАРЫ ═══ -->
+    <div th:if="${!#lists.isEmpty(similar)}" class="mt-20 pt-12 border-t border-white/10">
+        <div class="flex items-baseline justify-between mb-8">
+            <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Похожие товары</h2>
+            <a th:href="@{/catalog(categoryId=${product.categoryId})}" class="text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white transition">Все →</a>
+        </div>
+        <div class="relative">
+            <button onclick="scrollCarousel('similar', -1)" aria-label="Назад"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-9 h-9 bg-[#161616] border border-white/15 items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition">
+                <i class="fas fa-chevron-left text-[11px]"></i>
+            </button>
+            <button onclick="scrollCarousel('similar', 1)" aria-label="Вперёд"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-9 h-9 bg-[#161616] border border-white/15 items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition">
+                <i class="fas fa-chevron-right text-[11px]"></i>
+            </button>
+            <div id="carousel-similar"
+                 class="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-2 px-2"
+                 style="scrollbar-width: none">
+                <a th:each="p : ${similar}" th:href="@{'/product/' + ${p.id}}"
+                   class="group block flex-shrink-0 w-[160px] sm:w-[200px] md:w-[230px] snap-start">
+                    <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
+                        <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt=""
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                        <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
+                            <i class="fas fa-image text-white/10 text-3xl"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3">
+                            <p class="text-white/55 text-[10px] uppercase tracking-[0.15em] mb-1" th:text="${p.categoryName}"></p>
+                            <p class="text-white text-[12px] leading-snug line-clamp-2 mb-1.5" th:text="${p.title}"></p>
+                            <p class="text-white text-[14px] font-semibold" th:text="${p.price} + ' ₽'"></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ ВОЗМОЖНО ПОНРАВИТСЯ (новинки) ═══ -->
+    <div th:if="${!#lists.isEmpty(newest)}" class="mt-16 pt-12 border-t border-white/10">
+        <div class="flex items-baseline justify-between mb-8">
+            <h2 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Возможно понравится</h2>
+            <a href="/catalog?sort=createdAt" class="text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white transition">Все →</a>
+        </div>
+        <div class="relative">
+            <button onclick="scrollCarousel('newest', -1)" aria-label="Назад"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-9 h-9 bg-[#161616] border border-white/15 items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition">
+                <i class="fas fa-chevron-left text-[11px]"></i>
+            </button>
+            <button onclick="scrollCarousel('newest', 1)" aria-label="Вперёд"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-9 h-9 bg-[#161616] border border-white/15 items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition">
+                <i class="fas fa-chevron-right text-[11px]"></i>
+            </button>
+            <div id="carousel-newest"
+                 class="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-2 px-2"
+                 style="scrollbar-width: none">
+                <a th:each="p : ${newest}" th:href="@{'/product/' + ${p.id}}"
+                   class="group block flex-shrink-0 w-[160px] sm:w-[200px] md:w-[230px] snap-start">
+                    <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
+                        <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt=""
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                        <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
+                            <i class="fas fa-image text-white/10 text-3xl"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3">
+                            <p class="text-white/55 text-[10px] uppercase tracking-[0.15em] mb-1" th:text="${p.categoryName}"></p>
+                            <p class="text-white text-[12px] leading-snug line-clamp-2 mb-1.5" th:text="${p.title}"></p>
+                            <p class="text-white text-[14px] font-semibold" th:text="${p.price} + ' ₽'"></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function scrollCarousel(name, dir) {
+            const el = document.getElementById('carousel-' + name);
+            if (!el) return;
+            const card = el.querySelector('a');
+            const step = card ? card.offsetWidth + 16 : 240;
+            el.scrollBy({ left: step * dir * 2, behavior: 'smooth' });
+        }
+    </script>
+
     <!-- ═══ ОТЗЫВЫ ═══ -->
     <div class="mt-20 pt-12 border-t border-white/10">
         <div class="flex items-baseline gap-4 mb-10">

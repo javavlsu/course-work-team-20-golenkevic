@@ -143,6 +143,9 @@ form.is-loading button[type="submit"]::after {
 /* ═══ DETAILS / SUMMARY анимация ═══ */
 details[open] summary ~ * { animation: fadeInUp 0.25s ease; }
 
+/* ═══ КАРУСЕЛИ — скрытие скроллбара ═══ */
+[id^="carousel-"]::-webkit-scrollbar { display: none; }
+
 /* ═══ TOAST-уведомления — slide-up ═══ */
 @keyframes toastIn {
     from { opacity: 0; transform: translateY(20px); }
