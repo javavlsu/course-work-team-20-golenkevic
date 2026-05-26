@@ -11581,3 +11581,1483 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
         from
             products p1_0
 2026-05-26 17:04:12.834 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-05-26 17:05:00.425 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:05:00.426 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:05:00.480 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-26 17:05:00.480 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-26 17:05:01.235 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:05:01.323 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 81 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:05:01.913 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:05:01.925 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:05:01.925 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:05:01.968 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:05:01.969 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1488 ms
+2026-05-26 17:05:02.138 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:05:02.193 INFO  [restartedMain] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2026-05-26 17:05:02.227 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:05:02.444 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:05:02.466 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-26 17:05:02.614 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6ab0a06
+2026-05-26 17:05:02.615 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-26 17:05:02.657 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:05:03.736 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:05:03.850 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:05:04.229 INFO  [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-26 17:05:05.422 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:05:05.527 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:05:05.751 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@65d6873c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2a1160d6, org.springframework.security.web.context.SecurityContextHolderFilter@623a8cec, org.springframework.security.web.header.HeaderWriterFilter@340bdf5f, org.springframework.web.filter.CorsFilter@2ab2e0ca, org.springframework.security.web.authentication.logout.LogoutFilter@7ab485ab, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6055eba3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@fafd697, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@60832996, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@160ce41b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5beff5bb, org.springframework.security.web.access.ExceptionTranslationFilter@53f5d545, org.springframework.security.web.access.intercept.AuthorizationFilter@12ec38ae]
+2026-05-26 17:05:06.015 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:05:06.043 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:05:06.050 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 6.125 seconds (process running for 6.534)
+2026-05-26 17:05:06.171 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:05:06.173 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:05:06.284 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:05:06.284 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:05:06.305 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:05:06.307 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:05:06.308 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:05:06.309 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:05:06.309 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$mVqWA0Rxt4qi2xvzuhrVXeNB24MyMdVKwWmyA42zYiJDXZtg8c35G]
+2026-05-26 17:05:06.309 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:05:06.309 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:05:06.309 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:05:06.309 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:05:06.310 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:05:06.319 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.319 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:05:06.322 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.323 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:05:06.325 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.325 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:05:06.327 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.328 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:05:06.329 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.329 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:05:06.330 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.331 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:05:06.333 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.333 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:05:06.335 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.335 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:05:06.336 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:05:06.337 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:05:06.348 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:05:40.407 INFO  [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-26 17:05:40.407 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-26 17:05:40.408 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-05-26 17:06:58.010 DEBUG [http-nio-8080-exec-4] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-05-26 17:06:58.011 TRACE [http-nio-8080-exec-4] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [demo_seller]
+2026-05-26 17:06:58.014 DEBUG [http-nio-8080-exec-4] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:06:58.014 TRACE [http-nio-8080-exec-4] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [demo_seller]
+2026-05-26 17:06:58.037 DEBUG [http-nio-8080-exec-4] org.hibernate.SQL - 
+    /* <criteria> */ select
+        c1_0.id,
+        c1_0.name 
+    from
+        categories c1_0
+2026-05-26 17:06:58.043 DEBUG [http-nio-8080-exec-4] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0
+2026-05-26 17:06:58.537 ERROR [http-nio-8080-exec-6] r.v.m.config.GlobalExceptionHandler - Unhandled error on uri=/favicon.ico: 
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter.doFilter(RememberMeAuthenticationFilter.java:110)
+	at org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter.doFilter(RememberMeAuthenticationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:225)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2026-05-26 17:06:58.540 WARN  [http-nio-8080-exec-6] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico.]
+2026-05-26 17:08:31.502 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2026-05-26 17:08:31.513 INFO  [Thread-5] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:08:31.516 INFO  [Thread-5] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-26 17:08:31.521 INFO  [Thread-5] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-26 17:08:31.623 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:08:31.624 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:08:31.829 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:08:31.860 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 30 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:08:31.975 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:08:31.976 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:08:31.976 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:08:31.989 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:08:31.990 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 364 ms
+2026-05-26 17:08:32.045 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:08:32.048 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:08:32.051 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:08:32.052 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-05-26 17:08:32.057 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@280fbb89
+2026-05-26 17:08:32.058 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-05-26 17:08:32.059 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:08:32.235 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:08:32.307 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:08:32.802 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:08:32.820 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:08:32.922 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3e4b9c92, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1564a72e, org.springframework.security.web.context.SecurityContextHolderFilter@4abeb1d5, org.springframework.security.web.header.HeaderWriterFilter@7e4a6859, org.springframework.web.filter.CorsFilter@33e278a5, org.springframework.security.web.authentication.logout.LogoutFilter@7c2a8157, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@574e2dda, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@31a35c08, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6e8005c6, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7fc62e5d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7d181c42, org.springframework.security.web.access.ExceptionTranslationFilter@4822ebd9, org.springframework.security.web.access.intercept.AuthorizationFilter@398240dd]
+2026-05-26 17:08:33.053 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:08:33.064 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:08:33.068 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 1.481 seconds (process running for 213.552)
+2026-05-26 17:08:33.103 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:08:33.104 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:08:33.181 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:08:33.182 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:08:33.184 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:08:33.184 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:08:33.184 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:08:33.184 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:08:33.184 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$4hIZ/HYaSeZj.D5vNs5xrOKnuVCsB0fFFwFyNZHoHwlY4x6yg34dG]
+2026-05-26 17:08:33.184 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:08:33.185 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:08:33.185 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:08:33.185 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:08:33.185 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:08:33.189 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.189 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:08:33.192 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.193 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:08:33.195 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.195 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:08:33.198 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.198 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:08:33.201 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.201 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:08:33.203 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.203 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:08:33.206 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.206 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:08:33.208 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.209 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:08:33.210 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:08:33.211 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:08:33.215 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:08:33.220 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-05-26 17:08:58.575 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-05-26 17:08:58.580 INFO  [Thread-7] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:08:58.580 INFO  [Thread-7] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2026-05-26 17:08:58.582 INFO  [Thread-7] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2026-05-26 17:08:58.673 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:08:58.673 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:08:58.857 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:08:58.885 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:08:58.990 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:08:58.990 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:08:58.990 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:08:59.003 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:08:59.004 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 329 ms
+2026-05-26 17:08:59.056 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:08:59.059 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:08:59.062 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:08:59.063 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2026-05-26 17:08:59.066 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@74f207c5
+2026-05-26 17:08:59.066 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2026-05-26 17:08:59.067 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:08:59.245 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:08:59.315 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:08:59.759 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:08:59.779 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:08:59.874 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7272d476, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@760562e9, org.springframework.security.web.context.SecurityContextHolderFilter@5b6b798c, org.springframework.security.web.header.HeaderWriterFilter@4701e838, org.springframework.web.filter.CorsFilter@6c85abad, org.springframework.security.web.authentication.logout.LogoutFilter@2fba03f8, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3e3495d9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@783c5186, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6715cc6c, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@416ee424, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5afc2ddd, org.springframework.security.web.access.ExceptionTranslationFilter@1850fcd9, org.springframework.security.web.access.intercept.AuthorizationFilter@7caf0b8a]
+2026-05-26 17:08:59.974 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:08:59.983 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:08:59.986 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 1.346 seconds (process running for 240.47)
+2026-05-26 17:09:00.023 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:09:00.024 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:09:00.102 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:09:00.102 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:09:00.103 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:09:00.103 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:09:00.103 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:09:00.103 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:09:00.103 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$TVBkvKIkPEdYRUFGvtWbnOaix63L2qV3dn3XucNFWjYH6Dj2NKtkS]
+2026-05-26 17:09:00.103 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:09:00.103 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:09:00.104 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:09:00.104 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:09:00.104 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:09:00.108 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.109 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:09:00.111 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.111 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:09:00.113 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.114 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:09:00.115 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.116 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:09:00.117 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.117 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:09:00.119 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.119 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:09:00.121 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.121 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:09:00.123 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.124 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:09:00.126 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:00.126 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:09:00.130 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:09:00.132 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-05-26 17:09:37.527 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-05-26 17:09:37.555 INFO  [Thread-11] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:09:37.556 INFO  [Thread-11] com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2026-05-26 17:09:37.565 INFO  [Thread-11] com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2026-05-26 17:09:37.827 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:09:37.828 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:09:38.128 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:09:38.158 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 30 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:09:38.268 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:09:38.268 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:09:38.269 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:09:38.283 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:09:38.283 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 453 ms
+2026-05-26 17:09:38.336 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:09:38.338 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:09:38.341 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:09:38.342 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2026-05-26 17:09:38.346 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@23ed2946
+2026-05-26 17:09:38.346 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2026-05-26 17:09:38.347 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:09:38.495 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:09:38.570 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:09:39.131 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:09:39.151 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:09:39.251 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5fac84e2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1bb6d7e6, org.springframework.security.web.context.SecurityContextHolderFilter@51948eb2, org.springframework.security.web.header.HeaderWriterFilter@798e4e89, org.springframework.web.filter.CorsFilter@b24cf8, org.springframework.security.web.authentication.logout.LogoutFilter@8e974b2, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3ce4ef7f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3c6639a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@768c76ef, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7f6b50b5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@25795aa3, org.springframework.security.web.access.ExceptionTranslationFilter@12e8237, org.springframework.security.web.access.intercept.AuthorizationFilter@2d2d3e77]
+2026-05-26 17:09:39.348 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:09:39.358 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:09:39.362 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 1.661 seconds (process running for 279.846)
+2026-05-26 17:09:39.399 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:09:39.400 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:09:39.479 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:09:39.479 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:09:39.481 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$47Kruu2te2yhDlt0Le5LnewdY/6oHlviKej8Z.DsKuYS3ZOx/NOjS]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:09:39.482 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:09:39.487 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.487 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:09:39.489 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.490 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:09:39.491 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.491 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:09:39.493 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.493 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:09:39.495 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.496 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:09:39.497 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.497 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:09:39.499 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.499 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:09:39.502 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.502 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:09:39.504 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:09:39.504 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:09:39.507 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:09:39.509 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-05-26 17:10:13.243 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-05-26 17:10:13.249 INFO  [Thread-15] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:10:13.249 INFO  [Thread-15] com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2026-05-26 17:10:13.251 INFO  [Thread-15] com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2026-05-26 17:10:13.359 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:10:13.359 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:10:13.553 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:10:13.583 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 30 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:10:13.702 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:10:13.702 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:10:13.702 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:10:13.717 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:10:13.717 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 356 ms
+2026-05-26 17:10:13.772 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:10:13.774 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:10:13.778 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:10:13.779 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2026-05-26 17:10:13.783 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@45f0fd62
+2026-05-26 17:10:13.783 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2026-05-26 17:10:13.784 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:10:13.947 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:10:14.011 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:10:14.448 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:10:14.469 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:10:14.571 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@143797f8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@633dc89e, org.springframework.security.web.context.SecurityContextHolderFilter@16ce3540, org.springframework.security.web.header.HeaderWriterFilter@16ee6a63, org.springframework.web.filter.CorsFilter@5dd8fa7d, org.springframework.security.web.authentication.logout.LogoutFilter@e7c18a0, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@19b4fdf1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@61aaab2e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@ca79a6f, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@77e35f7f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@302d4e1e, org.springframework.security.web.access.ExceptionTranslationFilter@25c91529, org.springframework.security.web.access.intercept.AuthorizationFilter@affa040]
+2026-05-26 17:10:14.677 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:10:14.688 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:10:14.692 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 1.364 seconds (process running for 315.176)
+2026-05-26 17:10:14.729 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:10:14.730 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:10:14.811 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:10:14.811 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:10:14.813 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$Qb41kxHfR2k3IUBfzhODTON42mEIN/VHhEC5a9hhwyGIuAeivaHNu]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:10:14.814 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:10:14.819 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.820 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:10:14.823 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.823 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:10:14.825 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.826 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:10:14.828 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.829 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:10:14.831 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.831 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:10:14.832 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.832 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:10:14.834 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.835 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:10:14.836 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.837 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:10:14.838 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:14.838 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:10:14.841 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:10:14.844 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-05-26 17:10:28.513 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-05-26 17:10:28.518 INFO  [Thread-19] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:10:28.518 INFO  [Thread-19] com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2026-05-26 17:10:28.519 INFO  [Thread-19] com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2026-05-26 17:10:28.618 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:10:28.618 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:10:28.796 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:10:28.830 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 33 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:10:28.930 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:10:28.931 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:10:28.931 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:10:28.943 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:10:28.943 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 324 ms
+2026-05-26 17:10:28.990 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:10:28.992 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:10:28.995 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:10:28.996 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Starting...
+2026-05-26 17:10:28.999 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@56238f6f
+2026-05-26 17:10:28.999 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Start completed.
+2026-05-26 17:10:29.000 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:10:29.134 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:10:29.190 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:10:29.586 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:10:29.605 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:10:29.691 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@673c9fea, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2248a201, org.springframework.security.web.context.SecurityContextHolderFilter@feb3d97, org.springframework.security.web.header.HeaderWriterFilter@6565afe2, org.springframework.web.filter.CorsFilter@2064d0b5, org.springframework.security.web.authentication.logout.LogoutFilter@3a1af3c0, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@59ab70a5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@72599ae0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2499cd95, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@34c20ca3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@467670e, org.springframework.security.web.access.ExceptionTranslationFilter@1829d7e1, org.springframework.security.web.access.intercept.AuthorizationFilter@6e35709c]
+2026-05-26 17:10:29.786 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:10:29.798 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:10:29.801 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 1.21 seconds (process running for 330.285)
+2026-05-26 17:10:29.840 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:10:29.840 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:10:29.919 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:10:29.920 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:10:29.921 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$O1WOBLvGMS29KLEGtz4HSeyXiC1kPCwY2HdDX7l6qW94zhEhk7nvG]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:10:29.921 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:10:29.925 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.926 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:10:29.928 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.929 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:10:29.930 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.930 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:10:29.931 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.932 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:10:29.933 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.934 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:10:29.935 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.935 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:10:29.937 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.937 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:10:29.938 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.938 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:10:29.941 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:10:29.941 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:10:29.944 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:10:29.945 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-05-26 17:16:09.486 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-05-26 17:16:09.490 INFO  [Thread-23] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:16:09.491 INFO  [Thread-23] com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown initiated...
+2026-05-26 17:16:09.492 INFO  [Thread-23] com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown completed.
+2026-05-26 17:16:09.601 INFO  [restartedMain] r.v.m.MarketplaceApplication - Starting MarketplaceApplication using Java 23.0.1 with PID 17440 (C:\Users\User\Desktop\kyrsahjava\project\marketplace\target\classes started by User in C:\Users\User\Desktop\kyrsahjava\project\marketplace)
+2026-05-26 17:16:09.602 INFO  [restartedMain] r.v.m.MarketplaceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-26 17:16:09.771 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-26 17:16:09.796 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 12 JPA repository interfaces.
+2026-05-26 17:16:09.905 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-26 17:16:09.906 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-26 17:16:09.906 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-05-26 17:16:09.918 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-26 17:16:09.919 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 315 ms
+2026-05-26 17:16:09.968 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-26 17:16:09.971 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-26 17:16:09.974 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-26 17:16:09.975 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Starting...
+2026-05-26 17:16:09.979 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-7 - Added connection com.mysql.cj.jdbc.ConnectionImpl@25186614
+2026-05-26 17:16:09.979 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Start completed.
+2026-05-26 17:16:09.980 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-26 17:16:10.117 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-26 17:16:10.172 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-26 17:16:10.568 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-26 17:16:10.590 INFO  [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-26 17:16:10.674 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@42ee1a2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6cad64d6, org.springframework.security.web.context.SecurityContextHolderFilter@30547bed, org.springframework.security.web.header.HeaderWriterFilter@547b49a5, org.springframework.web.filter.CorsFilter@122b4974, org.springframework.security.web.authentication.logout.LogoutFilter@580d7348, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@277b206f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6816deb1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1b900894, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@74c97949, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2d176949, org.springframework.security.web.access.ExceptionTranslationFilter@78c17699, org.springframework.security.web.access.intercept.AuthorizationFilter@145f969f]
+2026-05-26 17:16:10.782 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-26 17:16:10.792 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-05-26 17:16:10.795 INFO  [restartedMain] r.v.m.MarketplaceApplication - Started MarketplaceApplication in 1.226 seconds (process running for 671.279)
+2026-05-26 17:16:10.832 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-05-26 17:16:10.833 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [admin]
+2026-05-26 17:16:10.909 DEBUG [restartedMain] org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.active,
+        u1_0.bio,
+        u1_0.email,
+        u1_0.password_hash,
+        u1_0.profile_pic,
+        u1_0.registered_at,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-05-26 17:16:10.909 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [1]
+2026-05-26 17:16:10.910 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* update
+        for ru.vlsu.marketplace.entities.User */update users 
+    set
+        active=?,
+        bio=?,
+        email=?,
+        password_hash=?,
+        profile_pic=?,
+        registered_at=?,
+        role=?,
+        username=? 
+    where
+        id=?
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:BOOLEAN) <- [true]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [null]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [admin@marketplace.ru]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [$2a$10$feEOHhlIUaJWw/wDMuiT5eEO2g/DD.W5NW8r.rkznkgaSTaEy3ZR2]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (5:BLOB) <- [null]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (6:TIMESTAMP_UTC) <- [2026-04-06T17:53:14Z]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (7:ENUM) <- [admin]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [admin]
+2026-05-26 17:16:10.911 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (9:INTEGER) <- [1]
+2026-05-26 17:16:10.915 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.915 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Nike]
+2026-05-26 17:16:10.917 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.917 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Adidas]
+2026-05-26 17:16:10.918 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.919 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Apple]
+2026-05-26 17:16:10.920 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.920 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Sony]
+2026-05-26 17:16:10.922 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.923 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Casio]
+2026-05-26 17:16:10.925 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.925 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Dr. Martens]
+2026-05-26 17:16:10.926 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.927 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Balenciaga]
+2026-05-26 17:16:10.929 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.929 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Chrome Hearts]
+2026-05-26 17:16:10.931 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* <criteria> */ select
+        b1_0.id,
+        b1_0.description,
+        b1_0.logo,
+        b1_0.name 
+    from
+        brands b1_0 
+    where
+        b1_0.name=?
+2026-05-26 17:16:10.931 TRACE [restartedMain] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [Без бренда]
+2026-05-26 17:16:10.934 DEBUG [restartedMain] org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        Product x */ select
+            count(*) 
+        from
+            products p1_0
+2026-05-26 17:16:10.936 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
