@@ -71,11 +71,25 @@ public class ProductService {
         Double avgRating = reviewRepository.getAverageRatingByProductId(p.getId());
         long reviewsCount = reviewRepository.countByProductId(p.getId());
 
+        Integer discount = null;
+        if (p.getOldPrice() != null && p.getPrice() != null
+                && p.getOldPrice().compareTo(p.getPrice()) > 0) {
+            discount = p.getOldPrice().subtract(p.getPrice())
+                    .multiply(java.math.BigDecimal.valueOf(100))
+                    .divide(p.getOldPrice(), 0, java.math.RoundingMode.HALF_UP)
+                    .intValue();
+        }
+        boolean isNew = p.getCreatedAt() != null
+                && p.getCreatedAt().isAfter(java.time.Instant.now().minusSeconds(7L * 24 * 3600));
+
         return CatalogProductDto.builder()
                 .id(p.getId())
                 .title(p.getTitle())
                 .description(p.getDescription())
                 .price(p.getPrice())
+                .oldPrice(p.getOldPrice())
+                .discountPercent(discount)
+                .isNew(isNew)
                 .condition(p.getCondition())
                 .categoryId(p.getCategory() != null ? p.getCategory().getId() : null)
                 .categoryName(p.getCategory() != null ? p.getCategory().getName() : "")

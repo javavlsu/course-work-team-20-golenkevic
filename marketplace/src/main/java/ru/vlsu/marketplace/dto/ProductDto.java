@@ -11,6 +11,7 @@ public class ProductDto {
     private String title;
     private String description;
     private BigDecimal price;
+    private BigDecimal oldPrice;
     private Product.Condition condition;
     private Integer categoryId;
     private Integer brandId;

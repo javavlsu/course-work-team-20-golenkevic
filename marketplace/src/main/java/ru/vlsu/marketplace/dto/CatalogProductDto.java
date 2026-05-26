@@ -14,6 +14,9 @@ public class CatalogProductDto {
     private String title;
     private String description;
     private BigDecimal price;
+    private BigDecimal oldPrice;
+    private Integer discountPercent;
+    private boolean isNew;
     private Product.Condition condition;
     private Integer categoryId;
     private String categoryName;

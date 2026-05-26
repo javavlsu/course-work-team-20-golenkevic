@@ -46,7 +46,14 @@ public class CatalogController {
         size = blankToNull(size);
         search = blankToNull(search);
 
-        Pageable pageable = PageRequest.of(page, 20, Sort.by(sort).descending());
+        // Безопасные варианты сортировки
+        Sort sortSpec = switch (sort) {
+            case "priceAsc" -> Sort.by("price").ascending();
+            case "priceDesc" -> Sort.by("price").descending();
+            case "title" -> Sort.by("title").ascending();
+            default -> Sort.by("createdAt").descending();
+        };
+        Pageable pageable = PageRequest.of(page, 20, sortSpec);
         Page<Product> products = productService.getApprovedProducts(pageable, categoryId, brandId, minPrice, maxPrice,
                 condition, gender, season, color, material, size, search);
 
@@ -67,6 +74,7 @@ public class CatalogController {
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("search", search);
+        model.addAttribute("currentSort", sort);
         model.addAttribute("conditions", Product.Condition.values());
         model.addAttribute("genders", Product.Gender.values());
         model.addAttribute("seasons", Product.Season.values());

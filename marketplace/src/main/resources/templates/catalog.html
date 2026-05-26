@@ -165,10 +165,33 @@
 <!-- ═══ КАТАЛОГ ═══ -->
 <section class="max-w-[1400px] mx-auto px-6 py-10">
 
-    <!-- Заголовок + счётчик -->
-    <div class="flex items-center justify-between mb-8">
-        <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Каталог</h1>
-        <p class="text-white/30 text-[12px]" th:text="${totalItems} + ' товаров'"></p>
+    <!-- Заголовок + счётчик + сортировка -->
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-8">
+        <div class="flex items-baseline gap-3">
+            <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Каталог</h1>
+            <p class="text-white/30 text-[12px]" th:text="${totalItems} + ' товаров'"></p>
+        </div>
+        <form method="get" action="/catalog" id="sortForm" class="flex items-center gap-2">
+            <input type="hidden" name="search" th:value="${search}"/>
+            <input type="hidden" name="categoryId" th:value="${selectedCategory}"/>
+            <input type="hidden" name="brandId" th:value="${selectedBrand}"/>
+            <input type="hidden" name="condition" th:value="${selectedCondition}"/>
+            <input type="hidden" name="gender" th:value="${selectedGender}"/>
+            <input type="hidden" name="season" th:value="${selectedSeason}"/>
+            <input type="hidden" name="color" th:value="${selectedColor}"/>
+            <input type="hidden" name="material" th:value="${selectedMaterial}"/>
+            <input type="hidden" name="size" th:value="${selectedSize}"/>
+            <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+            <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+            <label for="sort-select" class="text-white/30 text-[10px] uppercase tracking-[0.2em]">Сортировка:</label>
+            <select id="sort-select" name="sort" onchange="document.getElementById('sortForm').submit()"
+                    class="bg-[#1a1a1a] border border-white/10 text-white/80 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
+                <option value="createdAt" th:selected="${currentSort == 'createdAt'}">Сначала новые</option>
+                <option value="priceAsc" th:selected="${currentSort == 'priceAsc'}">Цена: дешевле</option>
+                <option value="priceDesc" th:selected="${currentSort == 'priceDesc'}">Цена: дороже</option>
+                <option value="title" th:selected="${currentSort == 'title'}">По названию</option>
+            </select>
+        </form>
     </div>
 
     <!-- Пустой результат -->
@@ -187,6 +210,18 @@
                 <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
                     <i class="fas fa-image text-white/10 text-4xl"></i>
                 </div>
+
+                <!-- Бейджи -->
+                <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
+                    <span th:if="${p.discountPercent != null}"
+                          class="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1"
+                          th:text="'-' + ${p.discountPercent} + '%'"></span>
+                    <span th:if="${p.isNew and p.discountPercent == null}"
+                          class="bg-emerald-400 text-black text-[10px] font-bold uppercase tracking-wider px-2 py-1">
+                        New
+                    </span>
+                </div>
+
                 <!-- Градиентный оверлей -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
                 <!-- Информация поверх фото -->
@@ -194,8 +229,13 @@
                     <p class="text-white/55 text-[10px] uppercase tracking-[0.2em] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                        th:text="${p.categoryName}"></p>
                     <p class="text-white text-[13px] leading-snug line-clamp-2 mb-2" th:text="${p.title}"></p>
-                    <div class="flex items-center justify-between">
-                        <p class="text-white text-[15px] font-semibold" th:text="${p.price} + ' ₽'"></p>
+                    <div class="flex items-end justify-between gap-2">
+                        <div class="flex flex-col">
+                            <span th:if="${p.oldPrice != null and p.discountPercent != null}"
+                                  class="text-white/35 text-[11px] line-through" th:text="${p.oldPrice} + ' ₽'"></span>
+                            <p th:classappend="${p.discountPercent != null} ? 'text-red-400 text-[15px] font-bold' : 'text-white text-[15px] font-semibold'"
+                               th:text="${p.price} + ' ₽'"></p>
+                        </div>
                         <span class="text-yellow-400/80 text-[11px] flex items-center gap-1" th:if="${p.averageRating != null}">
                             <i class="fas fa-star text-[9px]"></i>
                             <span th:text="${#numbers.formatDecimal(p.averageRating, 1, 1)}"></span>

@@ -112,11 +112,24 @@ public class DataInitializer implements ApplicationRunner {
             row("Sony WH-1000XM4", "Беспроводные наушники с ANC. Состояние отличное.", "14500.00", Product.Condition.USED, electronics, sony, Product.Gender.UNISEX, Product.Season.UNIVERSAL, "Чёрный", "Пластик", "F")
         );
 
+        int[] discountIdx = {0, 3, 5, 8, 11};   // на которые ставим старую цену (скидка)
+        java.math.BigDecimal[] markups = {
+            new BigDecimal("1.35"), new BigDecimal("1.25"), new BigDecimal("1.40"),
+            new BigDecimal("1.30"), new BigDecimal("1.50")
+        };
+        int idx = 0;
         for (Object[] item : items) {
             Product p = new Product();
             p.setTitle((String) item[0]);
             p.setDescription((String) item[1]);
-            p.setPrice(new BigDecimal((String) item[2]));
+            BigDecimal price = new BigDecimal((String) item[2]);
+            p.setPrice(price);
+            // На некоторых товарах ставим oldPrice больше price → будет % скидки
+            for (int i = 0; i < discountIdx.length; i++) {
+                if (discountIdx[i] == idx) {
+                    p.setOldPrice(price.multiply(markups[i]).setScale(2, java.math.RoundingMode.HALF_UP));
+                }
+            }
             p.setCondition((Product.Condition) item[3]);
             p.setCategory((Category) item[4]);
             p.setBrand((Brand) item[5]);
@@ -129,6 +142,7 @@ public class DataInitializer implements ApplicationRunner {
             p.setStatus(Product.Status.APPROVED);
             p.setCreatedAt(Instant.now());
             productRepository.save(p);
+            idx++;
         }
     }
 

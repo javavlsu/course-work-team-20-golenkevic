@@ -194,10 +194,22 @@
                 <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
                     <i class="fas fa-image text-white/10 text-4xl"></i>
                 </div>
+                <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
+                    <span th:if="${p.discountPercent != null}"
+                          class="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1"
+                          th:text="'-' + ${p.discountPercent} + '%'"></span>
+                    <span th:if="${p.isNew and p.discountPercent == null}"
+                          class="bg-emerald-400 text-black text-[10px] font-bold uppercase tracking-wider px-2 py-1">New</span>
+                </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
                     <p class="text-white text-[13px] leading-snug line-clamp-2 mb-2" th:text="${p.title}"></p>
-                    <p class="text-white text-[15px] font-semibold" th:text="${p.price} + ' ₽'"></p>
+                    <div class="flex items-baseline gap-2">
+                        <p th:classappend="${p.discountPercent != null} ? 'text-red-400 text-[15px] font-bold' : 'text-white text-[15px] font-semibold'"
+                           th:text="${p.price} + ' ₽'"></p>
+                        <span th:if="${p.oldPrice != null and p.discountPercent != null}"
+                              class="text-white/35 text-[11px] line-through" th:text="${p.oldPrice} + ' ₽'"></span>
+                    </div>
                 </div>
             </div>
         </a>
@@ -218,10 +230,22 @@
                 <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
                     <i class="fas fa-image text-white/10 text-4xl"></i>
                 </div>
+                <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
+                    <span th:if="${p.discountPercent != null}"
+                          class="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1"
+                          th:text="'-' + ${p.discountPercent} + '%'"></span>
+                    <span th:if="${p.isNew and p.discountPercent == null}"
+                          class="bg-emerald-400 text-black text-[10px] font-bold uppercase tracking-wider px-2 py-1">New</span>
+                </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
                     <p class="text-white text-[13px] leading-snug line-clamp-2 mb-2" th:text="${p.title}"></p>
-                    <p class="text-white text-[15px] font-semibold" th:text="${p.price} + ' ₽'"></p>
+                    <div class="flex items-baseline gap-2">
+                        <p th:classappend="${p.discountPercent != null} ? 'text-red-400 text-[15px] font-bold' : 'text-white text-[15px] font-semibold'"
+                           th:text="${p.price} + ' ₽'"></p>
+                        <span th:if="${p.oldPrice != null and p.discountPercent != null}"
+                              class="text-white/35 text-[11px] line-through" th:text="${p.oldPrice} + ' ₽'"></span>
+                    </div>
                 </div>
             </div>
         </a>

@@ -59,6 +59,14 @@
                                class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[14px] px-4 py-3 focus:border-white/35 outline-none transition"
                                placeholder="0">
                     </div>
+                    <div>
+                        <label for="oldPrice" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">
+                            Старая цена <span class="text-white/20 normal-case">(для скидки)</span>
+                        </label>
+                        <input id="oldPrice" type="number" name="oldPrice" step="0.01" min="0"
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[14px] px-4 py-3 focus:border-white/35 outline-none transition"
+                               placeholder="Необязательно">
+                    </div>
                     <div th:with="condLabels=${ {'NEW':'Новый','USED':'Б/у','VINTAGE':'Винтаж'} }">
                         <label for="condition" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Состояние *</label>
                         <select id="condition" name="condition" required

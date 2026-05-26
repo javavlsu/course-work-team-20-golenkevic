@@ -79,6 +79,7 @@ public class SellerController {
         dto.setTitle(product.getTitle());
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());
+        dto.setOldPrice(product.getOldPrice());
         dto.setCondition(product.getCondition());
         dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
         dto.setBrandId(product.getBrand() != null ? product.getBrand().getId() : null);
@@ -127,6 +128,7 @@ public class SellerController {
         product.setColor(dto.getColor());
         product.setMaterial(dto.getMaterial());
         product.setSize(dto.getSize());
+        product.setOldPrice(dto.getOldPrice());
     }
 
     @PostMapping("/products/{productId}/images/{imageId}/delete")

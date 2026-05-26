@@ -126,8 +126,18 @@
             </div>
 
             <!-- Цена -->
-            <p class="text-white text-[36px] md:text-[42px] font-light tracking-tight mb-8"
-               th:text="${product.price} + ' ₽'"></p>
+            <div class="mb-8">
+                <div th:if="${product.discountPercent != null}" class="flex items-baseline gap-3 flex-wrap">
+                    <p class="text-red-400 text-[36px] md:text-[42px] font-bold tracking-tight"
+                       th:text="${product.price} + ' ₽'"></p>
+                    <p class="text-white/35 text-[20px] line-through" th:text="${product.oldPrice} + ' ₽'"></p>
+                    <span class="bg-red-500 text-white text-[11px] font-bold uppercase tracking-wider px-2 py-1"
+                          th:text="'-' + ${product.discountPercent} + '%'"></span>
+                </div>
+                <p th:unless="${product.discountPercent != null}"
+                   class="text-white text-[36px] md:text-[42px] font-light tracking-tight"
+                   th:text="${product.price} + ' ₽'"></p>
+            </div>
 
             <!-- Кнопки -->
             <div sec:authorize="isAuthenticated()" class="space-y-3 mb-8">

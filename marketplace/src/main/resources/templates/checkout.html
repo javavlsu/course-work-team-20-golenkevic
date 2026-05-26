@@ -95,11 +95,29 @@
                     </div>
                 </div>
 
+                <!-- Промокод -->
+                <div class="border-t border-white/10 pt-5 mb-5">
+                    <label for="promo" class="text-white/40 text-[10px] uppercase tracking-[0.15em] block mb-2">Промокод</label>
+                    <div class="flex gap-2">
+                        <input id="promo" type="text" placeholder="ВВЕДИТЕ КОД"
+                               class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-[12px] px-3 py-2 focus:border-white/30 outline-none transition uppercase placeholder:text-white/20">
+                        <button type="button" onclick="applyPromo()"
+                                class="px-4 py-2 border border-white/15 text-white/60 text-[11px] uppercase tracking-[0.1em] hover:border-white/35 hover:text-white/85 transition">
+                            Применить
+                        </button>
+                    </div>
+                    <p id="promo-msg" class="hidden mt-2 text-[11px]"></p>
+                </div>
+
                 <!-- Итог -->
                 <div class="border-t border-white/10 pt-5 mb-8">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-white/40 text-[12px]">Товары</span>
                         <span class="text-white/60 text-[13px]" th:text="${total} + ' ₽'"></span>
+                    </div>
+                    <div id="promo-row" class="flex justify-between items-center mb-2 hidden">
+                        <span class="text-emerald-400/70 text-[12px]">Скидка по промокоду</span>
+                        <span id="promo-discount" class="text-emerald-400/80 text-[13px]">— ₽</span>
                     </div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-white/40 text-[12px]">Доставка</span>
@@ -107,9 +125,40 @@
                     </div>
                     <div class="flex justify-between items-center pt-3 border-t border-white/8 mt-3">
                         <span class="text-white/50 text-[12px] uppercase tracking-[0.15em]">Итого</span>
-                        <span class="text-white text-[22px] font-light" th:text="${total} + ' ₽'"></span>
+                        <span id="grand-total" class="text-white text-[22px] font-light" th:text="${total} + ' ₽'"
+                              th:data-base="${total}"></span>
                     </div>
                 </div>
+
+                <script th:inline="javascript">
+                    const baseTotal = /*[[${total}]]*/ 0;
+                    const promoCodes = { 'WELCOME': 10, 'SALE20': 20, 'BLACK': 30 };
+
+                    function applyPromo() {
+                        const code = document.getElementById('promo').value.trim().toUpperCase();
+                        const msg = document.getElementById('promo-msg');
+                        const row = document.getElementById('promo-row');
+                        const discountEl = document.getElementById('promo-discount');
+                        const totalEl = document.getElementById('grand-total');
+                        const pct = promoCodes[code];
+                        if (!pct) {
+                            msg.textContent = 'Промокод не найден';
+                            msg.className = 'mt-2 text-[11px] text-red-400/80';
+                            msg.classList.remove('hidden');
+                            row.classList.add('hidden');
+                            totalEl.textContent = baseTotal + ' ₽';
+                            return;
+                        }
+                        const discount = (baseTotal * pct) / 100;
+                        const finalTotal = baseTotal - discount;
+                        msg.textContent = 'Скидка ' + pct + '% применена';
+                        msg.className = 'mt-2 text-[11px] text-emerald-400/80';
+                        msg.classList.remove('hidden');
+                        discountEl.textContent = '−' + discount.toFixed(2) + ' ₽';
+                        row.classList.remove('hidden');
+                        totalEl.textContent = finalTotal.toFixed(2) + ' ₽';
+                    }
+                </script>
 
                 <!-- Кнопка (десктоп) -->
                 <button form="checkoutForm" type="submit"
