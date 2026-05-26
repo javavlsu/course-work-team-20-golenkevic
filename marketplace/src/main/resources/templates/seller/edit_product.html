@@ -58,11 +58,11 @@
                                oninput="updatePrice(this.value)"
                                class="w-full bg-[#1a1a1a] border border-white/10 text-white text-[14px] px-4 py-3 focus:border-white/35 outline-none transition">
                     </div>
-                    <div>
+                    <div th:with="condLabels=${ {'NEW':'Новый','USED':'Б/у','VINTAGE':'Винтаж'} }">
                         <label for="condition" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Состояние *</label>
                         <select id="condition" name="condition" required
                                 class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
-                            <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}" th:selected="${c == productDto.condition}"></option>
+                            <option th:each="c : ${conditions}" th:value="${c}" th:text="${condLabels.get(c.name())}" th:selected="${c == productDto.condition}"></option>
                         </select>
                     </div>
                 </div>
@@ -89,21 +89,21 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-5">
-                    <div>
+                    <div th:with="genderLabels=${ {'MALE':'Мужской','FEMALE':'Женский','UNISEX':'Унисекс'} }">
                         <label for="gender" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Пол</label>
                         <select id="gender" name="gender"
                                 class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
                             <option value="">Не указан</option>
-                            <option th:each="g : ${genders}" th:value="${g}" th:text="${g}"
+                            <option th:each="g : ${genders}" th:value="${g}" th:text="${genderLabels.get(g.name())}"
                                     th:selected="${g == productDto.gender}"></option>
                         </select>
                     </div>
-                    <div>
+                    <div th:with="seasonLabels=${ {'SUMMER':'Лето','WINTER':'Зима','DEMI':'Демисезон','UNIVERSAL':'Универсальный'} }">
                         <label for="season" class="block text-white/35 text-[10px] uppercase tracking-[0.2em] mb-2">Сезон</label>
                         <select id="season" name="season"
                                 class="w-full bg-[#1a1a1a] border border-white/10 text-white/70 text-[13px] px-4 py-3 focus:border-white/35 outline-none transition">
                             <option value="">Не указан</option>
-                            <option th:each="s : ${seasons}" th:value="${s}" th:text="${s}"
+                            <option th:each="s : ${seasons}" th:value="${s}" th:text="${seasonLabels.get(s.name())}"
                                     th:selected="${s == productDto.season}"></option>
                         </select>
                     </div>

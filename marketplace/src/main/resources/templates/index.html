@@ -140,7 +140,15 @@
                     <!-- Правая колонка: фото -->
                     <a th:href="@{/catalog(categoryId=${cat.id})}"
                        class="block relative overflow-hidden bg-[#1a1a1a] group/photo">
-                        <img th:src="${'/photoformain/photo_' + ((stat.index % 9) + 1) + '_2026-04-26_17-20-42.jpg'}"
+                        <img th:src="${#strings.equals(cat.name, 'Одежда')
+                                       ? '/photoformain/odezda.jpg'
+                                       : (#strings.equals(cat.name, 'Обувь')
+                                           ? '/photoformain/shoe.jpg'
+                                           : (#strings.equals(cat.name, 'Сумки')
+                                               ? '/photoformain/bag.jpg'
+                                               : (#strings.equals(cat.name, 'Аксессуары')
+                                                   ? '/photoformain/aksesyar.jpeg'
+                                                   : '/photoformain/photo_' + ((stat.index % 9) + 1) + '_2026-04-26_17-20-42.jpg')))}"
                              alt="" class="w-full h-full object-cover group-hover/photo:scale-105 transition-transform duration-500"/>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 right-4">

@@ -10,7 +10,14 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = {
+    @Index(name = "idx_product_status", columnList = "status"),
+    @Index(name = "idx_product_status_created", columnList = "status, created_at"),
+    @Index(name = "idx_product_category", columnList = "fk_category"),
+    @Index(name = "idx_product_brand", columnList = "fk_brand"),
+    @Index(name = "idx_product_seller", columnList = "fk_seller"),
+    @Index(name = "idx_product_price", columnList = "price")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -37,12 +37,21 @@
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <a th:each="br : ${brands}" th:href="@{/catalog(brandId=${br.id})}"
+        <a th:each="br : ${brands}" th:if="${!#strings.equals(br.name, 'Без бренда')}"
+           th:with="logoMap=${ {'Nike':'/brends/nike.png',
+                                 'Adidas':'/brends/Adidas.png',
+                                 'Apple':'/brends/apple.jpg',
+                                 'Sony':'/brends/Sony.png',
+                                 'Casio':'/brends/Casio.png',
+                                 'Dr. Martens':'/brends/DRMARTENS.png',
+                                 'Balenciaga':'/brends/balenciaga.jpg',
+                                 'Chrome Hearts':'/brends/Chromehearts.jpg'} }"
+           th:href="@{/catalog(brandId=${br.id})}"
            class="group bg-[#111] border border-white/8 hover:border-white/25 transition p-6 flex flex-col items-center gap-3 aspect-square justify-center">
-            <div class="w-16 h-16 bg-[#1a1a1a] flex items-center justify-center">
-                <img th:if="${br.logo != null}" th:src="@{'/brand/' + ${br.id} + '/logo'}"
-                     alt="" class="w-full h-full object-contain"/>
-                <i th:unless="${br.logo != null}" class="fas fa-tag text-white/25 text-xl"></i>
+            <div class="w-20 h-20 bg-white flex items-center justify-center overflow-hidden p-2">
+                <img th:if="${logoMap.containsKey(br.name)}" th:src="${logoMap.get(br.name)}"
+                     th:alt="${br.name}" class="w-full h-full object-contain"/>
+                <i th:unless="${logoMap.containsKey(br.name)}" class="fas fa-tag text-white/25 text-xl"></i>
             </div>
             <p class="text-white/85 text-[14px] uppercase tracking-[0.15em] text-center group-hover:text-white transition" th:text="${br.name}"></p>
             <p class="text-white/25 text-[11px] text-center line-clamp-2" th:text="${br.description}" th:if="${br.description != null}"></p>
