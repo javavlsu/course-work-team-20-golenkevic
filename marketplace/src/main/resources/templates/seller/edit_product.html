@@ -226,6 +226,16 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
+        <div class="flex border-b border-white/8">
+            <button id="tab-local" type="button" onclick="switchSource('local')"
+                    class="flex-1 py-3 text-[11px] uppercase tracking-[0.2em] border-b-2 border-white text-white">
+                Локальная библиотека
+            </button>
+            <button id="tab-external" type="button" onclick="switchSource('external')"
+                    class="flex-1 py-3 text-[11px] uppercase tracking-[0.2em] border-b-2 border-transparent text-white/35 hover:text-white/60 transition">
+                <i class="fas fa-globe text-[10px] mr-1.5"></i>Поиск в интернете
+            </button>
+        </div>
         <div class="p-5 border-b border-white/8 flex flex-wrap gap-2">
             <input id="gallery-search" type="text" placeholder="Поиск..." oninput="loadGallery()"
                    class="flex-1 min-w-[180px] bg-[#1a1a1a] border border-white/10 text-white text-[13px] px-3 py-2 focus:border-white/30 outline-none transition placeholder:text-white/25">
@@ -254,6 +264,8 @@
 
 <script>
     const selectedGallery = new Set();
+    const galleryPreviewMap = new Map();
+    let gallerySource = 'local';
 
     function openGallery() {
         document.getElementById('gallery-modal').classList.remove('hidden');
@@ -265,35 +277,61 @@
         document.getElementById('gallery-modal').classList.remove('flex');
     }
 
+    function switchSource(src) {
+        gallerySource = src;
+        const active = 'flex-1 py-3 text-[11px] uppercase tracking-[0.2em] border-b-2 border-white text-white';
+        const inactive = 'flex-1 py-3 text-[11px] uppercase tracking-[0.2em] border-b-2 border-transparent text-white/35 hover:text-white/60 transition';
+        document.getElementById('tab-local').className = src === 'local' ? active : inactive;
+        document.getElementById('tab-external').className = src === 'external' ? active : inactive;
+        document.getElementById('tab-external').innerHTML = '<i class="fas fa-globe text-[10px] mr-1.5"></i>Поиск в интернете';
+        document.getElementById('gallery-search').placeholder = src === 'external' ? 'Например: shoes, phone, watch...' : 'Поиск...';
+        loadGallery();
+    }
+
     function loadGallery() {
         const search = document.getElementById('gallery-search').value;
         const category = document.getElementById('gallery-category').value;
-        fetch(`/api/gallery?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}`)
-            .then(r => r.json()).then(items => {
-                const grid = document.getElementById('gallery-grid');
-                grid.innerHTML = '';
-                if (items.length === 0) {
-                    grid.innerHTML = '<p class="col-span-full text-white/30 text-center text-[12px] py-8">Ничего не найдено</p>';
-                    return;
-                }
-                items.forEach(it => {
-                    const selected = selectedGallery.has(it.path);
-                    const div = document.createElement('div');
-                    div.className = `relative aspect-square bg-[#1a1a1a] overflow-hidden cursor-pointer border-2 ${selected ? 'border-white/80' : 'border-transparent'} hover:border-white/40 transition`;
-                    div.innerHTML = `
-                        <img src="${it.path}" alt="" class="w-full h-full object-cover"/>
-                        <div class="absolute bottom-1 left-1 right-1 text-white/80 text-[10px] truncate bg-black/50 px-1.5 py-0.5">${it.filename}</div>
-                        ${selected ? '<div class="absolute top-1 right-1 w-5 h-5 bg-white text-black flex items-center justify-center text-[10px]"><i class="fas fa-check"></i></div>' : ''}
-                    `;
-                    div.onclick = () => toggleGallery(it.path);
-                    grid.appendChild(div);
-                });
+        const url = gallerySource === 'external'
+            ? `/api/gallery/external?query=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}`
+            : `/api/gallery?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}`;
+        const grid = document.getElementById('gallery-grid');
+        grid.innerHTML = '<p class="col-span-full text-white/30 text-center text-[12px] py-8">Загрузка...</p>';
+        fetch(url).then(r => r.json()).then(items => {
+            grid.innerHTML = '';
+            if (items.length === 0) {
+                grid.innerHTML = gallerySource === 'external'
+                    ? '<p class="col-span-full text-white/30 text-center text-[12px] py-8">Введите запрос или выберите категорию</p>'
+                    : '<p class="col-span-full text-white/30 text-center text-[12px] py-8">Ничего не найдено</p>';
+                return;
+            }
+            items.forEach(it => {
+                const key = gallerySource === 'external' ? ('external:' + it.url) : it.path;
+                const previewUrl = gallerySource === 'external' ? it.url : it.path;
+                const label = gallerySource === 'external' ? (it.title || '') : it.filename;
+                const selected = selectedGallery.has(key);
+                const div = document.createElement('div');
+                div.className = `relative aspect-square bg-[#1a1a1a] overflow-hidden cursor-pointer border-2 ${selected ? 'border-white/80' : 'border-transparent'} hover:border-white/40 transition`;
+                div.innerHTML = `
+                    <img src="${previewUrl}" alt="" class="w-full h-full object-cover"/>
+                    <div class="absolute bottom-1 left-1 right-1 text-white/80 text-[10px] truncate bg-black/50 px-1.5 py-0.5">${label}</div>
+                    ${selected ? '<div class="absolute top-1 right-1 w-5 h-5 bg-white text-black flex items-center justify-center text-[10px]"><i class="fas fa-check"></i></div>' : ''}
+                `;
+                div.onclick = () => toggleGallery(key, previewUrl);
+                grid.appendChild(div);
             });
+        }).catch(() => {
+            grid.innerHTML = '<p class="col-span-full text-red-400/70 text-center text-[12px] py-8">Не удалось загрузить</p>';
+        });
     }
 
-    function toggleGallery(path) {
-        if (selectedGallery.has(path)) selectedGallery.delete(path);
-        else selectedGallery.add(path);
+    function toggleGallery(key, previewUrl) {
+        if (selectedGallery.has(key)) {
+            selectedGallery.delete(key);
+            galleryPreviewMap.delete(key);
+        } else {
+            selectedGallery.add(key);
+            galleryPreviewMap.set(key, previewUrl || (key.startsWith('external:') ? key.substring(9) : key));
+        }
         document.getElementById('gallery-count').textContent = selectedGallery.size;
         loadGallery();
         renderGallerySelection();
@@ -302,11 +340,11 @@
     function renderGallerySelection() {
         const hidden = document.getElementById('gallery-selected-hidden');
         hidden.innerHTML = '';
-        selectedGallery.forEach(path => {
+        selectedGallery.forEach(key => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'galleryPaths';
-            input.value = path;
+            input.value = key;
             hidden.appendChild(input);
         });
 
@@ -317,16 +355,19 @@
             return;
         }
         thumbs.classList.remove('hidden');
-        selectedGallery.forEach(path => {
+        selectedGallery.forEach(key => {
+            const previewUrl = galleryPreviewMap.get(key) || key;
             const div = document.createElement('div');
             div.className = 'relative aspect-square bg-[#1a1a1a] overflow-hidden group border border-emerald-400/30';
             div.innerHTML = `
-                <img src="${path}" alt="" class="w-full h-full object-cover"/>
-                <button type="button" onclick="toggleGallery('${path}')"
-                        class="absolute top-1 right-1 w-6 h-6 bg-red-500/90 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <img src="${previewUrl}" alt="" class="w-full h-full object-cover"/>
+                <button type="button" data-key="${key}" class="gallery-remove absolute top-1 right-1 w-6 h-6 bg-red-500/90 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                     <i class="fas fa-times"></i>
                 </button>`;
             thumbs.appendChild(div);
+        });
+        thumbs.querySelectorAll('.gallery-remove').forEach(btn => {
+            btn.addEventListener('click', () => toggleGallery(btn.dataset.key));
         });
     }
 

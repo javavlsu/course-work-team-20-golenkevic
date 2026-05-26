@@ -9,7 +9,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
+import java.time.Duration;
 import ru.vlsu.marketplace.dto.ProductDto;
 import ru.vlsu.marketplace.entities.Product;
 import ru.vlsu.marketplace.entities.ProductImage;
@@ -121,15 +126,20 @@ public class SellerController {
         if (galleryPaths == null) return;
         for (String path : galleryPaths) {
             if (path == null || path.isBlank()) continue;
-            // path вида /gallery/clothes/odezda-1.jpg
-            String clean = path.startsWith("/") ? path.substring(1) : path;
-            if (!clean.startsWith("gallery/")) continue;
-            byte[] bytes;
-            try {
-                bytes = Files.readAllBytes(new ClassPathResource("static/" + clean).getFile().toPath());
-            } catch (IOException e) {
-                continue;
+            byte[] bytes = null;
+            if (path.startsWith("external:")) {
+                bytes = downloadExternal(path.substring("external:".length()));
+            } else {
+                String clean = path.startsWith("/") ? path.substring(1) : path;
+                if (!clean.startsWith("gallery/")) continue;
+                try {
+                    bytes = Files.readAllBytes(new ClassPathResource("static/" + clean).getFile().toPath());
+                } catch (IOException e) {
+                    continue;
+                }
             }
+            if (bytes == null || bytes.length == 0) continue;
+
             if (product.getImageData() == null) {
                 product.setImageData(bytes);
                 productService.save(product);
@@ -140,6 +150,17 @@ public class SellerController {
                 img.setSortOrder(productImageRepository.findByProductIdOrderBySortOrderAsc(product.getId()).size());
                 productImageRepository.save(img);
             }
+        }
+    }
+
+    private byte[] downloadExternal(String url) {
+        try {
+            HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
+            HttpRequest req = HttpRequest.newBuilder(URI.create(url)).timeout(Duration.ofSeconds(15)).GET().build();
+            HttpResponse<byte[]> resp = client.send(req, HttpResponse.BodyHandlers.ofByteArray());
+            return resp.statusCode() == 200 ? resp.body() : null;
+        } catch (Exception e) {
+            return null;
         }
     }
 
