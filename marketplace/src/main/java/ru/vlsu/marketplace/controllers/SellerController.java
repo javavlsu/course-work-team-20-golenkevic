@@ -5,8 +5,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
 import ru.vlsu.marketplace.dto.ProductDto;
 import ru.vlsu.marketplace.entities.Product;
 import ru.vlsu.marketplace.entities.ProductImage;
@@ -55,6 +58,7 @@ public class SellerController {
     @PostMapping("/products/new")
     public String addProduct(@ModelAttribute ProductDto dto,
                              @RequestParam(required = false) MultipartFile[] images,
+                             @RequestParam(required = false) String[] galleryPaths,
                              @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         User seller = userService.findByUsername(userDetails.getUsername()).orElseThrow();
         Product product = new Product();
@@ -67,7 +71,8 @@ public class SellerController {
         product.setCreatedAt(Instant.now());
         applyDtoAttributes(product, dto);
         Product saved = productService.save(product);
-        saveImages(saved, images, 0);
+        saveGalleryImages(saved, galleryPaths);
+        saveImages(saved, images, productImageRepository.findByProductIdOrderBySortOrderAsc(saved.getId()).size());
         return "redirect:/seller/products";
     }
 
@@ -96,7 +101,8 @@ public class SellerController {
 
     @PostMapping("/products/{id}/edit")
     public String editProduct(@PathVariable Integer id, @ModelAttribute ProductDto dto,
-                              @RequestParam(required = false) MultipartFile[] images) throws IOException {
+                              @RequestParam(required = false) MultipartFile[] images,
+                              @RequestParam(required = false) String[] galleryPaths) throws IOException {
         Product product = productService.findById(id).orElseThrow();
         product.setTitle(dto.getTitle());
         product.setDescription(dto.getDescription());
@@ -104,10 +110,37 @@ public class SellerController {
         product.setCondition(dto.getCondition());
         applyDtoAttributes(product, dto);
         Product saved = productService.save(product);
+        saveGalleryImages(saved, galleryPaths);
         int existingCount = productImageRepository.findByProductIdOrderBySortOrderAsc(id).size()
                           + (saved.getImageData() != null ? 1 : 0);
         saveImages(saved, images, existingCount);
         return "redirect:/seller/products";
+    }
+
+    private void saveGalleryImages(Product product, String[] galleryPaths) throws IOException {
+        if (galleryPaths == null) return;
+        for (String path : galleryPaths) {
+            if (path == null || path.isBlank()) continue;
+            // path вида /gallery/clothes/odezda-1.jpg
+            String clean = path.startsWith("/") ? path.substring(1) : path;
+            if (!clean.startsWith("gallery/")) continue;
+            byte[] bytes;
+            try {
+                bytes = Files.readAllBytes(new ClassPathResource("static/" + clean).getFile().toPath());
+            } catch (IOException e) {
+                continue;
+            }
+            if (product.getImageData() == null) {
+                product.setImageData(bytes);
+                productService.save(product);
+            } else {
+                ProductImage img = new ProductImage();
+                img.setProduct(product);
+                img.setImageData(bytes);
+                img.setSortOrder(productImageRepository.findByProductIdOrderBySortOrderAsc(product.getId()).size());
+                productImageRepository.save(img);
+            }
+        }
     }
 
     private void addFormReferenceData(Model model) {
