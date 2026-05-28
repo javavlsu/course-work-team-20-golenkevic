@@ -171,27 +171,22 @@
                     </div>
                 </div>
 
-                <!-- Выбор размера -->
-                <div th:if="${product.size != null and !#strings.isEmpty(product.size)}" class="mb-6">
+                <!-- Сетка размеров RU(EU) -->
+                <div class="mb-6">
                     <div class="flex items-center justify-between mb-3">
-                        <p class="text-white text-[13px] font-semibold uppercase tracking-[0.15em]">Размер</p>
-                        <button type="button" class="text-white/40 text-[11px] uppercase tracking-wider hover:text-[#3FB6E4] transition flex items-center gap-1">
-                            <i class="fas fa-ruler text-[10px]"></i> Размерная сетка
+                        <p class="text-white text-[13px] font-semibold">
+                            Размер: <span>RU</span> <span class="text-white/50">(EU)</span>
+                        </p>
+                        <button type="button" onclick="openSizeGuide()" class="text-white/55 text-[11px] hover:text-[#3FB6E4] transition flex items-center gap-1.5">
+                            <i class="fas fa-ruler text-[11px]"></i> Гайд размера
                         </button>
                     </div>
-                    <div class="grid grid-cols-4 sm:grid-cols-5 gap-2">
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">36</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">37</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">38</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">39</button>
-                        <button type="button" class="size-btn py-2 border-2 border-[#3FB6E4] bg-[#3FB6E4]/10 text-white text-[12px] font-semibold"
-                                th:text="${product.size}">42</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">41</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">42</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">43</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">44</button>
-                        <button type="button" disabled class="size-btn py-2 border border-white/10 text-white/40 text-[12px]">45</button>
-                    </div>
+                    <div id="size-grid"
+                         th:attr="data-current-size=${product.size},data-price=${product.price}"
+                         class="grid grid-cols-4 gap-px bg-white/[0.06]"></div>
+                    <p class="mt-3 text-white/45 text-[12px]">
+                        Длина стопы: <span id="foot-length" class="text-white/80">22,5</span> cm
+                    </p>
                 </div>
 
                 <!-- Распределение «как сидит» -->
@@ -532,6 +527,68 @@
     </div>
 </div>
 
+<!-- ═══ МОДАЛ «ГАЙД РАЗМЕРА» ═══ -->
+<div id="size-guide-modal" class="hidden fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm">
+    <div class="absolute inset-0 flex items-start justify-center p-4 overflow-y-auto">
+        <div class="bg-[#141414] border border-white/10 max-w-2xl w-full mt-12 mb-8 shadow-2xl">
+
+            <!-- Шапка модала -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-white/10 sticky top-0 bg-[#141414] z-10">
+                <h2 class="text-white text-[18px] font-semibold">Гайд размера</h2>
+                <button type="button" onclick="closeSizeGuide()"
+                        class="w-8 h-8 flex items-center justify-center text-white/55 hover:text-white transition"
+                        aria-label="Закрыть">
+                    <i class="fas fa-times text-[15px]"></i>
+                </button>
+            </div>
+
+            <!-- Укажите свой размер -->
+            <div class="px-6 py-5 border-b border-white/8">
+                <div class="flex items-center justify-between gap-4 p-4 bg-white/[0.03] border border-white/8">
+                    <div>
+                        <p class="text-white text-[13.5px] font-medium">Укажите свой размер</p>
+                        <p class="text-white/40 text-[11.5px] mt-0.5">Получите персональные рекомендации</p>
+                    </div>
+                    <button type="button"
+                            class="px-4 py-2 border border-white/20 text-white/85 text-[12px] uppercase tracking-wider hover:border-[#3FB6E4]/60 hover:text-[#3FB6E4] transition">
+                        Укажите
+                    </button>
+                </div>
+            </div>
+
+            <!-- Заголовок таблицы + переключатель cm/inch -->
+            <div class="px-6 pt-5 pb-3 flex items-center justify-between">
+                <h3 class="text-white text-[15px] font-semibold">Таблица размеров</h3>
+                <div class="flex border border-white/15 overflow-hidden">
+                    <button type="button" id="unit-inch" onclick="setSizeUnit('inch')"
+                            class="px-3 py-1.5 text-[12px] text-white/55 hover:text-white transition">inch</button>
+                    <button type="button" id="unit-cm" onclick="setSizeUnit('cm')"
+                            class="px-3 py-1.5 text-[12px] bg-[#3FB6E4] text-black font-medium">cm</button>
+                </div>
+            </div>
+
+            <!-- Таблица размеров -->
+            <div class="px-6 pb-6 overflow-x-auto">
+                <table class="w-full text-[12.5px]" id="size-table">
+                    <thead>
+                        <tr class="text-white/45 text-[11px] uppercase tracking-wider">
+                            <th class="py-3 px-2 text-left font-medium">EU</th>
+                            <th class="py-3 px-2 text-left font-medium">RU</th>
+                            <th class="py-3 px-2 text-left font-medium">UK</th>
+                            <th class="py-3 px-2 text-left font-medium">US Мужские</th>
+                            <th class="py-3 px-2 text-left font-medium">US Женские</th>
+                            <th class="py-3 px-2 text-left font-medium">JP</th>
+                            <th class="py-3 px-2 text-left font-medium">KR</th>
+                            <th class="py-3 px-2 text-left font-medium">Длина стопы (<span id="unit-label">cm</span>)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="size-table-body" class="text-white/80"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <script>
@@ -570,6 +627,157 @@
         const step = card ? card.offsetWidth + 16 : 240;
         el.scrollBy({ left: step * dir * 2, behavior: 'smooth' });
     }
+
+    // ─── Стандартная таблица соответствия размеров обуви ───
+    const SIZE_CHART = [
+        { eu: '35,5', ru: '34,5', uk: '3',   usM: '3,5', usW: '5',   jp: '22,5', kr: '225', cm: 22.5 },
+        { eu: '36',   ru: '35',   uk: '3,5', usM: '4',   usW: '5,5', jp: '23',   kr: '230', cm: 23.0 },
+        { eu: '36,5', ru: '35,5', uk: '4',   usM: '4,5', usW: '6',   jp: '23,5', kr: '235', cm: 23.5 },
+        { eu: '37',   ru: '36',   uk: '4,5', usM: '5',   usW: '6,5', jp: '23,5', kr: '235', cm: 23.5 },
+        { eu: '37,5', ru: '36,5', uk: '4,5', usM: '5',   usW: '6,5', jp: '23,5', kr: '235', cm: 23.5 },
+        { eu: '38',   ru: '37',   uk: '5',   usM: '5,5', usW: '7',   jp: '24',   kr: '240', cm: 24.0 },
+        { eu: '38,5', ru: '37,5', uk: '5,5', usM: '6',   usW: '7,5', jp: '24',   kr: '240', cm: 24.0 },
+        { eu: '39',   ru: '38',   uk: '6',   usM: '6,5', usW: '8',   jp: '24,5', kr: '245', cm: 24.5 },
+        { eu: '40',   ru: '39',   uk: '6',   usM: '7',   usW: '8,5', jp: '25',   kr: '250', cm: 25.0 },
+        { eu: '40,5', ru: '39,5', uk: '6,5', usM: '7,5', usW: '9',   jp: '25,5', kr: '255', cm: 25.5 },
+        { eu: '41',   ru: '40',   uk: '7',   usM: '8',   usW: '9,5', jp: '26',   kr: '260', cm: 26.0 },
+        { eu: '42',   ru: '41',   uk: '7,5', usM: '8,5', usW: '10',  jp: '26,5', kr: '265', cm: 26.5 },
+        { eu: '42,5', ru: '41,5', uk: '8',   usM: '9',   usW: '10,5',jp: '27',   kr: '270', cm: 27.0 },
+        { eu: '43',   ru: '42',   uk: '8,5', usM: '9,5', usW: '11',  jp: '27,5', kr: '275', cm: 27.5 },
+        { eu: '44',   ru: '43',   uk: '9',   usM: '10',  usW: '11,5',jp: '28',   kr: '280', cm: 28.0 },
+        { eu: '44,5', ru: '43,5', uk: '9,5', usM: '10,5',usW: '12',  jp: '28,5', kr: '285', cm: 28.5 },
+        { eu: '45',   ru: '44',   uk: '10',  usM: '11',  usW: '12,5',jp: '29',   kr: '290', cm: 29.0 },
+        { eu: '45,5', ru: '44,5', uk: '10,5',usM: '11,5',usW: '13',  jp: '29,5', kr: '295', cm: 29.5 },
+        { eu: '46',   ru: '45',   uk: '11',  usM: '12',  usW: '13,5',jp: '30',   kr: '300', cm: 30.0 },
+        { eu: '46,5', ru: '45,5', uk: '11,5',usM: '12,5',usW: '14',  jp: '30,5', kr: '305', cm: 30.5 },
+        { eu: '47',   ru: '46',   uk: '12',  usM: '13',  usW: '—',   jp: '31',   kr: '310', cm: 31.0 },
+        { eu: '47,5', ru: '46,5', uk: '12,5',usM: '13,5',usW: '—',   jp: '31,5', kr: '315', cm: 31.5 },
+        { eu: '48',   ru: '47',   uk: '13',  usM: '14',  usW: '—',   jp: '32',   kr: '320', cm: 32.0 },
+        { eu: '48,5', ru: '47,5', uk: '13,5',usM: '14,5',usW: '—',   jp: '32,5', kr: '325', cm: 32.5 }
+    ];
+
+    function fmtPrice(v) {
+        return Math.round(v).toLocaleString('ru-RU').replace(/,/g, ' ') + ' ₽';
+    }
+
+    // ─── Сетка размеров RU(EU) на странице товара ───
+    (function renderSizeGrid() {
+        const grid = document.getElementById('size-grid');
+        if (!grid) return;
+        const currentSize = (grid.dataset.currentSize || '').trim().replace('.', ',');
+        const basePrice = parseFloat(grid.dataset.price || '0');
+
+        // Грубое сопоставление: если currentSize совпадает с любым EU/RU — это наш размер
+        const matchIdx = SIZE_CHART.findIndex(s =>
+            s.ru === currentSize || s.eu === currentSize ||
+            s.ru.replace(',', '.') === currentSize || s.eu.replace(',', '.') === currentSize
+        );
+
+        // Последние 4 размера помечаем как «нет в наличии»
+        const unavailableFrom = SIZE_CHART.length - 4;
+
+        SIZE_CHART.forEach((s, i) => {
+            const isCurrent = (i === matchIdx);
+            const isAvailable = i < unavailableFrom || isCurrent;
+            const cell = document.createElement('button');
+            cell.type = 'button';
+            cell.title = 'Длина стопы: ' + s.cm.toString().replace('.', ',') + ' cm';
+            cell.dataset.cm = s.cm;
+            const priceText = isAvailable ? fmtPrice(basePrice) : '— ₽';
+            const baseClasses = 'flex flex-col items-start gap-0.5 px-3 py-2.5 text-left bg-[#141414] transition';
+            if (isCurrent) {
+                cell.className = baseClasses + ' outline outline-2 outline-[#3FB6E4] -outline-offset-2 z-10 relative';
+                cell.innerHTML =
+                    '<span class="text-white text-[13px] font-semibold">' + s.ru + ' <span class="text-white/50 font-normal">(' + s.eu + ')</span></span>' +
+                    '<span class="text-white text-[12px]">' + priceText + '</span>';
+            } else if (isAvailable) {
+                cell.className = baseClasses + ' hover:bg-white/[0.06]';
+                cell.innerHTML =
+                    '<span class="text-white text-[13px]">' + s.ru + ' <span class="text-white/50">(' + s.eu + ')</span></span>' +
+                    '<span class="text-white/65 text-[12px]">' + priceText + '</span>';
+            } else {
+                cell.className = baseClasses + ' opacity-35 cursor-not-allowed';
+                cell.disabled = true;
+                cell.innerHTML =
+                    '<span class="text-white/55 text-[13px]">' + s.ru + ' <span class="text-white/35">(' + s.eu + ')</span></span>' +
+                    '<span class="text-white/35 text-[12px]">— ₽</span>';
+            }
+            cell.addEventListener('mouseenter', () => {
+                const fl = document.getElementById('foot-length');
+                if (fl) fl.textContent = s.cm.toString().replace('.', ',');
+            });
+            grid.appendChild(cell);
+        });
+
+        // Изначально длина стопы — текущего размера, если есть, иначе минимального
+        const initial = matchIdx >= 0 ? SIZE_CHART[matchIdx] : SIZE_CHART[0];
+        const fl = document.getElementById('foot-length');
+        if (fl) fl.textContent = initial.cm.toString().replace('.', ',');
+    })();
+
+    // ─── Модал «Гайд размера» ───
+    let sizeUnit = 'cm';
+
+    function renderSizeTable() {
+        const tbody = document.getElementById('size-table-body');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        SIZE_CHART.forEach((s, i) => {
+            const tr = document.createElement('tr');
+            tr.className = (i % 2 === 0 ? 'bg-white/[0.02]' : '') + ' hover:bg-white/[0.06] transition';
+            const footLen = sizeUnit === 'cm'
+                ? s.cm.toString().replace('.', ',')
+                : (s.cm / 2.54).toFixed(2).replace('.', ',');
+            tr.innerHTML =
+                '<td class="py-2.5 px-2">' + s.eu + '</td>' +
+                '<td class="py-2.5 px-2">' + s.ru + '</td>' +
+                '<td class="py-2.5 px-2">' + s.uk + '</td>' +
+                '<td class="py-2.5 px-2">' + s.usM + '</td>' +
+                '<td class="py-2.5 px-2">' + s.usW + '</td>' +
+                '<td class="py-2.5 px-2">' + s.jp + '</td>' +
+                '<td class="py-2.5 px-2">' + s.kr + '</td>' +
+                '<td class="py-2.5 px-2">' + footLen + '</td>';
+            tbody.appendChild(tr);
+        });
+    }
+
+    function openSizeGuide() {
+        document.getElementById('size-guide-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        renderSizeTable();
+    }
+    function closeSizeGuide() {
+        document.getElementById('size-guide-modal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    function setSizeUnit(u) {
+        sizeUnit = u;
+        document.getElementById('unit-label').textContent = u;
+        const cmBtn = document.getElementById('unit-cm');
+        const inBtn = document.getElementById('unit-inch');
+        if (u === 'cm') {
+            cmBtn.className = 'px-3 py-1.5 text-[12px] bg-[#3FB6E4] text-black font-medium';
+            inBtn.className = 'px-3 py-1.5 text-[12px] text-white/55 hover:text-white transition';
+        } else {
+            inBtn.className = 'px-3 py-1.5 text-[12px] bg-[#3FB6E4] text-black font-medium';
+            cmBtn.className = 'px-3 py-1.5 text-[12px] text-white/55 hover:text-white transition';
+        }
+        renderSizeTable();
+    }
+
+    // Закрытие модала по клику на оверлей и Esc
+    document.getElementById('size-guide-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'size-guide-modal' || e.target.classList.contains('absolute')) {
+            // клик по подложке — но не по содержимому
+            if (e.target.id === 'size-guide-modal') closeSizeGuide();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeSizeGuide();
+    });
+
+    // Deeplink: открыть гайд по #size-guide в URL
+    if (window.location.hash === '#size-guide') openSizeGuide();
 </script>
 
 </body>
