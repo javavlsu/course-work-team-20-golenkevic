@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас — MARKETPLACE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
+        .grad-text {
+            background: linear-gradient(135deg, #3FB6E4 0%, #ffffff 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand-track { animation: scroll-x 40s linear infinite; }
+        @keyframes scroll-x {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        .brand-marquee:hover .brand-track { animation-play-state: paused; }
+        .stat-num { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0a0a0a]">
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="flex-1 pt-[108px]">
+
+    <!-- ═══ HERO ═══ -->
+    <section class="relative overflow-hidden border-b border-white/8">
+        <!-- Декоративные градиенты -->
+        <div class="absolute -top-32 -right-32 w-[600px] h-[600px] bg-[#3FB6E4]/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-[#3FB6E4]/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="relative max-w-[1500px] mx-auto px-4 sm:px-6 py-20 lg:py-28">
+            <p class="text-[#3FB6E4] text-[11px] uppercase tracking-[0.4em] mb-5 font-medium">О компании</p>
+            <h1 class="text-[44px] sm:text-[64px] lg:text-[88px] font-black tracking-tight leading-[0.95] mb-6">
+                Всё, что хочешь —<br>
+                <span class="grad-text">у нас</span>
+            </h1>
+            <p class="text-white/55 text-[16px] sm:text-[18px] leading-relaxed max-w-2xl mb-10">
+                Сотни брендов, тысячи товаров — в одном месте. Маркетплейс для поиска
+                и покупки оригинальных премиум-товаров с проверкой подлинности.
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <a href="/catalog" class="px-6 py-3.5 bg-[#3FB6E4] text-black text-[12px] uppercase tracking-[0.2em] font-bold hover:bg-[#3FB6E4]/90 transition flex items-center gap-2">
+                    <i class="fas fa-bag-shopping text-[12px]"></i> Перейти в каталог
+                </a>
+                <a href="#stats" class="px-6 py-3.5 border border-white/20 text-white/85 text-[12px] uppercase tracking-[0.2em] hover:border-[#3FB6E4]/60 hover:text-[#3FB6E4] transition flex items-center gap-2">
+                    Узнать больше <i class="fas fa-arrow-down text-[11px]"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ СТАТИСТИКА ═══ -->
+    <section id="stats" class="border-b border-white/8">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-16">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/8">
+                <div class="bg-[#0a0a0a] p-8 lg:p-10 group hover:bg-[#141414] transition">
+                    <i class="fas fa-box-open text-[#3FB6E4] text-[22px] mb-4 block"></i>
+                    <p class="text-white text-[40px] lg:text-[52px] font-bold leading-none stat-num"
+                       th:text="${productsCount}">0</p>
+                    <p class="text-white/45 text-[11px] uppercase tracking-[0.2em] mt-3">Товаров</p>
+                </div>
+                <div class="bg-[#0a0a0a] p-8 lg:p-10 group hover:bg-[#141414] transition">
+                    <i class="fas fa-tag text-[#3FB6E4] text-[22px] mb-4 block"></i>
+                    <p class="text-white text-[40px] lg:text-[52px] font-bold leading-none stat-num"
+                       th:text="${brandsCount}">0</p>
+                    <p class="text-white/45 text-[11px] uppercase tracking-[0.2em] mt-3">Брендов</p>
+                </div>
+                <div class="bg-[#0a0a0a] p-8 lg:p-10 group hover:bg-[#141414] transition">
+                    <i class="fas fa-th-large text-[#3FB6E4] text-[22px] mb-4 block"></i>
+                    <p class="text-white text-[40px] lg:text-[52px] font-bold leading-none stat-num"
+                       th:text="${categoriesCount}">0</p>
+                    <p class="text-white/45 text-[11px] uppercase tracking-[0.2em] mt-3">Категорий</p>
+                </div>
+                <div class="bg-[#0a0a0a] p-8 lg:p-10 group hover:bg-[#141414] transition">
+                    <i class="fas fa-users text-[#3FB6E4] text-[22px] mb-4 block"></i>
+                    <p class="text-white text-[40px] lg:text-[52px] font-bold leading-none stat-num"
+                       th:text="${usersCount}">0</p>
+                    <p class="text-white/45 text-[11px] uppercase tracking-[0.2em] mt-3">Пользователей</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ ГАРАНТИЯ ОРИГИНАЛЬНОСТИ ═══ -->
+    <section class="border-b border-white/8">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <p class="text-[#3FB6E4] text-[11px] uppercase tracking-[0.4em] mb-4 font-medium">Только оригинал</p>
+                <h2 class="text-white text-[36px] lg:text-[52px] font-bold tracking-tight leading-tight mb-6">
+                    Гарантия подлинности<br>и качества
+                </h2>
+                <p class="text-white/55 text-[15px] leading-relaxed mb-8">
+                    Каждый товар проходит проверку модерации. Без подделок, без брака —
+                    только то, что прошло через нашу команду экспертов.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-[#3FB6E4]/10 border border-[#3FB6E4]/30 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-shield-alt text-[#3FB6E4] text-[14px]"></i>
+                        </div>
+                        <div>
+                            <p class="text-white text-[14px] font-medium mb-1">Проверка подлинности</p>
+                            <p class="text-white/45 text-[12.5px] leading-relaxed">Экспертная команда проверяет каждый товар перед публикацией</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-[#3FB6E4]/10 border border-[#3FB6E4]/30 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-undo text-[#3FB6E4] text-[14px]"></i>
+                        </div>
+                        <div>
+                            <p class="text-white text-[14px] font-medium mb-1">Возврат в течение 14 дней</p>
+                            <p class="text-white/45 text-[12.5px] leading-relaxed">Без объяснения причин — полная защита покупателя</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-[#3FB6E4]/10 border border-[#3FB6E4]/30 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-lock text-[#3FB6E4] text-[14px]"></i>
+                        </div>
+                        <div>
+                            <p class="text-white text-[14px] font-medium mb-1">Безопасная сделка</p>
+                            <p class="text-white/45 text-[12.5px] leading-relaxed">Деньги уходят продавцу только после подтверждения заказа</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Декоративный блок справа -->
+            <div class="relative aspect-square bg-gradient-to-br from-[#141414] to-[#0a0a0a] border border-white/8 overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-[#3FB6E4]/30 blur-3xl"></div>
+                        <i class="fas fa-certificate text-[#3FB6E4] text-[200px] relative"></i>
+                    </div>
+                </div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <p class="text-white/30 text-[10px] uppercase tracking-[0.3em] mb-2">Сертификат</p>
+                    <p class="text-white text-[15px] font-semibold">100% подтверждённое качество</p>
+                    <p class="text-white/45 text-[12px] mt-1">QR-код в каждой посылке подтверждает оригинал</p>
+                </div>
+                <div class="absolute top-6 right-6 px-3 py-1.5 bg-[#3FB6E4] text-black text-[11px] uppercase tracking-wider font-bold">
+                    Original
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ КАТЕГОРИИ ═══ -->
+    <section class="border-b border-white/8">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-20">
+            <p class="text-[#3FB6E4] text-[11px] uppercase tracking-[0.4em] mb-4 font-medium">Ассортимент</p>
+            <h2 class="text-white text-[32px] lg:text-[44px] font-bold tracking-tight leading-tight mb-12">
+                Категории на любой вкус
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <a th:each="cat, it : ${categories}" th:href="@{/catalog(categoryId=${cat.id})}"
+                   class="group aspect-square bg-[#141414] border border-white/8 hover:border-[#3FB6E4]/40 transition flex flex-col items-center justify-center gap-3 p-4">
+                    <i th:switch="${it.index % 6}"
+                       class="text-[#3FB6E4] text-[28px] group-hover:scale-110 transition">
+                        <span th:case="0" class="fas fa-shoe-prints"></span>
+                        <span th:case="1" class="fas fa-tshirt"></span>
+                        <span th:case="2" class="fas fa-clock"></span>
+                        <span th:case="3" class="fas fa-shopping-bag"></span>
+                        <span th:case="4" class="fas fa-glasses"></span>
+                        <span th:case="5" class="fas fa-mobile-alt"></span>
+                    </i>
+                    <span class="text-white text-[13px] font-medium text-center group-hover:text-[#3FB6E4] transition" th:text="${cat.name}">Категория</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ БРЕНДЫ (бесконечная лента) ═══ -->
+    <section th:if="${not #lists.isEmpty(brands)}" class="border-b border-white/8">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-20">
+            <p class="text-[#3FB6E4] text-[11px] uppercase tracking-[0.4em] mb-4 font-medium">Партнёры</p>
+            <h2 class="text-white text-[32px] lg:text-[44px] font-bold tracking-tight leading-tight mb-3">
+                Глобальный ассортимент
+            </h2>
+            <p class="text-white/45 text-[14px] mb-12">Сотрудничаем с ведущими мировыми и локальными брендами</p>
+        </div>
+        <div class="brand-marquee overflow-hidden border-t border-b border-white/8 bg-white/[0.02]">
+            <div class="brand-track flex items-center w-max">
+                <a th:each="br : ${brands}" th:href="@{/catalog(brandId=${br.id})}"
+                   class="flex items-center justify-center px-10 py-8 border-r border-white/8 min-w-[200px] group">
+                    <span class="text-white/55 text-[16px] font-bold tracking-wider uppercase group-hover:text-[#3FB6E4] transition whitespace-nowrap"
+                          th:text="${br.name}">Brand</span>
+                </a>
+                <!-- Дубликат для бесконечности -->
+                <a th:each="br : ${brands}" th:href="@{/catalog(brandId=${br.id})}"
+                   class="flex items-center justify-center px-10 py-8 border-r border-white/8 min-w-[200px] group">
+                    <span class="text-white/55 text-[16px] font-bold tracking-wider uppercase group-hover:text-[#3FB6E4] transition whitespace-nowrap"
+                          th:text="${br.name}">Brand</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ КАК МЫ РАБОТАЕМ (4 ШАГА) ═══ -->
+    <section class="border-b border-white/8">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-20">
+            <p class="text-[#3FB6E4] text-[11px] uppercase tracking-[0.4em] mb-4 font-medium">Процесс</p>
+            <h2 class="text-white text-[32px] lg:text-[44px] font-bold tracking-tight leading-tight mb-12">
+                Как мы работаем
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/8">
+                <div class="bg-[#0a0a0a] p-8 hover:bg-[#141414] transition relative">
+                    <span class="text-[#3FB6E4]/30 text-[80px] font-black absolute -top-2 right-4 leading-none">1</span>
+                    <i class="fas fa-search text-[#3FB6E4] text-[24px] mb-5 block relative"></i>
+                    <h3 class="text-white text-[16px] font-semibold mb-2 relative">Выберите товар</h3>
+                    <p class="text-white/45 text-[13px] leading-relaxed relative">Найдите нужный товар через поиск или каталог с десятками фильтров</p>
+                </div>
+                <div class="bg-[#0a0a0a] p-8 hover:bg-[#141414] transition relative">
+                    <span class="text-[#3FB6E4]/30 text-[80px] font-black absolute -top-2 right-4 leading-none">2</span>
+                    <i class="fas fa-shopping-cart text-[#3FB6E4] text-[24px] mb-5 block relative"></i>
+                    <h3 class="text-white text-[16px] font-semibold mb-2 relative">Оформите заказ</h3>
+                    <p class="text-white/45 text-[13px] leading-relaxed relative">Добавьте товар в корзину, выберите способ оплаты и доставки</p>
+                </div>
+                <div class="bg-[#0a0a0a] p-8 hover:bg-[#141414] transition relative">
+                    <span class="text-[#3FB6E4]/30 text-[80px] font-black absolute -top-2 right-4 leading-none">3</span>
+                    <i class="fas fa-shield-alt text-[#3FB6E4] text-[24px] mb-5 block relative"></i>
+                    <h3 class="text-white text-[16px] font-semibold mb-2 relative">Проверка модерации</h3>
+                    <p class="text-white/45 text-[13px] leading-relaxed relative">Команда проверяет подлинность и состояние товара перед отправкой</p>
+                </div>
+                <div class="bg-[#0a0a0a] p-8 hover:bg-[#141414] transition relative">
+                    <span class="text-[#3FB6E4]/30 text-[80px] font-black absolute -top-2 right-4 leading-none">4</span>
+                    <i class="fas fa-truck text-[#3FB6E4] text-[24px] mb-5 block relative"></i>
+                    <h3 class="text-white text-[16px] font-semibold mb-2 relative">Получите заказ</h3>
+                    <p class="text-white/45 text-[13px] leading-relaxed relative">Доставка курьером по России 2–5 рабочих дней, либо самовывоз</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ ПРЕИМУЩЕСТВА (3 БЛОКА) ═══ -->
+    <section class="border-b border-white/8">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-20">
+            <p class="text-[#3FB6E4] text-[11px] uppercase tracking-[0.4em] mb-4 font-medium">Почему мы</p>
+            <h2 class="text-white text-[32px] lg:text-[44px] font-bold tracking-tight leading-tight mb-12">
+                Преимущества платформы
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="p-8 bg-gradient-to-br from-[#141414] to-[#0a0a0a] border border-white/8 hover:border-[#3FB6E4]/40 transition group">
+                    <div class="w-14 h-14 bg-[#3FB6E4]/10 border border-[#3FB6E4]/30 flex items-center justify-center mb-6 group-hover:bg-[#3FB6E4]/20 transition">
+                        <i class="fas fa-bolt text-[#3FB6E4] text-[20px]"></i>
+                    </div>
+                    <h3 class="text-white text-[18px] font-bold mb-3">Быстрая доставка</h3>
+                    <p class="text-white/50 text-[13.5px] leading-relaxed">Заказы передаются в доставку в день оформления. Бесплатная доставка от 5 000 ₽.</p>
+                </div>
+                <div class="p-8 bg-gradient-to-br from-[#141414] to-[#0a0a0a] border border-white/8 hover:border-[#3FB6E4]/40 transition group">
+                    <div class="w-14 h-14 bg-[#3FB6E4]/10 border border-[#3FB6E4]/30 flex items-center justify-center mb-6 group-hover:bg-[#3FB6E4]/20 transition">
+                        <i class="fas fa-credit-card text-[#3FB6E4] text-[20px]"></i>
+                    </div>
+                    <h3 class="text-white text-[18px] font-bold mb-3">Удобная оплата</h3>
+                    <p class="text-white/50 text-[13.5px] leading-relaxed">Банковские карты, СБП, наличные при получении. Защищённая обработка платежей.</p>
+                </div>
+                <div class="p-8 bg-gradient-to-br from-[#141414] to-[#0a0a0a] border border-white/8 hover:border-[#3FB6E4]/40 transition group">
+                    <div class="w-14 h-14 bg-[#3FB6E4]/10 border border-[#3FB6E4]/30 flex items-center justify-center mb-6 group-hover:bg-[#3FB6E4]/20 transition">
+                        <i class="fas fa-headset text-[#3FB6E4] text-[20px]"></i>
+                    </div>
+                    <h3 class="text-white text-[18px] font-bold mb-3">Поддержка 24/7</h3>
+                    <p class="text-white/50 text-[13.5px] leading-relaxed">Команда поддержки решает любые вопросы по заказу, доставке и возврату.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA: КОНТАКТЫ + APP ═══ -->
+    <section>
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-3">
+
+            <!-- Скачать приложение -->
+            <div class="relative overflow-hidden p-10 bg-gradient-to-br from-[#3FB6E4]/20 to-[#0a0a0a] border border-[#3FB6E4]/30">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-[#3FB6E4]/20 rounded-full blur-3xl"></div>
+                <i class="fas fa-mobile-alt text-[#3FB6E4] text-[32px] mb-5 block relative"></i>
+                <h3 class="text-white text-[24px] lg:text-[28px] font-bold tracking-tight mb-2 relative">Приложение MARKETPLACE</h3>
+                <p class="text-white/55 text-[14px] mb-6 relative">Промокод <span class="text-[#3FB6E4] font-bold">APP4</span> — скидка 400 ₽ при первом заказе от 5 000 ₽</p>
+                <div class="flex flex-wrap gap-3 relative">
+                    <a href="#" class="px-5 py-3 bg-[#3FB6E4] text-black text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[#3FB6E4]/90 transition flex items-center gap-2">
+                        <i class="fab fa-apple text-[16px]"></i> App Store
+                    </a>
+                    <a href="#" class="px-5 py-3 border border-white/30 text-white text-[12px] uppercase tracking-[0.18em] hover:border-[#3FB6E4]/60 hover:text-[#3FB6E4] transition flex items-center gap-2">
+                        <i class="fab fa-google-play text-[14px]"></i> Google Play
+                    </a>
+                </div>
+            </div>
+
+            <!-- Связаться -->
+            <div class="p-10 bg-[#141414] border border-white/8">
+                <i class="fas fa-envelope text-[#3FB6E4] text-[32px] mb-5 block"></i>
+                <h3 class="text-white text-[24px] lg:text-[28px] font-bold tracking-tight mb-2">Свяжитесь с нами</h3>
+                <p class="text-white/55 text-[14px] mb-6">Команда поддержки готова ответить на любые вопросы</p>
+                <div class="space-y-3">
+                    <a href="mailto:support@marketplace.ru" class="flex items-center justify-between gap-4 px-4 py-3 border border-white/10 hover:border-[#3FB6E4]/40 transition group">
+                        <div class="flex items-center gap-3">
+                            <i class="far fa-envelope text-[#3FB6E4] text-[14px]"></i>
+                            <span class="text-white/85 text-[13px]">support@marketplace.ru</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-white/30 text-[12px] group-hover:text-[#3FB6E4] group-hover:translate-x-1 transition"></i>
+                    </a>
+                    <a href="/catalog" class="flex items-center justify-between gap-4 px-4 py-3 border border-white/10 hover:border-[#3FB6E4]/40 transition group">
+                        <div class="flex items-center gap-3">
+                            <i class="far fa-question-circle text-[#3FB6E4] text-[14px]"></i>
+                            <span class="text-white/85 text-[13px]">Справочный центр</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-white/30 text-[12px] group-hover:text-[#3FB6E4] group-hover:translate-x-1 transition"></i>
+                    </a>
+                    <a href="/auth" class="flex items-center justify-between gap-4 px-4 py-3 border border-white/10 hover:border-[#3FB6E4]/40 transition group">
+                        <div class="flex items-center gap-3">
+                            <i class="far fa-user text-[#3FB6E4] text-[14px]"></i>
+                            <span class="text-white/85 text-[13px]">Стать продавцом</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-white/30 text-[12px] group-hover:text-[#3FB6E4] group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
