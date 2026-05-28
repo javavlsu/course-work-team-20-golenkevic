@@ -78,30 +78,29 @@
         <!-- ═══ КАТЕГОРИИ (горизонтальный скролл) ═══ -->
         <div th:if="${categories != null}" class="border-t border-white/8">
             <div class="max-w-[1500px] mx-auto px-4 sm:px-6">
-                <div class="cat-scroll flex items-center gap-1 overflow-x-auto whitespace-nowrap h-11">
+                <div class="cat-scroll flex items-stretch gap-1 overflow-x-auto whitespace-nowrap h-11">
 
                     <!-- Дропдаун «Категории» -->
-                    <div class="relative group flex-shrink-0">
-                        <button class="flex items-center gap-2 text-white text-[12px] uppercase tracking-[0.18em] px-3 py-2 hover:text-[#3FB6E4] transition">
-                            <i class="fas fa-bars text-[10px]"></i>
-                            Категории
-                            <i class="fas fa-chevron-down text-[8px] opacity-60"></i>
+                    <div class="relative group flex-shrink-0 flex items-stretch">
+                        <button type="button" class="flex items-center gap-2 text-[#3FB6E4] text-[12px] uppercase tracking-[0.18em] px-3 leading-none hover:text-white transition whitespace-nowrap">
+                            <span>Категории</span>
+                            <i class="fas fa-chevron-down text-[10px] opacity-80"></i>
                         </button>
-                        <div class="absolute left-0 top-full hidden group-hover:block bg-[#0f0f0f] border border-white/10 min-w-[220px] py-2 z-50">
+                        <div class="absolute left-0 top-full hidden group-hover:block bg-[#0f0f0f] border border-white/10 min-w-[220px] py-2 z-50 shadow-xl">
                             <a th:each="cat : ${categories}" th:href="@{/catalog(categoryId=${cat.id})}"
                                th:text="${cat.name}"
                                class="block px-4 py-2 text-[12px] text-white/70 hover:text-[#3FB6E4] hover:bg-white/5 transition tracking-wide"></a>
                         </div>
                     </div>
 
-                    <span class="w-px h-4 bg-white/10 flex-shrink-0 mx-1"></span>
+                    <span class="w-px self-center h-4 bg-white/15 flex-shrink-0 mx-1"></span>
 
                     <!-- Категории-чипы -->
                     <a th:each="cat : ${categories}" th:href="@{/catalog(categoryId=${cat.id})}"
                        th:text="${cat.name}"
                        th:class="${selectedCategory != null and cat.id == selectedCategory}
-                            ? 'flex-shrink-0 text-[12px] uppercase tracking-[0.15em] text-[#3FB6E4] px-3 py-2 border-b-2 border-[#3FB6E4] relative -mb-px'
-                            : 'flex-shrink-0 text-[12px] uppercase tracking-[0.15em] text-white/65 hover:text-white px-3 py-2 transition'"></a>
+                            ? 'flex-shrink-0 flex items-center text-[12px] uppercase tracking-[0.15em] text-[#3FB6E4] px-3 border-b-2 border-[#3FB6E4] -mb-px'
+                            : 'flex-shrink-0 flex items-center text-[12px] uppercase tracking-[0.15em] text-white/65 hover:text-white px-3 transition'"></a>
                 </div>
             </div>
         </div>
