@@ -40,4 +40,13 @@ public class IndexController {
         model.addAttribute("usersCount", userRepository.count());
         return "about";
     }
+
+    @GetMapping("/authentication")
+    public String authentication(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("brands", brandRepository.findAll());
+        model.addAttribute("productsCount", productRepository.count());
+        model.addAttribute("brandsCount", brandRepository.count());
+        return "authentication";
+    }
 }
