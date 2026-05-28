@@ -2,68 +2,109 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header th:fragment="header" class="fixed top-0 left-0 right-0 z-50">
 
-    <!-- Top bar -->
+    <!-- ═══ TOP BAR ═══ -->
     <div class="bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
-        <nav aria-label="Основная навигация" class="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <nav aria-label="Основная навигация" class="max-w-[1500px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4 sm:gap-6">
 
-            <!-- Левая часть: бургер + ссылки -->
-            <div class="flex items-center gap-6 flex-1">
-                <button id="burger-btn" aria-label="Меню"
-                        class="lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] -ml-1.5">
-                    <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
-                    <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
-                    <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
-                </button>
-                <div class="hidden lg:flex items-center gap-6">
-                    <a href="/catalog" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Каталог</a>
-                    <a href="/brands" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Бренды</a>
-                    <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
-                        <a href="/seller/products" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Мои товары</a>
-                    </span>
-                    <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
-                        <a href="/seller/orders" class="text-[12px] text-white/60 hover:text-white uppercase tracking-[0.2em] transition">Заказы</a>
-                    </span>
-                </div>
-            </div>
+            <!-- Бургер (моб.) -->
+            <button id="burger-btn" aria-label="Меню"
+                    class="lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] -ml-1.5 flex-shrink-0">
+                <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
+                <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
+                <span class="burger-line w-5 h-px bg-white/85 transition-all duration-300"></span>
+            </button>
 
             <!-- Логотип -->
-            <a href="/" class="absolute left-1/2 -translate-x-1/2 text-white text-[14px] sm:text-[16px] lg:text-[18px] font-semibold tracking-[0.25em] sm:tracking-[0.3em] uppercase whitespace-nowrap">
-                MARKETPLACE
+            <a href="/" class="flex items-center flex-shrink-0">
+                <span class="text-white text-[16px] sm:text-[18px] font-bold tracking-[0.28em] uppercase">MARKETPLACE</span>
             </a>
 
-            <!-- Правая часть -->
-            <div class="flex items-center gap-3 sm:gap-5 flex-1 justify-end">
-                <div sec:authorize="isAuthenticated()" class="flex items-center gap-3 sm:gap-5">
-                    <a href="/cart" class="text-white/70 hover:text-white transition" aria-label="Корзина">
-                        <i class="fas fa-shopping-bag text-[16px] sm:text-[17px]"></i>
-                    </a>
-                    <a href="/profile" class="hidden sm:inline text-white/70 hover:text-white transition" aria-label="Профиль">
-                        <i class="fas fa-user text-[17px]"></i>
-                    </a>
-                    <a href="/orders" class="hidden md:inline text-white/70 hover:text-white transition" aria-label="Заказы">
-                        <i class="fas fa-receipt text-[16px]"></i>
-                    </a>
-                    <span sec:authorize="hasAnyAuthority('ROLE_moderator','ROLE_admin')">
-                        <a href="/moderation" class="hidden sm:inline text-white/70 hover:text-white transition" aria-label="Модерация">
-                            <i class="fas fa-shield-alt text-[16px]"></i>
-                        </a>
+            <!-- Поиск -->
+            <form action="/catalog" method="get" class="flex-1 max-w-2xl relative hidden md:block">
+                <input type="text" name="search"
+                       placeholder="nike cortez women"
+                       class="w-full bg-white/[0.04] border border-white/10 text-white text-[13px] pl-4 pr-12 py-2.5 focus:border-[#3FB6E4]/60 outline-none transition placeholder:text-white/30">
+                <button type="submit"
+                        class="absolute right-0 top-0 h-full px-4 text-white/55 hover:text-[#3FB6E4] transition"
+                        aria-label="Найти">
+                    <i class="fas fa-search text-[14px]"></i>
+                </button>
+            </form>
+
+            <!-- Поиск (моб. иконка) -->
+            <a href="/catalog" class="md:hidden ml-auto text-white/70 hover:text-white transition" aria-label="Поиск">
+                <i class="fas fa-search text-[16px]"></i>
+            </a>
+
+            <!-- Правая группа: онлайн-проверка / о нас / профиль / избранное -->
+            <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+
+                <a href="/catalog" class="hidden lg:flex items-center gap-2 text-white/80 hover:text-white transition group">
+                    <span class="w-8 h-8 flex items-center justify-center border border-white/15 group-hover:border-[#3FB6E4]/60 transition">
+                        <i class="fas fa-shield-alt text-[11px] text-[#3FB6E4]"></i>
                     </span>
-                    <span sec:authorize="hasAuthority('ROLE_admin')">
-                        <a href="/admin/dashboard" class="hidden sm:inline text-white/70 hover:text-white transition" aria-label="Админ">
-                            <i class="fas fa-sliders-h text-[16px]"></i>
-                        </a>
+                    <span class="text-[12px] uppercase tracking-[0.15em]">Онлайн-проверка</span>
+                </a>
+
+                <a href="/brands" class="hidden lg:flex items-center gap-2 text-white/80 hover:text-white transition group">
+                    <span class="w-8 h-8 flex items-center justify-center border border-white/15 group-hover:border-[#3FB6E4]/60 transition">
+                        <i class="fas fa-info text-[11px] text-[#3FB6E4]"></i>
                     </span>
-                    <form th:action="@{/profile/logout}" method="post" class="hidden sm:inline">
-                        <button type="submit" class="text-white/30 hover:text-red-400 transition" aria-label="Выйти">
-                            <i class="fas fa-sign-out-alt text-[14px]"></i>
-                        </button>
-                    </form>
+                    <span class="text-[12px] uppercase tracking-[0.15em]">О нас</span>
+                </a>
+
+                <div sec:authorize="isAuthenticated()" class="flex items-center gap-3 sm:gap-4">
+                    <a href="/profile" class="text-white/70 hover:text-[#3FB6E4] transition" aria-label="Профиль">
+                        <i class="far fa-user text-[17px]"></i>
+                    </a>
+                    <a href="/cart" class="text-white/70 hover:text-[#3FB6E4] transition relative" aria-label="Корзина">
+                        <i class="fas fa-shopping-bag text-[16px]"></i>
+                    </a>
+                    <a href="/favorites" class="text-white/70 hover:text-[#3FB6E4] transition" aria-label="Избранное">
+                        <i class="far fa-heart text-[17px]"></i>
+                    </a>
                 </div>
-                <div sec:authorize="isAnonymous()">
-                    <a href="/auth" class="text-[12px] text-white/70 hover:text-white uppercase tracking-[0.2em] transition">Войти</a>
+                <div sec:authorize="isAnonymous()" class="flex items-center gap-4">
+                    <a href="/auth" class="text-white/70 hover:text-[#3FB6E4] transition" aria-label="Войти">
+                        <i class="far fa-user text-[17px]"></i>
+                    </a>
+                    <a href="/auth" class="text-white/70 hover:text-[#3FB6E4] transition" aria-label="Избранное">
+                        <i class="far fa-heart text-[17px]"></i>
+                    </a>
                 </div>
             </div>
         </nav>
+
+        <!-- ═══ КАТЕГОРИИ (горизонтальный скролл) ═══ -->
+        <div th:if="${categories != null}" class="border-t border-white/8">
+            <div class="max-w-[1500px] mx-auto px-4 sm:px-6">
+                <div class="cat-scroll flex items-center gap-1 overflow-x-auto whitespace-nowrap h-11">
+
+                    <!-- Дропдаун «Категории» -->
+                    <div class="relative group flex-shrink-0">
+                        <button class="flex items-center gap-2 text-white text-[12px] uppercase tracking-[0.18em] px-3 py-2 hover:text-[#3FB6E4] transition">
+                            <i class="fas fa-bars text-[10px]"></i>
+                            Категории
+                            <i class="fas fa-chevron-down text-[8px] opacity-60"></i>
+                        </button>
+                        <div class="absolute left-0 top-full hidden group-hover:block bg-[#0f0f0f] border border-white/10 min-w-[220px] py-2 z-50">
+                            <a th:each="cat : ${categories}" th:href="@{/catalog(categoryId=${cat.id})}"
+                               th:text="${cat.name}"
+                               class="block px-4 py-2 text-[12px] text-white/70 hover:text-[#3FB6E4] hover:bg-white/5 transition tracking-wide"></a>
+                        </div>
+                    </div>
+
+                    <span class="w-px h-4 bg-white/10 flex-shrink-0 mx-1"></span>
+
+                    <!-- Категории-чипы -->
+                    <a th:each="cat : ${categories}" th:href="@{/catalog(categoryId=${cat.id})}"
+                       th:text="${cat.name}"
+                       th:class="${selectedCategory != null and cat.id == selectedCategory}
+                            ? 'flex-shrink-0 text-[12px] uppercase tracking-[0.15em] text-[#3FB6E4] px-3 py-2 border-b-2 border-[#3FB6E4] relative -mb-px'
+                            : 'flex-shrink-0 text-[12px] uppercase tracking-[0.15em] text-white/65 hover:text-white px-3 py-2 transition'"></a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ═══ МОБИЛЬНОЕ МЕНЮ ═══ -->
@@ -73,7 +114,6 @@
     <aside id="mobile-menu"
            class="fixed top-0 left-0 bottom-0 w-[85%] max-w-sm bg-[#0a0a0a] border-r border-white/10 -translate-x-full transition-transform duration-300 ease-out lg:hidden z-50 overflow-y-auto">
 
-        <!-- Шапка меню -->
         <div class="flex items-center justify-between p-5 border-b border-white/10">
             <span class="text-white text-[14px] font-semibold tracking-[0.25em] uppercase">Marketplace</span>
             <button id="close-menu" aria-label="Закрыть"
@@ -82,7 +122,6 @@
             </button>
         </div>
 
-        <!-- Профиль (если авторизован) -->
         <div sec:authorize="isAuthenticated()" class="p-5 border-b border-white/10 flex items-center gap-3">
             <div class="w-10 h-10 bg-[#161616] rounded-full flex items-center justify-center">
                 <i class="fas fa-user text-white/30 text-[14px]"></i>
@@ -95,7 +134,6 @@
             </div>
         </div>
 
-        <!-- Навигация -->
         <nav aria-label="Мобильное меню" class="py-4">
             <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2">Магазин</p>
             <a href="/" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
@@ -107,8 +145,10 @@
             <a href="/brands" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
                 <i class="fas fa-tag text-white/30 w-5 text-[14px]"></i> Бренды
             </a>
+            <a href="/favorites" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
+                <i class="far fa-heart text-white/30 w-5 text-[14px]"></i> Избранное
+            </a>
 
-            <!-- Покупатель -->
             <div sec:authorize="isAuthenticated()">
                 <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Личный кабинет</p>
                 <a href="/cart" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
@@ -122,7 +162,6 @@
                 </a>
             </div>
 
-            <!-- Продавец -->
             <span sec:authorize="hasAnyAuthority('ROLE_seller','ROLE_admin')">
                 <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Продавец</p>
                 <a href="/seller/products" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
@@ -136,7 +175,6 @@
                 </a>
             </span>
 
-            <!-- Модератор -->
             <span sec:authorize="hasAnyAuthority('ROLE_moderator','ROLE_admin')">
                 <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Модерация</p>
                 <a href="/moderation" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
@@ -144,7 +182,6 @@
                 </a>
             </span>
 
-            <!-- Админ -->
             <span sec:authorize="hasAuthority('ROLE_admin')">
                 <p class="text-white/25 text-[10px] uppercase tracking-[0.25em] px-5 py-2 mt-4">Администрирование</p>
                 <a href="/admin/dashboard" class="flex items-center gap-3 px-5 py-3 text-white/75 text-[13px] hover:bg-white/5 hover:text-white transition">
@@ -155,7 +192,6 @@
                 </a>
             </span>
 
-            <!-- Выход / Вход -->
             <div sec:authorize="isAuthenticated()" class="mt-4 px-5 pt-4 border-t border-white/8">
                 <form th:action="@{/profile/logout}" method="post">
                     <button type="submit"
@@ -166,7 +202,7 @@
             </div>
             <div sec:authorize="isAnonymous()" class="mt-4 px-5 pt-4 border-t border-white/8">
                 <a href="/auth"
-                   class="block w-full py-3 bg-white text-black text-center text-[12px] uppercase tracking-[0.2em] hover:bg-white/90 transition">
+                   class="block w-full py-3 bg-[#3FB6E4] text-black text-center text-[12px] uppercase tracking-[0.2em] hover:bg-[#3FB6E4]/90 transition">
                     Войти / Регистрация
                 </a>
             </div>
@@ -180,6 +216,8 @@
         #burger-btn.open .burger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
         #burger-btn.open .burger-line:nth-child(2) { opacity: 0; }
         #burger-btn.open .burger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-scroll { scrollbar-width: none; }
     </style>
 
     <script>

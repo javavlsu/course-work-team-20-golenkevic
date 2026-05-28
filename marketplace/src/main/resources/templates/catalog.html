@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,258 +7,571 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e5e5e5; }
-        .filter-chips::-webkit-scrollbar { display: none; }
-        .filter-chips { scrollbar-width: none; }
+        .filter-section summary::-webkit-details-marker { display: none; }
+        .filter-section summary { list-style: none; cursor: pointer; }
+        .filter-section[open] summary .chev { transform: rotate(180deg); }
+        .chev { transition: transform 0.25s; }
+        .heart-btn:hover svg { fill: #ff4d6d; stroke: #ff4d6d; }
+        .heart-btn.active svg { fill: #ff4d6d; stroke: #ff4d6d; }
+
+        /* ─── Кастомный чекбокс ─── */
+        .cb { position: relative; display: inline-block; width: 16px; height: 16px; flex-shrink: 0; }
+        .cb input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .cb .box { display: block; width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.25); background: transparent; transition: all 0.15s; }
+        .cb input:checked + .box { background: #3FB6E4; border-color: #3FB6E4; }
+        .cb input:checked + .box::after {
+            content: ''; position: absolute; left: 5px; top: 2px;
+            width: 4px; height: 8px; border: solid #0a0a0a;
+            border-width: 0 2px 2px 0; transform: rotate(45deg);
+        }
+        .cb-group:hover .box { border-color: rgba(255,255,255,0.5); }
+
+        /* ─── Дуальный слайдер цены ─── */
+        .range-track { position: relative; height: 28px; }
+        .range-track .rail { position: absolute; left: 0; right: 0; top: 50%; height: 3px; background: rgba(255,255,255,0.1); transform: translateY(-50%); border-radius: 2px; }
+        .range-track .fill { position: absolute; top: 50%; height: 3px; background: #3FB6E4; transform: translateY(-50%); border-radius: 2px; }
+        .range-track input[type=range] {
+            position: absolute; left: 0; right: 0; top: 0;
+            width: 100%; height: 28px; margin: 0;
+            -webkit-appearance: none; appearance: none;
+            background: transparent;
+            pointer-events: none;
+        }
+        .range-track input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; pointer-events: auto;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: #fff; border: 2px solid #3FB6E4;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+        .range-track input[type=range]::-moz-range-thumb {
+            pointer-events: auto;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: #fff; border: 2px solid #3FB6E4;
+            cursor: pointer;
+        }
+        .range-track input[type=range]::-webkit-slider-runnable-track { background: transparent; }
+        .range-track input[type=range]::-moz-range-track { background: transparent; }
+
+        /* Лоадер контента */
+        #catalog-content { transition: opacity 0.2s; }
+        #catalog-content.loading { opacity: 0.4; pointer-events: none; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#0a0a0a]">
 <div th:replace="~{fragments/header :: header}"></div>
-<main class="flex-1 pt-16">
 
-<!-- ═══ ФИЛЬТР-БАР (sticky) ═══ -->
-<div class="sticky top-16 z-30 bg-[#0a0a0a] border-b border-white/10">
-    <form method="get" action="/catalog" id="filterForm">
+<main class="flex-1 pt-[108px]">
 
-        <!-- Строка 1: поиск + цена + кнопка -->
-        <div class="max-w-[1400px] mx-auto px-6 pt-3 pb-2 flex flex-wrap items-center gap-2">
-            <!-- Поиск -->
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-white/25 text-[11px]"></i>
-                <input type="text" name="search" th:value="${search}"
-                       placeholder="Поиск..."
-                       class="bg-white/5 border border-white/10 text-white text-[13px] pl-8 pr-4 py-2 w-52 focus:border-white/30 outline-none transition placeholder:text-white/25">
-            </div>
-            <!-- Цена от — до -->
-            <div class="flex items-center gap-1">
-                <input type="number" name="minPrice" th:value="${minPrice}" step="0.01" placeholder="от ₽"
-                       class="bg-white/5 border border-white/10 text-white text-[13px] px-3 py-2 w-24 focus:border-white/30 outline-none transition placeholder:text-white/25">
-                <span class="text-white/20 text-[12px]">—</span>
-                <input type="number" name="maxPrice" th:value="${maxPrice}" step="0.01" placeholder="до ₽"
-                       class="bg-white/5 border border-white/10 text-white text-[13px] px-3 py-2 w-24 focus:border-white/30 outline-none transition placeholder:text-white/25">
-            </div>
-            <!-- Применить -->
-            <button type="submit"
-                    class="px-5 py-2 bg-white text-black text-[11px] uppercase tracking-[0.15em] hover:bg-white/90 transition">
-                Найти
-            </button>
-            <!-- Сбросить -->
-            <a href="/catalog"
-               th:if="${search != null or selectedCategory != null or selectedBrand != null or selectedCondition != null or selectedGender != null or selectedSeason != null or selectedColor != null or selectedMaterial != null or selectedSize != null or minPrice != null or maxPrice != null}"
-               class="flex items-center gap-1.5 text-white/35 text-[11px] uppercase tracking-[0.1em] hover:text-white/70 transition">
-                <i class="fas fa-times text-[10px]"></i> Сбросить
-            </a>
-        </div>
-
-        <!-- Строка 2: категории + бренд + пол + состояние + сезон (горизонтальный скролл) -->
-        <div class="filter-chips overflow-x-auto">
-            <div class="max-w-[1400px] mx-auto px-6 pb-3 flex items-center gap-1.5 whitespace-nowrap">
-
-                <!-- Категория -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Категория</span>
-                <button type="submit" name="categoryId" value=""
-                        th:class="${selectedCategory == null}
-                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white text-black'
-                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
-                    Все
-                </button>
-                <button th:each="cat : ${categories}"
-                        type="submit" th:name="categoryId" th:value="${cat.id}" th:text="${cat.name}"
-                        th:class="${cat.id == selectedCategory}
-                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white text-black'
-                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
-                </button>
-
-                <span class="w-px h-4 bg-white/15 mx-2"></span>
-
-                <!-- Пол -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Пол</span>
-                <button type="submit" name="gender" value=""
-                        th:class="${selectedGender == null}
-                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
-                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
-                    Все
-                </button>
-                <button th:each="g : ${genders}" type="submit" th:name="gender" th:value="${g}" th:text="${g}"
-                        th:class="${g == selectedGender}
-                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
-                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
-                </button>
-
-                <span class="w-px h-4 bg-white/15 mx-2"></span>
-
-                <!-- Состояние -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Состояние</span>
-                <button type="submit" name="condition" value=""
-                        th:class="${selectedCondition == null}
-                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
-                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
-                    Любое
-                </button>
-                <button th:each="c : ${conditions}"
-                        type="submit" th:name="condition" th:value="${c}" th:text="${c}"
-                        th:class="${c == selectedCondition}
-                            ? 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] bg-white/15 text-white border border-white/30'
-                            : 'px-3.5 py-1.5 text-[11px] uppercase tracking-[0.1em] border border-white/15 text-white/55 hover:border-white/40 hover:text-white/80 transition'">
-                </button>
-
-            </div>
-        </div>
-
-        <!-- Строка 3: бренд + сезон + цвет + материал + размер -->
-        <div class="filter-chips overflow-x-auto border-t border-white/5">
-            <div class="max-w-[1400px] mx-auto px-6 py-3 flex items-center gap-1.5 whitespace-nowrap">
-                <!-- Бренд -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Бренд</span>
-                <select name="brandId" onchange="this.form.submit()"
-                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
-                    <option value="">Любой</option>
-                    <option th:each="br : ${brands}" th:value="${br.id}" th:text="${br.name}" th:selected="${br.id == selectedBrand}"></option>
-                </select>
-
-                <span class="w-px h-4 bg-white/15 mx-2"></span>
-
-                <!-- Сезон -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Сезон</span>
-                <select name="season" onchange="this.form.submit()"
-                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
-                    <option value="">Любой</option>
-                    <option th:each="s : ${seasons}" th:value="${s}" th:text="${s}" th:selected="${s == selectedSeason}"></option>
-                </select>
-
-                <span class="w-px h-4 bg-white/15 mx-2"></span>
-
-                <!-- Цвет -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Цвет</span>
-                <select name="color" onchange="this.form.submit()"
-                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
-                    <option value="">Любой</option>
-                    <option th:each="c : ${availableColors}" th:value="${c}" th:text="${c}" th:selected="${c == selectedColor}"></option>
-                </select>
-
-                <span class="w-px h-4 bg-white/15 mx-2"></span>
-
-                <!-- Материал -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Материал</span>
-                <select name="material" onchange="this.form.submit()"
-                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
-                    <option value="">Любой</option>
-                    <option th:each="m : ${availableMaterials}" th:value="${m}" th:text="${m}" th:selected="${m == selectedMaterial}"></option>
-                </select>
-
-                <span class="w-px h-4 bg-white/15 mx-2"></span>
-
-                <!-- Размер -->
-                <span class="text-white/25 text-[10px] uppercase tracking-[0.2em] mr-2">Размер</span>
-                <select name="size" onchange="this.form.submit()"
-                        class="bg-[#1a1a1a] border border-white/10 text-white/70 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
-                    <option value="">Любой</option>
-                    <option th:each="sz : ${availableSizes}" th:value="${sz}" th:text="${sz}" th:selected="${sz == selectedSize}"></option>
-                </select>
-            </div>
-        </div>
-    </form>
-</div>
-
-<!-- ═══ КАТАЛОГ ═══ -->
-<section class="max-w-[1400px] mx-auto px-6 py-10">
-
-    <!-- Заголовок + счётчик + сортировка -->
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-8">
-        <div class="flex items-baseline gap-3">
-            <h1 class="text-white text-[13px] uppercase tracking-[0.25em] font-medium">Каталог</h1>
-            <p class="text-white/30 text-[12px]" th:text="${totalItems} + ' товаров'"></p>
-        </div>
-        <form method="get" action="/catalog" id="sortForm" class="flex items-center gap-2">
-            <input type="hidden" name="search" th:value="${search}"/>
-            <input type="hidden" name="categoryId" th:value="${selectedCategory}"/>
-            <input type="hidden" name="brandId" th:value="${selectedBrand}"/>
-            <input type="hidden" name="condition" th:value="${selectedCondition}"/>
-            <input type="hidden" name="gender" th:value="${selectedGender}"/>
-            <input type="hidden" name="season" th:value="${selectedSeason}"/>
-            <input type="hidden" name="color" th:value="${selectedColor}"/>
-            <input type="hidden" name="material" th:value="${selectedMaterial}"/>
-            <input type="hidden" name="size" th:value="${selectedSize}"/>
-            <input type="hidden" name="minPrice" th:value="${minPrice}"/>
-            <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
-            <label for="sort-select" class="text-white/30 text-[10px] uppercase tracking-[0.2em]">Сортировка:</label>
-            <select id="sort-select" name="sort" onchange="document.getElementById('sortForm').submit()"
-                    class="bg-[#1a1a1a] border border-white/10 text-white/80 text-[12px] px-3 py-1.5 focus:border-white/30 outline-none transition">
-                <option value="createdAt" th:selected="${currentSort == 'createdAt'}">Сначала новые</option>
-                <option value="priceAsc" th:selected="${currentSort == 'priceAsc'}">Цена: дешевле</option>
-                <option value="priceDesc" th:selected="${currentSort == 'priceDesc'}">Цена: дороже</option>
-                <option value="title" th:selected="${currentSort == 'title'}">По названию</option>
-            </select>
-        </form>
+    <!-- ═══ ХЛЕБНЫЕ КРОШКИ ═══ -->
+    <div class="max-w-[1500px] mx-auto px-4 sm:px-6 pt-6">
+        <nav aria-label="breadcrumb" class="text-[11px] uppercase tracking-[0.18em] text-white/35">
+            <a href="/" class="hover:text-white/70 transition">Главная</a>
+            <span class="mx-1.5 text-white/20">/</span>
+            <a href="/catalog" class="hover:text-white/70 transition">Каталог</a>
+            <th:block th:if="${selectedCategory != null}">
+                <span class="mx-1.5 text-white/20">/</span>
+                <span class="text-white/70">
+                    <th:block th:each="cat : ${categories}" th:if="${cat.id == selectedCategory}" th:text="${cat.name}"></th:block>
+                </span>
+            </th:block>
+            <th:block th:if="${search != null}">
+                <span class="mx-1.5 text-white/20">/</span>
+                <span class="text-white/70" th:text="'«' + ${search} + '»'"></span>
+            </th:block>
+        </nav>
     </div>
 
-    <!-- Пустой результат -->
-    <div th:if="${#lists.isEmpty(products.content)}" class="py-24 text-center">
-        <i class="fas fa-search text-white/10 text-5xl mb-6"></i>
-        <p class="text-white/30 text-[13px] uppercase tracking-[0.2em]">Ничего не найдено</p>
-        <a href="/catalog" class="mt-6 inline-block text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white/70 transition">Сбросить фильтры</a>
+    <!-- ═══ ЗАГОЛОВОК ═══ -->
+    <div class="max-w-[1500px] mx-auto px-4 sm:px-6 mt-4">
+        <h1 class="text-white text-3xl sm:text-4xl font-bold tracking-tight">
+            <th:block th:if="${selectedCategory != null}">
+                <th:block th:each="cat : ${categories}" th:if="${cat.id == selectedCategory}" th:text="${cat.name}"></th:block>
+            </th:block>
+            <th:block th:if="${selectedCategory == null and search != null}" th:text="'Поиск: ' + ${search}"></th:block>
+            <th:block th:if="${selectedCategory == null and search == null}">Каталог</th:block>
+        </h1>
+        <p id="total-items" class="text-white/35 text-[12px] mt-2 uppercase tracking-[0.15em]" th:text="${totalItems} + ' товаров'">0 товаров</p>
     </div>
 
-    <!-- Адаптивная сетка -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-        <a th:each="p : ${products}" th:href="@{'/product/' + ${p.id}}" class="group block">
-            <div class="aspect-[3/4] bg-[#161616] overflow-hidden relative">
-                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt=""
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
-                <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
-                    <i class="fas fa-image text-white/10 text-4xl"></i>
-                </div>
+    <!-- ═══ СЕТКА: САЙДБАР + КАТАЛОГ ═══ -->
+    <section class="max-w-[1500px] mx-auto px-4 sm:px-6 py-8 flex gap-8">
 
-                <!-- Бейджи -->
-                <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
-                    <span th:if="${p.discountPercent != null}"
-                          class="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1"
-                          th:text="'-' + ${p.discountPercent} + '%'"></span>
-                    <span th:if="${p.isNew and p.discountPercent == null}"
-                          class="bg-emerald-400 text-black text-[10px] font-bold uppercase tracking-wider px-2 py-1">
-                        New
-                    </span>
-                </div>
+        <!-- ───── ЛЕВЫЙ САЙДБАР: ФИЛЬТРЫ ───── -->
+        <aside class="w-[240px] flex-shrink-0 hidden lg:block">
+            <form method="get" action="/catalog" id="filterForm" class="space-y-1">
 
-                <!-- Градиентный оверлей -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
-                <!-- Информация поверх фото -->
-                <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                    <p class="text-white/55 text-[10px] uppercase tracking-[0.2em] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                       th:text="${p.categoryName}"></p>
-                    <p class="text-white text-[13px] leading-snug line-clamp-2 mb-2" th:text="${p.title}"></p>
-                    <div class="flex items-end justify-between gap-2">
-                        <div class="flex flex-col">
-                            <span th:if="${p.oldPrice != null and p.discountPercent != null}"
-                                  class="text-white/35 text-[11px] line-through" th:text="${p.oldPrice} + ' ₽'"></span>
-                            <p th:classappend="${p.discountPercent != null} ? 'text-red-400 text-[15px] font-bold' : 'text-white text-[15px] font-semibold'"
-                               th:text="${p.price} + ' ₽'"></p>
+                <input type="hidden" name="categoryId" th:value="${selectedCategory}"/>
+                <input type="hidden" name="search" th:value="${search}"/>
+                <input type="hidden" name="sort" id="sort-hidden" th:value="${currentSort}"/>
+
+                <!-- ━ Бренды ━ -->
+                <details class="filter-section border-b border-white/8 py-4" open>
+                    <summary class="flex items-center justify-between text-white text-[13px] font-semibold uppercase tracking-[0.15em]">
+                        Бренды
+                        <i class="fas fa-chevron-down chev text-[10px] text-white/40"></i>
+                    </summary>
+                    <div class="mt-3 space-y-2 max-h-60 overflow-y-auto pr-1">
+                        <label class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="brandId" value="" th:checked="${selectedBrand == null}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]">Все бренды</span>
+                        </label>
+                        <label th:each="br : ${brands}" class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="brandId" th:value="${br.id}" th:checked="${br.id == selectedBrand}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span th:text="${br.name}" class="text-white/65 text-[12.5px] truncate">Бренд</span>
+                        </label>
+                    </div>
+                </details>
+
+                <!-- ━ Пол и возраст (русские лейблы) ━ -->
+                <details class="filter-section border-b border-white/8 py-4" open>
+                    <summary class="flex items-center justify-between text-white text-[13px] font-semibold uppercase tracking-[0.15em]">
+                        Пол и возраст
+                        <i class="fas fa-chevron-down chev text-[10px] text-white/40"></i>
+                    </summary>
+                    <div class="mt-3 space-y-2">
+                        <label class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="gender" value="" th:checked="${selectedGender == null}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]">Любой</span>
+                        </label>
+                        <label th:each="g : ${genders}" class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="gender" th:value="${g}" th:checked="${g == selectedGender}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]"
+                                  th:text="${g.name() == 'MALE' ? 'Мужской' : (g.name() == 'FEMALE' ? 'Женский' : 'Унисекс')}">Пол</span>
+                        </label>
+                    </div>
+                </details>
+
+                <!-- ━ Размер (в стиле списка с чекбоксами) ━ -->
+                <details class="filter-section border-b border-white/8 py-4" th:if="${availableSizes != null and not #lists.isEmpty(availableSizes)}" open>
+                    <summary class="flex items-center justify-between text-white text-[13px] font-semibold uppercase tracking-[0.15em]">
+                        Размер
+                        <i class="fas fa-chevron-down chev text-[10px] text-white/40"></i>
+                    </summary>
+                    <div class="mt-3 space-y-2 max-h-60 overflow-y-auto pr-1">
+                        <label class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="size" value="" th:checked="${selectedSize == null}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]">Любой</span>
+                        </label>
+                        <label th:each="sz : ${availableSizes}" class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="size" th:value="${sz}" th:checked="${sz == selectedSize}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span th:text="${sz}" class="text-white/65 text-[12.5px]">Размер</span>
+                        </label>
+                    </div>
+                </details>
+
+                <!-- ━ Состояние (русские лейблы) ━ -->
+                <details class="filter-section border-b border-white/8 py-4">
+                    <summary class="flex items-center justify-between text-white text-[13px] font-semibold uppercase tracking-[0.15em]">
+                        Состояние
+                        <i class="fas fa-chevron-down chev text-[10px] text-white/40"></i>
+                    </summary>
+                    <div class="mt-3 space-y-2">
+                        <label class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="condition" value="" th:checked="${selectedCondition == null}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]">Любое</span>
+                        </label>
+                        <label th:each="c : ${conditions}" class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="condition" th:value="${c}" th:checked="${c == selectedCondition}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]"
+                                  th:text="${c.name() == 'NEW' ? 'Новое' : (c.name() == 'USED' ? 'Б/у' : 'Винтаж')}">Состояние</span>
+                        </label>
+                    </div>
+                </details>
+
+                <!-- ━ Цвет ━ -->
+                <details class="filter-section border-b border-white/8 py-4" th:if="${availableColors != null and not #lists.isEmpty(availableColors)}">
+                    <summary class="flex items-center justify-between text-white text-[13px] font-semibold uppercase tracking-[0.15em]">
+                        Цвет
+                        <i class="fas fa-chevron-down chev text-[10px] text-white/40"></i>
+                    </summary>
+                    <div class="mt-3 space-y-2 max-h-48 overflow-y-auto pr-1">
+                        <label class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="color" value="" th:checked="${selectedColor == null}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span class="text-white/65 text-[12.5px]">Любой</span>
+                        </label>
+                        <label th:each="col : ${availableColors}" class="flex items-center gap-2.5 cursor-pointer cb-group">
+                            <span class="cb">
+                                <input type="radio" name="color" th:value="${col}" th:checked="${col == selectedColor}"/>
+                                <span class="box"></span>
+                            </span>
+                            <span th:text="${col}" class="text-white/65 text-[12.5px] truncate">Цвет</span>
+                        </label>
+                    </div>
+                </details>
+
+                <!-- ━ Цена (двойной слайдер) ━ -->
+                <details class="filter-section border-b border-white/8 py-4" open>
+                    <summary class="flex items-center justify-between text-white text-[13px] font-semibold uppercase tracking-[0.15em]">
+                        Цена
+                        <i class="fas fa-chevron-down chev text-[10px] text-white/40"></i>
+                    </summary>
+                    <div class="mt-4">
+                        <!-- Числовые инпуты -->
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex-1 relative">
+                                <input type="number" id="priceMinInput" name="minPrice" th:value="${minPrice}"
+                                       min="0" max="200000" step="100" placeholder="0"
+                                       class="w-full bg-white/[0.04] border border-white/10 text-white text-[12px] pl-2.5 pr-6 py-2 focus:border-[#3FB6E4]/60 outline-none transition placeholder:text-white/30">
+                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 text-[11px]">₽</span>
+                            </div>
+                            <span class="text-white/25 text-[12px]">—</span>
+                            <div class="flex-1 relative">
+                                <input type="number" id="priceMaxInput" name="maxPrice" th:value="${maxPrice}"
+                                       min="0" max="200000" step="100" placeholder="∞"
+                                       class="w-full bg-white/[0.04] border border-white/10 text-white text-[12px] pl-2.5 pr-6 py-2 focus:border-[#3FB6E4]/60 outline-none transition placeholder:text-white/30">
+                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 text-[11px]">₽</span>
+                            </div>
                         </div>
-                        <span class="text-yellow-400/80 text-[11px] flex items-center gap-1" th:if="${p.averageRating != null}">
-                            <i class="fas fa-star text-[9px]"></i>
-                            <span th:text="${#numbers.formatDecimal(p.averageRating, 1, 1)}"></span>
-                        </span>
+
+                        <!-- Двойной слайдер -->
+                        <div class="range-track" data-min="0" data-max="200000">
+                            <div class="rail"></div>
+                            <div class="fill" id="priceFill"></div>
+                            <input type="range" id="priceMinRange" min="0" max="200000" step="100" value="0">
+                            <input type="range" id="priceMaxRange" min="0" max="200000" step="100" value="200000">
+                        </div>
+                        <div class="flex justify-between text-white/30 text-[10px] uppercase tracking-wider mt-1">
+                            <span>0 ₽</span>
+                            <span>200 000 ₽</span>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Сбросить -->
+                <div th:if="${search != null or selectedCategory != null or selectedBrand != null or selectedCondition != null or selectedGender != null or selectedColor != null or selectedSize != null or minPrice != null or maxPrice != null}"
+                     class="pt-4">
+                    <a href="/catalog" id="resetFilters"
+                       class="flex items-center justify-center gap-2 w-full py-2.5 border border-white/15 text-white/55 text-[11px] uppercase tracking-[0.15em] hover:border-white/40 hover:text-white transition">
+                        <i class="fas fa-times text-[10px]"></i> Сбросить фильтры
+                    </a>
+                </div>
+            </form>
+        </aside>
+
+        <!-- ───── ПРАВЫЙ БЛОК: СОРТИРОВКА + СЕТКА (динамическое содержимое) ───── -->
+        <div class="flex-1 min-w-0">
+            <div id="catalog-content">
+
+                <!-- Сортировка -->
+                <div class="flex items-center justify-end gap-3 mb-6">
+                    <label for="sort-select" class="text-white/35 text-[11px] uppercase tracking-[0.18em]">Сортировать по:</label>
+                    <div class="relative">
+                        <select id="sort-select"
+                                class="appearance-none bg-[#141414] border border-white/10 text-white text-[12px] pl-3 pr-9 py-2 focus:border-[#3FB6E4]/60 outline-none transition cursor-pointer">
+                            <option value="createdAt" th:selected="${currentSort == 'createdAt'}">По умолчанию</option>
+                            <option value="priceAsc" th:selected="${currentSort == 'priceAsc'}">Цена: дешевле</option>
+                            <option value="priceDesc" th:selected="${currentSort == 'priceDesc'}">Цена: дороже</option>
+                            <option value="title" th:selected="${currentSort == 'title'}">По названию</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-white/40 text-[9px] pointer-events-none"></i>
                     </div>
                 </div>
+
+                <!-- Пустой результат -->
+                <div th:if="${#lists.isEmpty(products.content)}" class="py-24 text-center">
+                    <i class="fas fa-search text-white/10 text-5xl mb-6"></i>
+                    <p class="text-white/30 text-[13px] uppercase tracking-[0.2em]">Ничего не найдено</p>
+                    <a href="/catalog" class="mt-6 inline-block text-white/40 text-[12px] uppercase tracking-[0.15em] hover:text-white/70 transition">Сбросить фильтры</a>
+                </div>
+
+                <!-- Сетка карточек -->
+                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4">
+                    <article th:each="p : ${products}" class="group relative">
+
+                        <form sec:authorize="isAuthenticated()" th:action="@{'/favorites/add/' + ${p.id}}" method="post"
+                              class="absolute top-2.5 right-2.5 z-10">
+                            <button type="submit"
+                                    class="heart-btn w-8 h-8 flex items-center justify-center bg-[#0a0a0a]/60 backdrop-blur-sm hover:bg-[#0a0a0a]/80 transition"
+                                    aria-label="В избранное">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                        </form>
+                        <a sec:authorize="isAnonymous()" href="/auth"
+                           class="absolute top-2.5 right-2.5 z-10 heart-btn w-8 h-8 flex items-center justify-center bg-[#0a0a0a]/60 backdrop-blur-sm hover:bg-[#0a0a0a]/80 transition"
+                           aria-label="В избранное">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </a>
+
+                        <a th:href="@{'/product/' + ${p.id}}" class="block">
+                            <div class="aspect-square bg-[#141414] overflow-hidden relative">
+                                <img th:if="${p.hasImage}" th:src="@{'/product/' + ${p.id} + '/image'}" alt=""
+                                     loading="lazy"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                                <div th:unless="${p.hasImage}" class="w-full h-full flex items-center justify-center">
+                                    <i class="fas fa-image text-white/10 text-4xl"></i>
+                                </div>
+
+                                <div class="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+                                    <span th:if="${p.discountPercent != null}"
+                                          class="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1"
+                                          th:text="'-' + ${p.discountPercent} + '%'"></span>
+                                    <span th:if="${p.isNew and p.discountPercent == null}"
+                                          class="bg-[#3FB6E4] text-black text-[10px] font-bold uppercase tracking-wider px-2 py-1">
+                                        New
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 px-0.5">
+                                <h3 class="text-white text-[13px] leading-snug line-clamp-2 min-h-[2.6em] group-hover:text-[#3FB6E4] transition"
+                                    th:text="${p.title}">Название</h3>
+
+                                <div class="mt-2 flex items-baseline justify-between gap-2">
+                                    <div class="flex flex-col">
+                                        <span th:if="${p.oldPrice != null and p.discountPercent != null}"
+                                              class="text-white/30 text-[10px] line-through" th:text="${p.oldPrice} + ' ₽'"></span>
+                                        <p th:classappend="${p.discountPercent != null} ? 'text-red-400 text-[16px] font-bold' : 'text-white text-[16px] font-bold'">
+                                            <span th:text="${#numbers.formatDecimal(p.price, 0, 'WHITESPACE', 0, 'POINT')}">0</span>
+                                            <span class="text-[14px] font-medium ml-0.5">₽</span>
+                                        </p>
+                                    </div>
+                                    <span class="text-white/30 text-[11px]" th:if="${p.reviewsCount != null and p.reviewsCount > 0}">
+                                        Продано <span th:text="${p.reviewsCount}">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+
+                <!-- Пагинация -->
+                <div class="mt-12 flex justify-center items-center gap-1.5" th:if="${totalPages > 1}">
+                    <a th:if="${currentPage > 0}"
+                       th:href="@{/catalog(page=${currentPage - 1}, search=${search}, categoryId=${selectedCategory}, brandId=${selectedBrand}, condition=${selectedCondition}, gender=${selectedGender}, color=${selectedColor}, size=${selectedSize}, minPrice=${minPrice}, maxPrice=${maxPrice}, sort=${currentSort})}"
+                       class="page-link w-9 h-9 flex items-center justify-center border border-white/15 text-white/50 hover:border-[#3FB6E4]/60 hover:text-[#3FB6E4] transition">
+                        <i class="fas fa-chevron-left text-[10px]"></i>
+                    </a>
+                    <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                       th:if="${i < 5 or i == totalPages - 1 or (i >= currentPage - 1 and i <= currentPage + 1)}"
+                       th:href="@{/catalog(page=${i}, search=${search}, categoryId=${selectedCategory}, brandId=${selectedBrand}, condition=${selectedCondition}, gender=${selectedGender}, color=${selectedColor}, size=${selectedSize}, minPrice=${minPrice}, maxPrice=${maxPrice}, sort=${currentSort})}"
+                       th:text="${i + 1}"
+                       th:class="${i == currentPage}
+                           ? 'page-link w-9 h-9 flex items-center justify-center bg-[#3FB6E4] text-black text-[12px] font-bold'
+                           : 'page-link w-9 h-9 flex items-center justify-center border border-white/15 text-white/55 text-[12px] hover:border-[#3FB6E4]/60 hover:text-[#3FB6E4] transition'">
+                    </a>
+                    <a th:if="${currentPage < totalPages - 1}"
+                       th:href="@{/catalog(page=${currentPage + 1}, search=${search}, categoryId=${selectedCategory}, brandId=${selectedBrand}, condition=${selectedCondition}, gender=${selectedGender}, color=${selectedColor}, size=${selectedSize}, minPrice=${minPrice}, maxPrice=${maxPrice}, sort=${currentSort})}"
+                       class="page-link w-9 h-9 flex items-center justify-center border border-white/15 text-white/50 hover:border-[#3FB6E4]/60 hover:text-[#3FB6E4] transition">
+                        <i class="fas fa-chevron-right text-[10px]"></i>
+                    </a>
+                </div>
+
             </div>
-        </a>
-    </div>
-
-    <!-- Пагинация -->
-    <div class="mt-12 flex justify-center gap-1" th:if="${totalPages > 1}">
-        <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-           th:href="@{/catalog(page=${i}, search=${search}, categoryId=${selectedCategory}, condition=${selectedCondition}, minPrice=${minPrice}, maxPrice=${maxPrice})}"
-           th:text="${i + 1}"
-           th:class="${i == currentPage}
-               ? 'w-10 h-10 flex items-center justify-center bg-white text-black text-[13px]'
-               : 'w-10 h-10 flex items-center justify-center border border-white/15 text-white/50 text-[13px] hover:border-white/40 transition'">
-        </a>
-    </div>
-
-</section>
+        </div>
+    </section>
 </main>
+
+<!-- ═══ ПЛАВАЮЩИЙ БАННЕР ═══ -->
+<div id="float-banner"
+     class="fixed bottom-6 right-6 z-40 bg-gradient-to-br from-[#3FB6E4] to-[#2a8fb8] text-black px-4 py-3 shadow-2xl flex items-center gap-3 max-w-[260px] group">
+    <button onclick="document.getElementById('float-banner').remove()"
+            class="absolute -top-2 -right-2 w-6 h-6 bg-[#0a0a0a] text-white/70 rounded-full flex items-center justify-center hover:text-white transition text-[10px]"
+            aria-label="Закрыть">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="flex-shrink-0 w-12 h-12 bg-[#0a0a0a]/15 flex items-center justify-center">
+        <i class="fas fa-mobile-alt text-[20px]"></i>
+    </div>
+    <div class="leading-tight">
+        <p class="text-[10px] uppercase tracking-[0.2em] font-medium opacity-80">В приложении</p>
+        <p class="text-[18px] font-extrabold">−400 ₽</p>
+        <p class="text-[10px] uppercase tracking-wider opacity-80">скидка от 5000 ₽</p>
+    </div>
+</div>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- ═══ AJAX-ФИЛЬТРАЦИЯ ═══ -->
+<script>
+(function() {
+    const form = document.getElementById('filterForm');
+    const content = document.getElementById('catalog-content');
+    const sortHidden = document.getElementById('sort-hidden');
+    if (!form || !content) return;
+
+    // ─── Двойной слайдер цены ───
+    const rMin = document.getElementById('priceMinRange');
+    const rMax = document.getElementById('priceMaxRange');
+    const iMin = document.getElementById('priceMinInput');
+    const iMax = document.getElementById('priceMaxInput');
+    const fill = document.getElementById('priceFill');
+    const SLIDER_MIN = 0, SLIDER_MAX = 200000;
+
+    function syncFill() {
+        const a = +rMin.value, b = +rMax.value;
+        const lo = Math.min(a, b), hi = Math.max(a, b);
+        const left = (lo / SLIDER_MAX) * 100;
+        const right = (hi / SLIDER_MAX) * 100;
+        fill.style.left = left + '%';
+        fill.style.width = (right - left) + '%';
+    }
+
+    // Инициализация слайдера из значений инпутов
+    function initSlider() {
+        const min = +iMin.value || SLIDER_MIN;
+        const max = +iMax.value || SLIDER_MAX;
+        rMin.value = Math.max(SLIDER_MIN, Math.min(min, SLIDER_MAX));
+        rMax.value = Math.max(SLIDER_MIN, Math.min(max, SLIDER_MAX));
+        syncFill();
+    }
+    initSlider();
+
+    rMin.addEventListener('input', () => {
+        if (+rMin.value > +rMax.value) rMin.value = rMax.value;
+        iMin.value = rMin.value === '0' ? '' : rMin.value;
+        syncFill();
+    });
+    rMax.addEventListener('input', () => {
+        if (+rMax.value < +rMin.value) rMax.value = rMin.value;
+        iMax.value = rMax.value === String(SLIDER_MAX) ? '' : rMax.value;
+        syncFill();
+    });
+    iMin.addEventListener('input', () => {
+        rMin.value = +iMin.value || SLIDER_MIN;
+        syncFill();
+    });
+    iMax.addEventListener('input', () => {
+        rMax.value = +iMax.value || SLIDER_MAX;
+        syncFill();
+    });
+
+    // ─── Сбор URL из формы ───
+    function buildUrl(extraParams) {
+        const data = new FormData(form);
+        const params = new URLSearchParams();
+        for (const [k, v] of data) {
+            if (v !== null && v !== '') params.append(k, v);
+        }
+        if (extraParams) {
+            for (const [k, v] of Object.entries(extraParams)) {
+                params.set(k, v);
+            }
+        }
+        return '/catalog?' + params.toString();
+    }
+
+    // ─── AJAX-загрузка ───
+    let lastFetch = 0;
+    async function load(url) {
+        const my = ++lastFetch;
+        content.classList.add('loading');
+        try {
+            const res = await fetch(url, { headers: { 'Accept': 'text/html' } });
+            const html = await res.text();
+            if (my !== lastFetch) return; // отбрасываем устаревший ответ
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const fresh = doc.getElementById('catalog-content');
+            if (fresh) content.innerHTML = fresh.innerHTML;
+            // обновим заголовок «N товаров»
+            const ti = doc.getElementById('total-items');
+            const myTi = document.getElementById('total-items');
+            if (ti && myTi) myTi.textContent = ti.textContent;
+            history.replaceState(null, '', url);
+            rebind();
+        } finally {
+            if (my === lastFetch) content.classList.remove('loading');
+        }
+    }
+
+    // ─── Дебаунс для слайдера/инпутов цены ───
+    let debounceTimer;
+    function debouncedSubmit() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => load(buildUrl()), 350);
+    }
+
+    // ─── Подписка на изменения формы ───
+    form.addEventListener('change', (e) => {
+        // change на range игнорируем — submit через input + debounce
+        if (e.target.type === 'range') return;
+        load(buildUrl());
+    });
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        load(buildUrl());
+    });
+    // Цена: реагируем на input number и release range
+    ['priceMinInput', 'priceMaxInput'].forEach(id => {
+        document.getElementById(id).addEventListener('input', debouncedSubmit);
+    });
+    ['priceMinRange', 'priceMaxRange'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => load(buildUrl()));
+    });
+
+    // ─── Сброс фильтров без перезагрузки ───
+    const resetBtn = document.getElementById('resetFilters');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            form.querySelectorAll('input[type=radio]').forEach(r => { r.checked = (r.value === ''); });
+            iMin.value = ''; iMax.value = '';
+            rMin.value = SLIDER_MIN; rMax.value = SLIDER_MAX;
+            syncFill();
+            // hidden categoryId/search — оставляем как есть, только фильтры сбрасываем
+            const data = new FormData(form);
+            const params = new URLSearchParams();
+            for (const [k, v] of data) {
+                if ((k === 'categoryId' || k === 'search') && v) params.append(k, v);
+            }
+            load('/catalog' + (params.toString() ? '?' + params.toString() : ''));
+        });
+    }
+
+    // ─── Сортировка и пагинация — внутри #catalog-content (rebind после AJAX) ───
+    function rebind() {
+        const sortSelect = document.getElementById('sort-select');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', () => {
+                sortHidden.value = sortSelect.value;
+                load(buildUrl());
+            });
+        }
+        content.querySelectorAll('.page-link').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = a.getAttribute('href');
+                load(href);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    }
+    rebind();
+})();
+</script>
 </body>
 </html>
