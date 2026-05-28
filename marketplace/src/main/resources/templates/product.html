@@ -226,9 +226,9 @@
                 </div>
 
                 <!-- «Задать вопрос» — вторичный CTA -->
-                <a sec:authorize="isAuthenticated()" th:href="'mailto:' + ${product.sellerUsername} + '@marketplace.ru'"
-                   class="block text-center py-3 border border-white/10 text-white/55 text-[12px] uppercase tracking-[0.18em] hover:border-white/30 hover:text-white transition mb-6">
-                    <i class="far fa-envelope mr-2 text-[11px]"></i>Задать вопрос продавцу
+                <a sec:authorize="isAuthenticated()" href="https://t.me/odcedcf8" target="_blank" rel="noopener noreferrer"
+                   class="block text-center py-3 border border-white/10 text-white/55 text-[12px] uppercase tracking-[0.18em] hover:border-[#3FB6E4]/40 hover:text-[#3FB6E4] transition mb-6">
+                    <i class="fab fa-telegram mr-2 text-[12px]"></i>Связаться с продавцом
                 </a>
 
                 <div sec:authorize="!isAuthenticated()" class="mb-6">
